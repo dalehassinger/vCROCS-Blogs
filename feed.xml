@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>vCROCS</title>
+        <link>index.html</link>
+        <description>A blog built with vCROCS</description>
+        <language>en</language>
+        <lastBuildDate>Sun, 03 May 2026 22:18:54 -0400</lastBuildDate>
+        <atom:link href="feed.xml" rel="self" type="application/rss+xml"/>
+        <item>
+    <title>Hugo | Static Site Generator</title>
+    <link>hugo-static-site-generator.html</link>
+    <guid>hugo-static-site-generator.html</guid>
+    <pubDate>Sun, 03 May 2026 21:13:05 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VMware vRealize SaltStack Config as a Windows Server Admin - Part 8</title>
+    <link>vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-8.html</link>
+    <guid>vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-8.html</guid>
+    <pubDate>Sun, 03 May 2026 21:13:04 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VCF Automation | Linux PowerShell Host</title>
+    <link>vcf-automation-linux-powershell-host.html</link>
+    <guid>vcf-automation-linux-powershell-host.html</guid>
+    <pubDate>Sun, 03 May 2026 21:13:02 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VMware Aria Automation | Options for CPU|Memory values</title>
+    <link>vmware-aria-automation-options-for-cpu-memory-values.html</link>
+    <guid>vmware-aria-automation-options-for-cpu-memory-values.html</guid>
+    <pubDate>Sun, 03 May 2026 21:13:01 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>GitHub Repository | Code and Examples to help you get started</title>
+    <link>github-repository-code-and-examples-to-help-you-get-started.html</link>
+    <guid>github-repository-code-and-examples-to-help-you-get-started.html</guid>
+    <pubDate>Sun, 03 May 2026 21:13:01 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>PowerCLI Getting Started</title>
+    <link>powercli-getting-started.html</link>
+    <guid>powercli-getting-started.html</guid>
+    <pubDate>Sun, 03 May 2026 21:13:00 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VMware Aria Automation and SaltStack Config Resource</title>
+    <link>vmware-aria-automation-and-saltstack-config-resource.html</link>
+    <guid>vmware-aria-automation-and-saltstack-config-resource.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:59 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>Home Lab | Current BOM</title>
+    <link>home-lab-current-bom.html</link>
+    <guid>home-lab-current-bom.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:58 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>SaltConf 2021 | SaltStack Config Session</title>
+    <link>saltconf-2021-saltstack-config-session.html</link>
+    <guid>saltconf-2021-saltstack-config-session.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:57 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>Open Ports | Zero Trust</title>
+    <link>open-ports-zero-trust.html</link>
+    <guid>open-ports-zero-trust.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:57 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VMware Aria Automation | Working with Windows Server Drives</title>
+    <link>vmware-aria-automation-working-with-windows-server-drives.html</link>
+    <guid>vmware-aria-automation-working-with-windows-server-drives.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:56 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VMware vRealize SaltStack Config as a Windows Server Admin - Part 9</title>
+    <link>vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-9.html</link>
+    <guid>vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-9.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:55 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>The VMware Community Podcast | I was a Guest on the show</title>
+    <link>the-vmware-community-podcast-i-was-a-guest-on-the-show.html</link>
+    <guid>the-vmware-community-podcast-i-was-a-guest-on-the-show.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:54 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>Creating Charts with ChartJS and displaying in vRealize Operations</title>
+    <link>creating-charts-with-chartjs-and-displaying-in-vrealize-operations.html</link>
+    <guid>creating-charts-with-chartjs-and-displaying-in-vrealize-operations.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:53 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>vBrownbag VMworld Presentation</title>
+    <link>vbrownbag-vmworld-presentation.html</link>
+    <guid>vbrownbag-vmworld-presentation.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:52 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VMware Explore 2023 | Presentation</title>
+    <link>vmware-explore-2023-presentation.html</link>
+    <guid>vmware-explore-2023-presentation.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:51 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>VCF Automation | CustomProperties</title>
+    <link>vcf-automation-customproperties.html</link>
+    <guid>vcf-automation-customproperties.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:51 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>Chisoku: Knowing When Technology Is Enough</title>
+    <link>chisoku-knowing-when-technology-is-enough.html</link>
+    <guid>chisoku-knowing-when-technology-is-enough.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:50 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>vCommunity MP | Windows Servers Services</title>
+    <link>vcommunity-mp-windows-servers-services.html</link>
+    <guid>vcommunity-mp-windows-servers-services.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:49 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+<item>
+    <title>vExpert 2023 | vExpert Cloud Management</title>
+    <link>vexpert-2023-vexpert-cloud-management.html</link>
+    <guid>vexpert-2023-vexpert-cloud-management.html</guid>
+    <pubDate>Sun, 03 May 2026 21:12:48 -0400</pubDate>
+    <author>Dale Hassinger</author>
+    
+</item>
+    </channel>
+</rss>

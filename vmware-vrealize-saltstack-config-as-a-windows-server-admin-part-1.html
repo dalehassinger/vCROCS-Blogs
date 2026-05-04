@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VMware vRealize SaltStack Config as a Windows Server Admin - Part 1 - vCROCS</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dale Hassinger">
+    <link rel="stylesheet" href="style.css">
+    <script src="lightbox.js" defer></script>
+    <style>
+        /* Single column layout for individual post pages */
+        .container.single-post {
+            grid-template-columns: 1fr;
+            max-width: 900px;
+        }
+        .container.single-post .content-area {
+            max-width: 100%;
+        }
+        .container.single-post article {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-avatar">
+                    <img src="images/avatar.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <h2 class="sidebar-title">vCROCS</h2>
+        <p class="sidebar-subtitle">Automation, Monitoring, more...</p>
+        <div class="sidebar-social">
+                        <a href="https://github.com/dalehassinger" title="GitHub" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/dalehassinger/" title="LinkedIn" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+            </a>
+                <a href="feed.xml" title="RSS Feed">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20C5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/>
+                    </svg>
+                </a>
+            <a href="https://x.com/dalehassinger" title="X (Twitter)" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+            </a>
+
+        </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a href="index.html">
+                    <span class="icon">🏠</span>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="archive.html">
+                    <span class="icon">📚</span>
+                    <span>Archives</span>
+                </a>
+            </li>
+                    <li>
+            <a href="about.html">
+                <span class="icon">👤</span>
+                <span>About</span>
+            </a>
+        </li>
+        </ul>
+    </nav>
+</aside>
+    
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <div class="container single-post">
+            <div class="content-area">
+                <a href="index.html" class="back-link">← Back to all posts</a>
+                
+                <article>
+                    <header>
+                        <h1>VMware vRealize SaltStack Config as a Windows Server Admin - Part 1</h1>
+                        <div class="post-meta">
+                            <time datetime="2026-05-04T01:11:39Z">
+                                May 3, 2026
+                            </time>
+                             • by Dale Hassinger
+                        </div>
+                        <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
+                        <div class="tags"><a href="tags/saltstack-config.html" class="tag">#SaltStack Config</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a> <a href="tags/configuration-management.html" class="tag">#Configuration Management</a></div>
+                    </header>
+                    
+                    <img src="images/vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-1-featured.png" alt="VMware vRealize SaltStack Config as a Windows Server Admin - Part 1" class="featured-image" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: 12px; margin-bottom: 2rem;">
+                    
+                    <div class="content">
+                        <p><strong>Part 1: How to use SaltStack Config with Windows Server and PowerShell</strong></p>
+<br>
+<br>
+<br>
+<hr>
+<br>
+<p>I have recently started looking at using <strong>VMware vRealize SaltStack Config</strong>. This blog is a work in progress on my journey with Salt. I started at <strong>zero</strong> and let's see what I discover as I work towards getting to <strong>PROD</strong>. So if this topic is interesting to you, check back often.</p>
+<br>
+<p>I wanted to learn one of the server configuration products that are available like Salt, Puppet, Chef, Ansible, etc... but I wasn't sure which would be the best choice long term.  When VMware purchased SaltStack Config the product to choose became a lot easier for me. SaltStack Config is included with vRealize Suite for licensing and I can call VMware support for help, SaltStack Config became the obvious product to pick.</p>
+<br>
+<p>I like to show how to use VMware vRealize Products from a <strong>Windows Server Admin</strong> point of view.  I do work with both Windows Servers and Linux Servers but most information you see online with Salt is using Linux Servers. I also do most of my current automation with PowerShell scripts. I do not want to lose all the time invested into the logic with my current PowerShell scripts.</p>
+<br>
+<br>
+<hr>
+<br>
+<p>I am not going to go thru the process to install SaltStack Config.  There is already some very good blogs written on installing SaltStack Config. One item I would recommend with installing Salt-Stack Config is to use VMware vRealize Life Cycle Manager ("LCM"). LCM makes the process to install SaltStack Config a lot easier. This Blog is assuming you already installed SaltStack Config, now how do I use salt and what do I use salt for.</p>
+<br>
+<h2><a href="https://docs.vmware.com/en/vRealize-Automation/8.4/install-configure-saltstack-config/GUID-DBE6D84B-0D4B-4747-8291-B0D80851CE62.html" target="_blank">Installing and Configuring SaltStack Config</a></h2>
+<br>
+<hr>
+<br>
+<h2>The first step (minions):</h2>
+<br>
+<p>After you get a working SaltStack Config Server setup, the first item you need to do is add the salt agent to some "Test" servers. Servers that have the salt agent installed are called minions. There is the option to not add the salt agent to servers but then you need to use SSH to connect.  Windows Servers do not have SSH available as default so you would need to install an SSH server like OpenSSH on your servers. My thoughts are I need to add something for the minions to communicate with the salt-master. Instead of adding OpenSSH to every Windows Server I chose to install and use the salt agent.</p>
+<br>
+<p>For testing you can manually install the minion agent on a server to become familiar with how the salt commands work. During the install there are two values you need to enter. The name of the master and the name you want to use for the minion. I did that on my first couple test servers but then I created some PowerShell code to install the salt minion agent.</p>
+<p>{{< highlight powershell >}}</p>
+<h1>----- [ Install minion ] -----------------------------------------------</h1>
+<br>
+<h1>Define Username/Password</h1>
+<p>$username = 'username@vCROCS.info'</p>
+<br>
+<h1>The next line is how to create the encrypted password</h1>
+<h1>Read-Host -Prompt "Enter your password - username" -AsSecureString | ConvertFrom-SecureString | Out-File "C:\PWkey\username.key"</h1>
+<p>$password = Get-Content "C:\PWkey\username.key" | ConvertTo-SecureString</p>
+<p>$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $password</p>
+<br>
+<h1>----- [ This section connects you to vCenter where VM is located ] -----</h1>
+<br>
+<h1>Connect to vCenter</h1>
+<p>vCenterName = 'vCenter.vCROCS.info'</p>
+<p>Connect-VIServer $vCenterName -Credential $cred</p>
+<br>
+<h1>----- [ Install Salt Agent ] -------------------------------------------</h1>
+<br>
+<h1>Name of Server to install the salt minion agent</h1>
+<p>$vmName = 'DBH-217'</p>
+<br>
+<h1>Copy the minion agent file to your windows server</h1>
+<p>Copy-VMGuestFile -Source G:\Salt-Minion-2019.2.4-Py3-AMD64-Setup.exe -Destination 'C:\vCROCS' -VM $vmName -LocalToGuest -GuestCredential $cred</p>
+<br>
+<h1>command string to install the Salt Minion Agent</h1>
+<p>$PSText = 'C:\vCROCS\Salt-Minion-2019.2.4-Py3-AMD64-Setup.exe /S /master=salt /minion-name=' + $vmName</p>
+<br>
+<h1>Run the command on remote Server</h1>
+<p>Invoke-VMScript -VM $VMName -ScriptType bat -ScriptText $PSText -GuestCredential $cred</p>
+<br>
+<p>{{< /highlight >}}</p>
+<br>
+<p>After the minion agent is installed on your server you need to accept the key on the salt master. From the CLI you can run these commands.</p>
+<br>
+<p>List all keys. You should see you new minion listed in the Unaccepted Keys:</p>
+<p>{{< highlight powershell >}}salt-key -L{{< /highlight >}}</p>
+<br>
+<p>Accept the new minion key on the salt master:</p>
+<p>{{< highlight powershell >}}salt-key --accept="DBH-217"{{< /highlight >}}</p>
+<br>
+<p>If you list all keys again you should see you new minion listed in the Accepted Keys:</p>
+<p>{{< highlight powershell >}}salt-key -L{{< /highlight >}}</p>
+<br>
+<p>My next update will include information on how to auto accept new minions.</p>
+<br>
+<hr>
+<h2>Here are some basic salt commands from CLI that I have been using:</h2>
+<p><strong>Show all events:</strong></p>
+<p>{{< highlight powershell >}}salt-run state.event{{< /highlight >}}</p>
+<br>
+<img src="images/post/salt-03.png" alt="">
+<p><a href="https://github.com/dalehassinger/geeky/raw/main/assets/images/post/salt-03.png" target="_blank">Click Here to see Larger Image of Screen Shot</a></p>
+<br>
+<br>
+<p><strong>Show all events with a "Pretty" view:</strong></p>
+<p>{{< highlight powershell >}}salt-run state.event pretty=true{{< /highlight >}}</p>
+<br>
+<img src="images/post/salt-02.png" alt="">
+<p><a href="https://github.com/dalehassinger/geeky/raw/main/assets/images/post/salt-02.png" target="_blank">Click Here to see Larger Image of Screen Shot</a></p>
+<br>
+<br>
+<p><strong>List keys:</strong></p>
+<p>{{< highlight powershell >}}salt-key -L{{< /highlight >}}</p>
+<br>
+<p><strong>Accept Key:</strong></p>
+<p>{{< highlight powershell >}}salt-key --accept="DBH-214"{{< /highlight >}}</p>
+<br>
+<p><strong>Delete Key:</strong></p>
+<p>{{< highlight powershell >}}salt-key -d "DBH-211,DBH-212"{{< /highlight >}}</p>
+<br>
+<p><strong>Run a function on one minion:</strong></p>
+<p>{{< highlight powershell >}}salt "DBH-217" disk.usage{{< /highlight >}}</p>
+<br>
+<p><strong>Run a function on multiple minions:</strong></p>
+<p>{{< highlight powershell >}}salt "DBH-217,DBH-218" test.ping{{< /highlight >}}</p>
+<br>
+<p><strong>Run a function on all minions:</strong></p>
+<p>{{< highlight powershell >}}salt "*" test.ping{{< /highlight >}}</p>
+<br>
+<p><strong>Create a file:</strong></p>
+<p>{{< highlight powershell >}}salt "DBH-214" file.touch C:\vCROCS\salt.tst{{< /highlight >}}</p>
+<br>
+<p><strong>Copy a file:</strong></p>
+<p>{{< highlight powershell >}}salt "DBH-214" cp.get_file salt://vCROCS/vCROCSTEST.ps1 "C:\vCROCS\vCROCSTEST.ps1"{{< /highlight >}}</p>
+<br>
+<p><strong>Delete a file:</strong></p>
+<p>{{< highlight powershell >}}salt "DBH-214" file.remove "C:\vCROCS\vCROCSTEST.ps1"{{< /highlight >}}</p>
+<br>
+<p><strong>Run a PowerShell Script:</strong></p>
+<p>{{< highlight powershell >}}salt "DBH-214" cmd.script source="salt://vCROCS/vCROCSTEST.ps1" shell=powershell{{< /highlight >}}</p>
+<br>
+<p><strong>Restart the Salt Master Service:</strong></p>
+<p>{{< highlight powershell >}}service salt-master restart{{< /highlight >}}</p>
+<br>
+<p><strong>Show the status of the raas and salt-master services:</strong></p>
+<p>{{< highlight powershell >}}</p>
+<p>systemctl status raas</p>
+<p>systemctl status salt-master</p>
+<p>{{< /highlight >}}</p>
+<br>
+<p><strong>Stop and start the salt-master service:</strong></p>
+<p>{{< highlight powershell >}}</p>
+<p>systemctl stop salt-master</p>
+<p>systemctl start salt-master</p>
+<p>{{< /highlight >}}</p>
+<br>
+<p><strong>Get IP address of all minions:</strong></p>
+<p>{{< highlight powershell >}}salt '*' network.ip_addrs{{< /highlight >}}</p>
+<br>
+<p><strong>Ping All Minions:</strong></p>
+<p>{{< highlight powershell >}}salt "*" test.ping{{< /highlight >}}</p>
+<br>
+<p><strong>Disk Space Usage on all Minions:</strong></p>
+<p>{{< highlight powershell >}}salt "*" disk.usage{{< /highlight >}}</p>
+<br>
+<hr>
+<br>
+<h2>Lessons Learned:</h2>
+<ul>
+<li>Anything you can do in the SaltStack Config GUI you can do in CLI. I find myself using the CLI for most testing. After I have the commands correct I will then add into the GUI.</li>
+<li>DO NOT have the minion agent version newer than the Salt-Master. I am going to try and keep the salt-master and minions always at the same version. The minion can be at an older version than the salt-master.</li>
+<li>During my upgrade from SaltStack Config 8.3 to 8.4 the Salt API did not upgrade. I didn't remember seeing any errors in LCM after the upgrade. The raas service was at version 8.4 and the salt API was at 8.3.  I had authentication issues, I could not accept keys, etc... I opened an SR with VMware and they helped me fix the issue. The support I received from VMware with Salt was probably the best support I received on any VMware product.</li>
+<br>
+<hr>
+<br>
+</ul>
+<h2>Salt Links I found to be very helpful:</h2>
+<ul>
+<li><a href="https://sites.google.com/site/mrxpalmeiras/saltstack/salt-cheat-sheet" target="_blank">SaltStack Cheat Sheet</a></li>
+<li><a href="https://docs.saltproject.io/en/getstarted/"                            target="_blank">SaltStack Tutorials</a></li>
+<li><a href="https://docs.saltproject.io/en/latest/contents.html"                   target="_blank">SaltStack Documentation</a></li>
+<li><a href="https://saltstackcommunity.slack.com"                                  target="_blank">SaltStack Community Slack Channel</a></li>
+<li><a href="https://learnvrealizeautomation.github.io"                             target="_blank">Learn vRealize Automation</a></li>
+<li><a href="https://learnsaltstackconfig.github.io/"                               target="_blank">Learn SaltStack Config</a></li>
+<br>
+</ul>
+<div style="background-color:#ccffcc; Padding:20px;" >
+<p>When I write about <b>vRealize Automation</b> ("vRA") I always say there are many ways to accomplish the same task.  <b>SaltStack Config</b> is the same way.  I am showing what I felt was important to see but every organization/environment will be different. There is no right or wrong way to use Salt. This is a <b>GREAT Tool</b> that is included with your vRealize Suite Advanced/Enterprise license. If you own the vRealize Suite, you own SaltStack Config.</p>
+</div>
+<br>
+<hr>
+<br>
+<ul>
+<li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
+<br>
+</ul>
+<p><center></p>
+<p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
+<p></center></p>
+<br>
+<hr>
+
+                    </div>
+                </article>
+                
+                <footer>
+                    <p><a href="index.html">← Back to vCROCS</a></p>
+                </footer>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

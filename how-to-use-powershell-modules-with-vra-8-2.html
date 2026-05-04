@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to use PowerShell Modules with vRA 8.2 - vCROCS</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dale Hassinger">
+    <link rel="stylesheet" href="style.css">
+    <script src="lightbox.js" defer></script>
+    <style>
+        /* Single column layout for individual post pages */
+        .container.single-post {
+            grid-template-columns: 1fr;
+            max-width: 900px;
+        }
+        .container.single-post .content-area {
+            max-width: 100%;
+        }
+        .container.single-post article {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-avatar">
+                    <img src="images/avatar.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <h2 class="sidebar-title">vCROCS</h2>
+        <p class="sidebar-subtitle">Automation, Monitoring, more...</p>
+        <div class="sidebar-social">
+                        <a href="https://github.com/dalehassinger" title="GitHub" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/dalehassinger/" title="LinkedIn" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+            </a>
+                <a href="feed.xml" title="RSS Feed">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20C5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/>
+                    </svg>
+                </a>
+            <a href="https://x.com/dalehassinger" title="X (Twitter)" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+            </a>
+
+        </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a href="index.html">
+                    <span class="icon">🏠</span>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="archive.html">
+                    <span class="icon">📚</span>
+                    <span>Archives</span>
+                </a>
+            </li>
+                    <li>
+            <a href="about.html">
+                <span class="icon">👤</span>
+                <span>About</span>
+            </a>
+        </li>
+        </ul>
+    </nav>
+</aside>
+    
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <div class="container single-post">
+            <div class="content-area">
+                <a href="index.html" class="back-link">← Back to all posts</a>
+                
+                <article>
+                    <header>
+                        <h1>How to use PowerShell Modules with vRA 8.2</h1>
+                        <div class="post-meta">
+                            <time datetime="2026-05-04T01:12:45Z">
+                                May 3, 2026
+                            </time>
+                             • by Dale Hassinger
+                        </div>
+                        <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
+                        <div class="tags"><a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/vra.html" class="tag">#vRA</a> <a href="tags/abx.html" class="tag">#ABX</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a> <a href="tags/vmware-aria.html" class="tag">#VMware Aria</a></div>
+                    </header>
+                    
+                    <img src="images/how-to-use-powershell-modules-with-vra-8-2-featured.png" alt="How to use PowerShell Modules with vRA 8.2" class="featured-image" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: 12px; margin-bottom: 2rem;">
+                    
+                    <div class="content">
+                        <p><strong>Options to use PowerShell Modules</strong></p>
+<br>
+<br>
+<br>
+<hr>
+<br>
+<p>I like to review VMware vRA (vRealize Automation) 8.2 as a Microsoft Windows Server Admin.  Most of the reviews you see are creating Linux VMs and customizing the OS using tools for Linux. I create Windows/Linux VMs and customize the OS using a new feature added to vRA 8.x, Action Based Extensibility (ABX) with PowerShell.</p>
+<br>
+<p>In my vRA 7.6 environment, I use a PowerShell Host to run processes and on the PowerShell Host is where I install all the PS Modules that I use. When I started looking at how to use PowerShell with vRA 8.2 the one item that I needed to understand was how to use PowerShell Modules. VMware does have a Blog Post on how to include PowerShell modules with ABX Actions/vRO Work Flows - <a href="https://blogs.vmware.com/management/2020/07/how-to-abx-vro-powershell-additional-modules.html" target="_blank">Click Here to see the Blog Post</a>. After doing some testing and reviewing my options I decided to continue to use a PowerShell Host with vRA 8.2. What this allows me to do is use the same exact PowerShell Host for 7.6 and 8.2. The existing PS scripts that I have also work with both 7.6 and 8.2. No changes to any scripts and the PS Host. I like how VMware included PS as an options for all scripts within vRA 8.2. Hopefully in the future VMware will allow you to install your own PS Modules directly in the vRA Appliance. The one item that some people may not like about this setup is it does require an additional Windows Server that a standard vRA setup does not require. But to be able to use an existing Windows PS Host that can be shared between vRA 7.6 and 8.2 until I get my environment to 100% vRA 8.2 also has it positives. With Automation there is always many ways to complete the same task.</p>
+<br>
+<p>I wrote a Blog Post previously that describes how to pass Cloud Template inputs/properties to ABX Actions. This Post is really using that same technique but instead of only running an ABX Action, this ABX Action Script is passing the inputs/customproperties onto a PowerShell Host. Here is link to previous post: <a href="https://www.vcrocs.info/blog/vra81-abx-ps/" target="_blank">VREALIZE AUTOMATION 8.2 - POWERSHELL ABX</a>. By passing the custom properties as parameters to a PS Host I can also use PS Modules to connect to SQL servers and many other options. Basically any PS Module that is available can be used.</p>
+<br>
+<hr>
+<br>
+<h2>Details on how to use a ABX Script with a PowerShell Host:</h2>
+<br>
+<div style="background-color:#d9d9d9; Padding:20px;" >
+<p><b>Step 1:</b></p>
+<p><ul></p>
+<p><li>Create a Cloud Template. (See included yaml code and screen shot).</li></p>
+<p><li>Create inputs for the parameters you need to send to a PS script that will run on the PS Host. The inputs are the values that are used for the resource/properties. (See included yaml code)</li></p>
+<p><li>Create Properties in the resources section of the yaml for the inputs you just created. These properties will be the parameters that get passed to the PS Script. The properties get passed to the ABX script using $payload. (See included PS code)</li></p>
+<p></ul></p>
+<p><ul></p>
+<p><b>Step 2:</b></p>
+<p><li>Create a PowerShell ABX Action. (See included PS code and screen shot)</li></p>
+<p><li>To get the custom properties from the Cloud Template you need to use $payload.</li></p>
+<p><li>$payload.customProperties."Properties Name" is how you get the values from the $payload.</li></p>
+<p><li>You can assign the custom properties to a variable within the ABX PS code.</li></p>
+<p><li>I use Invoke-VMScript to run the PS Script on the PS Host because my environment is also a Zero Trust Environment. Invoke-VMScript allows me to run PS scripts on remote servers without opening ports to the remote servers.</li></p>
+<p></ul></p>
+<p><ul></p>
+<p><b>Step 3:</b></p>
+<p><li>Create a Subscription. See Screenshot.</li></p>
+<p><li>The subscription is want runs the ABX scripts.</li></p>
+<p><li>A subscription can be Fired before or after a compute resource gets provisioned.  I create a subscription for both in my environment.</li></p>
+<p><li>Within the subscription is where you define which ABX script is run. If you would want to string several ABX scripts together, the subscription could also run a ABX Flow.</li></p>
+<p></ul></p>
+</div>
+<br>
+<h2>Sample Code and Screen Shots:</h2>
+<h2>Cloud Template:</h2>
+<br>
+<img src="images/pshost-01.PNG" alt="">
+<br>
+<p>The properties under resources in the yaml code will be used like parameters in a PS Script. Since I have a background in PowerShell that is how I am using the properties. When you deploy the Cloud Template, the values entered that I defined will not be used until the ABX script runs. The ABX Script will run after the subscription is triggered. The values will be passed from the Cloud Template to the ABX Script using $payload.  Just like passing parameters to a PS script.</p>
+<br>
+<hr>
+<br>
+<p>Click to expand code:</p>
+<p>{{< highlight powershell >}}</p>
+<br>
+<h1>Created by Dale Hassinger - vCrocs.info</h1>
+<h1>Date: 01/14/2021</h1>
+<h1>Send Property Values to ABX Script that runs script on PS Host with all Zero Trust Permissions and Modules</h1>
+<h1>Version: 1</h1>
+<p>formatVersion: 1</p>
+<h1>---------- [ Inputs ] ---------- #</h1>
+<p>inputs:</p>
+<p>cpu:</p>
+<p>type: integer</p>
+<p>description: CPUs</p>
+<p>default: 2</p>
+<p>mem:</p>
+<p>type: integer</p>
+<p>description: Memory(MB)</p>
+<p>default: 8192</p>
+<p>VMName:</p>
+<p>type: string</p>
+<p>title: Enter VM Name</p>
+<p>minLength: 1</p>
+<p>maxLength: 15</p>
+<p>default: DBH-001</p>
+<p>TemplateName:</p>
+<p>type: string</p>
+<p>description: <b> Select Windows or Ubuntu.</b> <br></p>
+<p>default: vRA_Ubuntu_18.04.4</p>
+<p>title: OS</p>
+<p>oneOf:</p>
+<ul>
+<li>title: Ubuntu</li>
+</ul>
+<p>const: vRA_Ubuntu_18.04.4</p>
+<ul>
+<li>title: Windows 2016</li>
+</ul>
+<p>const: vRA_TEMPLATE_2016</p>
+<ul>
+<li>title: Windows 2019</li>
+</ul>
+<p>const: vRA_TEMPLATE_2019</p>
+<p>CustomizationSpec:</p>
+<p>type: string</p>
+<p>default: vRA_Ubuntu</p>
+<p>description:</p>
+<p>type: string</p>
+<p>default: vRA 8.2 TEST VM</p>
+<p>environment:</p>
+<p>type: string</p>
+<p>description: '<b> Select Environment.</b> <br>'</p>
+<p>default: 'environment:Management'</p>
+<p>title: Environment</p>
+<p>oneOf:</p>
+<ul>
+<li>title: Compute</li>
+</ul>
+<p>const: 'environment:Compute'</p>
+<ul>
+<li>title: Management</li>
+</ul>
+<p>const: 'environment:Management'</p>
+<ul>
+<li>title: DevTest</li>
+</ul>
+<p>const: 'environment:DevTest'</p>
+<p>department:</p>
+<p>type: string</p>
+<p>description: <b> Select Application Team.</b> <br></p>
+<p>default: 'department:APP Team 1'</p>
+<p>title: Application Team</p>
+<p>oneOf:</p>
+<ul>
+<li>title: APP Team 1</li>
+</ul>
+<p>const: 'department:APP Team 1'</p>
+<ul>
+<li>title: APP Team 2</li>
+</ul>
+<p>const: 'department:APP Team 2'</p>
+<ul>
+<li>title: APP Team 3</li>
+</ul>
+<p>const: 'department:APP Team 3'</p>
+<p>IP:</p>
+<p>type: string</p>
+<p>default: 192.168.86.200</p>
+<p>emailAddress:</p>
+<p>type: string</p>
+<p>default: Dale.Hassinger@vCROCS.info</p>
+<p>RootPartition:</p>
+<p>type: integer</p>
+<p>default: 20</p>
+<p>BuildBY:</p>
+<p>type: string</p>
+<p>default: DaleHassinger</p>
+<p>BuildRequestor:</p>
+<p>type: string</p>
+<p>default: KirkShaffer</p>
+<p>OSVersion:</p>
+<p>type: string</p>
+<p>default: Ubuntu18044</p>
+<h1>---------- [ Resources ] ---------- #</h1>
+<p>resources:</p>
+<p>Cloud_Network_1:</p>
+<p>type: Cloud.Network</p>
+<p>properties:</p>
+<p>networkType: existing</p>
+<p>address: '${input.IP}'</p>
+<p>constraints:</p>
+<ul>
+<li>tag: '${input.environment}'</li>
+<li>tag: '${input.department}'</li>
+</ul>
+<p>Cloud_vSphere_Machine_1:</p>
+<p>type: Cloud.vSphere.Machine</p>
+<p>properties:</p>
+<p>image: '${input.TemplateName}'</p>
+<p>flavor: std</p>
+<p>cpu: '${input.cpu}'</p>
+<p>mem: '${input.mem}'</p>
+<p>customizationSpec: '${input.CustomizationSpec}'</p>
+<p>emailAddress: '${input.emailAddress}'</p>
+<p>RootPartition: '${input.RootPartition}'</p>
+<p>BuildBY: '${input.BuildBY}'</p>
+<p>BuildRequestor: '${input.BuildRequestor}'</p>
+<p>OSVersion: '${input.OSVersion}'</p>
+<p>constraints:</p>
+<ul>
+<li>tag: '${input.environment}'</li>
+</ul>
+<p>networks:</p>
+<ul>
+<li>network: '${resource.Cloud_Network_1.id}'</li>
+</ul>
+<p>assignment: static</p>
+<p>address: '${input.IP}'</p>
+<p>name: '${input.VMName}'</p>
+<p>description: '${input.description}'</p>
+<br>
+<p>{{< /highlight >}}</p>
+<br>
+<h2>ABX Action Script:</h2>
+<br>
+<img src="images/pshost-02.PNG" alt="">
+<br>
+<p>In my PowerShell code I am using Write-Host to help show how the Cloud Template passes values to the ABX Action using the $payload. I use the code to troubleshoot and understand how it is working. I am able to take values from the payload customProperties and assign to variables. The customProperties are defined in the Cloud Template yaml code as resources/properties. I can then make decisions in the code based on these values. For production the write-host lines could be removed.</p>
+<br>
+<hr>
+<br>
+<p>Click to expand code:</p>
+<p>{{< highlight powershell >}}</p>
+<br>
+<p>function handler($context, $payload) {</p>
+<br>
+<h1>Build PowerShell variables</h1>
+<p>$VMName = $payload.resourceNames</p>
+<p>$cpu = $payload.customProperties.cpu</p>
+<p>$mem = $payload.customProperties.mem</p>
+<p>$description = $payload.customProperties.description</p>
+<p>$IPaddress = $payload.addresses</p>
+<p>$emailAddress = $payload.customProperties.emailAddress</p>
+<p>$RootPartition = $payload.customProperties.RootPartition</p>
+<p>$BuildBY = $payload.customProperties.BuildBY</p>
+<p>$BuildRequestor = $payload.customProperties.BuildRequestor</p>
+<p>$OSVersion = $payload.customProperties.OSVersion</p>
+<br>
+<h1>Show PS variables</h1>
+<p>Write-Host 'VMName:' $VMName</p>
+<p>Write-Host 'CPU:' $cpu</p>
+<p>Write-Host 'Memory:' $mem</p>
+<p>Write-Host 'Description:' $description</p>
+<p>Write-Host 'IPaddress:' $IPaddress</p>
+<p>Write-Host 'Email:' $emailAddress</p>
+<p>Write-Host 'Root:' $RootPartition</p>
+<p>Write-Host 'Build By:' $BuildBY</p>
+<p>Write-Host 'Build BuildRequestor:' $BuildRequestor</p>
+<p>Write-Host 'OS Version:' $OSVersion</p>
+<br>
+<h1>----- [ Define Username/ Get Password ] ------------------------------------------------------------------</h1>
+<p>$HashiVaultPW = 'vCROCS#1'</p>
+<br>
+<p>Write-Host $HashiVaultPW</p>
+<br>
+<p>$username = 'administrator@vsphere.local'</p>
+<p>Write-Host $username</p>
+<br>
+<h1>----- [ Connect vCenter and run PS Script on PS Host ] ------------------------------------------------------------------</h1>
+<br>
+<h1>Connect to vCenter to be able to connect to PS Host</h1>
+<p>Connect-VIServer -Server vCenter01.vCROCS.info -User $username -Password $HashiVaultPW -Protocol https -Force</p>
+<br>
+<h1>PS Host Name</h1>
+<p>$PSHost = 'vCROCSPSHost'</p>
+<p>Write-Host 'PS Host:'$PSHost</p>
+<br>
+<h1>PS Script text</h1>
+<p>$PSParameters = "-VMNAME '" + $VMName + "' -emailAddress '" + $emailAddress + "' -RootPartition '" + $RootPartition + "'"</p>
+<p>Write-Host 'PS Parameters:'$PSParameters</p>
+<br>
+<p>$PSScript = 'G:\Scripts\Create-Linux-Server-Step-3-v01.ps1'</p>
+<p>Write-Host 'PS Script:'$PSScript</p>
+<br>
+<p>$PSText = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe "' + $PSScript + '" ' + $PSParameters</p>
+<p>Write-Host 'Complete PS String:'$PSText</p>
+<br>
+<h1>Run PS Script on PS Host</h1>
+<p>$result = Invoke-VMScript -VM $PSHost -ScriptType Bat -ScriptText $PSText -GuestUser $username -GuestPassword $HashiVaultPW</p>
+<p>Write-Host $result.ScriptOutput</p>
+<br>
+<p>return $LASTEXITCODE</p>
+<p>}</p>
+<br>
+<p>{{< /highlight >}}</p>
+<br>
+<h2>Subscription:</h2>
+<br>
+<img src="images/pshost-03.PNG" alt="">
+<br>
+<hr>
+<br>
+<div style="background-color:#9ae59a; Padding:20px;" ><b>Lessons Learned:</b>
+<p><ul></p>
+<p><li>vRA 7.6 and 8.2 can share the same PS Host and Scripts.</li></p>
+<p><li>A lot of the PowerShell code and logic I use in vRA 7.6 will be able to be reused/shared.</li></p>
+<p><li>Using a PS Host does require an additional VM.</li></p>
+<p><li>Within ABX scripts I have always changed the default "Custom limits and retry options". I set the "Memory Limit" to 1024 and "Timeouts" to 900.</li></p>
+<p><li>Anytime I speak to others about Automation the one item I stress is there is no right way or wrong way to accomplish your tasks. Build on the skills that your Team already has. The environment I work in is 90% Windows Servers so we use PowerShell a lot. That is why I needed to be able to use all the PS Modules that I have installed on the PS Host.</li></p>
+<p></ul></p>
+</div>
+<br>
+<hr>
+<br>
+<ul>
+<li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
+<br>
+</ul>
+<p><center></p>
+<p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
+<p></center></p>
+<br>
+<hr>
+
+                    </div>
+                </article>
+                
+                <footer>
+                    <p><a href="index.html">← Back to vCROCS</a></p>
+                </footer>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
