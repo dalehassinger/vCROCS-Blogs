@@ -46,6 +46,45 @@ body {
     flex-direction: column;
 }
 
+.mobile-nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.mobile-nav-toggle:hover {
+    background: rgba(255,255,255,0.14);
+    transform: translateY(-1px);
+}
+
+.mobile-nav-toggle .hamburger-lines {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mobile-nav-toggle .hamburger-lines span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
 .sidebar-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -689,7 +728,8 @@ footer a:hover {
         width: 100%;
         height: auto;
         position: relative;
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 1rem 1rem;
+        overflow: visible;
     }
     
     .sidebar-avatar {
@@ -700,9 +740,48 @@ footer a:hover {
     .sidebar-title {
         font-size: 1.25rem;
     }
+
+    .sidebar-header {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .mobile-nav-toggle {
+        display: inline-flex;
+    }
     
     .sidebar-nav {
+        flex: none;
         margin-top: 1rem;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.25s ease, opacity 0.2s ease;
+    }
+
+    .sidebar.mobile-nav-open .sidebar-nav {
+        max-height: 60vh;
+        opacity: 1;
+        pointer-events: auto;
+        overflow-y: auto;
+    }
+
+    .sidebar.mobile-nav-open .mobile-nav-toggle .hamburger-lines span:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .sidebar.mobile-nav-open .mobile-nav-toggle .hamburger-lines span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .sidebar.mobile-nav-open .mobile-nav-toggle .hamburger-lines span:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    .sidebar-nav ul {
+        padding-top: 0.35rem;
     }
     
     .main-wrapper {

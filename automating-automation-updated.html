@@ -8,6 +8,20 @@
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
     <script src="lightbox.js" defer></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
+<script>
+  var doNotTrack = false;
+  if ( true ) {
+    var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+    var doNotTrack = (dnt == "1" || dnt == "yes");
+  }
+  if (!doNotTrack) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KSLC6FHF36');
+  }
+</script>
     <style>
         /* Single column layout for individual post pages */
         .container.single-post {
@@ -54,9 +68,17 @@
             </a>
 
         </div>
+        <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+            <span class="hamburger-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="mobile-nav-label">Menu</span>
+        </button>
     </div>
     
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" id="site-navigation">
         <ul>
             <li>
                 <a href="index.html">
@@ -79,6 +101,31 @@
         </ul>
     </nav>
 </aside>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = sidebar ? sidebar.querySelector('.mobile-nav-toggle') : null;
+        const navLinks = sidebar ? sidebar.querySelectorAll('.sidebar-nav a') : [];
+
+        if (!sidebar || !toggle) {
+            return;
+        }
+
+        toggle.addEventListener('click', function() {
+            const isOpen = sidebar.classList.toggle('mobile-nav-open');
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-nav-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    });
+</script>
     
     <!-- Main Content -->
     <div class="main-wrapper">
@@ -90,8 +137,8 @@
                     <header>
                         <h1>Automating Automation (Updated)</h1>
                         <div class="post-meta">
-                            <time datetime="2026-05-04T01:12:03Z">
-                                May 3, 2026
+                            <time datetime="2021-04-29T04:00:00Z">
+                                April 29, 2021
                             </time>
                              • by Dale Hassinger
                         </div>

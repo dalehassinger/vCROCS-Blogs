@@ -6,6 +6,20 @@
     <title>Archive - vCROCS</title>
     <link rel="stylesheet" href="style.css">
     <script src="lightbox.js" defer></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
+<script>
+  var doNotTrack = false;
+  if ( true ) {
+    var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+    var doNotTrack = (dnt == "1" || dnt == "yes");
+  }
+  if (!doNotTrack) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KSLC6FHF36');
+  }
+</script>
     <style>
         /* Archive filtering styles */
         .archive-year-section {
@@ -82,9 +96,17 @@
             </a>
 
         </div>
+        <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+            <span class="hamburger-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="mobile-nav-label">Menu</span>
+        </button>
     </div>
     
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" id="site-navigation">
         <ul>
             <li>
                 <a href="index.html">
@@ -107,6 +129,31 @@
         </ul>
     </nav>
 </aside>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = sidebar ? sidebar.querySelector('.mobile-nav-toggle') : null;
+        const navLinks = sidebar ? sidebar.querySelectorAll('.sidebar-nav a') : [];
+
+        if (!sidebar || !toggle) {
+            return;
+        }
+
+        toggle.addEventListener('click', function() {
+            const isOpen = sidebar.classList.toggle('mobile-nav-open');
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-nav-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    });
+</script>
     
     <!-- Main Content -->
     <div class="main-wrapper">
@@ -127,456 +174,474 @@
                     <section class="archive-year-section" data-year="2026" id="year-2026">
     <h2>2026</h2>
     <div class="post-item" data-year="2026">
-    <h3><a href="hugo-static-site-generator.html">Hugo | Static Site Generator</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-8.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 8</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-automation-linux-powershell-host.html">VCF Automation | Linux PowerShell Host</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-automation-options-for-cpu-memory-values.html">VMware Aria Automation | Options for CPU|Memory values</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="github-repository-code-and-examples-to-help-you-get-started.html">GitHub Repository | Code and Examples to help you get started</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="powercli-getting-started.html">PowerCLI Getting Started</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-automation-and-saltstack-config-resource.html">VMware Aria Automation and SaltStack Config Resource</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="home-lab-current-bom.html">Home Lab | Current BOM</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="saltconf-2021-saltstack-config-session.html">SaltConf 2021 | SaltStack Config Session</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="open-ports-zero-trust.html">Open Ports | Zero Trust</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-automation-working-with-windows-server-drives.html">VMware Aria Automation | Working with Windows Server Drives</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-9.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 9</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="the-vmware-community-podcast-i-was-a-guest-on-the-show.html">The VMware Community Podcast | I was a Guest on the show</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="creating-charts-with-chartjs-and-displaying-in-vrealize-operations.html">Creating Charts with ChartJS and displaying in vRealize Operations</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vbrownbag-vmworld-presentation.html">vBrownbag VMworld Presentation</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-explore-2023-presentation.html">VMware Explore 2023 | Presentation</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-automation-customproperties.html">VCF Automation | CustomProperties</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="chisoku-knowing-when-technology-is-enough.html">Chisoku: Knowing When Technology Is Enough</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcommunity-mp-windows-servers-services.html">vCommunity MP | Windows Servers Services</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vexpert-2023-vexpert-cloud-management.html">vExpert 2023 | vExpert Cloud Management</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-operations-servicenow-management-pack.html">VMware Aria Operations | Servicenow | Management Pack</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="powercli-and-yaml.html">PowerCLI and YAML</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="unlocking-the-potential-vmware-aria-operations-automation-central-vm-snaps.html">Unlocking the Potential | VMware Aria Operations | Automation Central | VM Snaps</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="how-to-use-powershell-modules-with-vra-8-2.html">How to use PowerShell Modules with vRA 8.2</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="what-is-vrealize-automation-episode-21.html">What is vRealize Automation - Episode 21</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="unlocking-the-potential-vmware-aria-automation-config-api.html">Unlocking the Potential | VMware Aria Automation Config API</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="custom-app-claude-code.html">Custom App | Claude Code</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-automation-custom-form-with-chatgpt.html">VMware Aria Automation | Custom Form with ChatGPT</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="nsx-t-security-tags-and-powershell.html">NSX-T security Tags and PowerShell</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-7.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 7</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-operations-dashboard-esxi-tiered-memory.html">VCF Operations Dashboard | ESXi Tiered Memory</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="use-vcenter-tags-to-maintain-vm-storage-placement.html">Use vCenter TAGs to maintain VM Storage Placement</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
     <h3><a href="vmug-connect-2026-minneapolis.html">VMUG Connect 2026 | Minneapolis</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="esxi-on-raspberry-pi.html">ESXi on Raspberry PI</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="why-i-give-back-my-7-year-vexpert-story.html">Why I Give Back: My 7-Year vExpert Story</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-operations-ideas-for-practical-and-effective-dashboards.html">VCF Operations | Ideas for Practical and Effective Dashboards</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="aria-operations-aria-appliances-observability.html">Aria Operations | Aria Appliances Observability</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-explore-2024.html">VMware Explore 2024</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="unlocking-the-potential-vmware-aria-automation-abx-action-constants-and-secrets.html">Unlocking the Potential | VMware Aria Automation | ABX Action Constants and Secrets</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmworld-2021-saltstack-config-session.html">VMworld 2021 - SaltStack Config Session</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="the-powershell-podcast-i-was-a-guest-on-the-show.html">The PowerShell Podcast | I was a Guest on the show</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="unlocking-the-potential-vmware-aria-operations-metric-search.html">Unlocking the Potential | VMware Aria Operations | Metric Search</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="schedule-rvtools-data-export.html">Schedule RVTools Data Export</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="unlocking-the-potential-vmware-aria-operations-automation-central-snapshot-age.html">Unlocking the Potential | VMware Aria Operations | Automation Central | Snapshot Age</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="aria-operations-vcenter-observability.html">Aria Operations | vCenter Observability</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-4.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 4</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vexpert-2024-fifth-year.html">VMware vExpert 2024 | Fifth Year</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="smart-desk-and-homelab.html">Smart Desk and Homelab.</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="how-vrealize-operations-can-help-with-right-sizing-vms.html">How vRealize Operations can help with Right Sizing VMs</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-api.html">VMware vRealize SaltStack Config API</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-operations-for-logs-saas-esxi-host-syslog-setting.html">VMware Aria Operations for Logs (SaaS) | ESXi Host syslog setting</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-operations-broadcom-services-management-pack.html">VMware Aria Operations | Broadcom Services | Management Pack</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vexpert-2022-vexpert-cloud-management.html">vExpert 2022 | vExpert Cloud Management</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="year-in-review-2021-2022-goals.html">Year in Review - 2021 | 2022 Goals</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-the-hvc-community-remains-strong-and-active.html">VMware | The HVC Community remains strong and active</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-3.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 3</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-cheat-sheet-for-a-windows-server-admin.html">VMware vRealize SaltStack Config cheat sheet for a Windows Server Admin</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-explore-2025-my-sessions-and-more.html">VMware Explore 2025 | My Sessions and more...</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="tech-enhanced-camping-adventures-july-2025.html">Tech-Enhanced Camping Adventures | July 2025</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="central-pa-vmug-august-2022.html">Central PA VMUG | August 2022</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-powerblock-august-2022.html">VMware PowerBlock | August 2022</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vrealize-operations-8-x-new-features.html">vRealize Operations 8.x - New Features</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="unlocking-the-potential-vmware-aria-operations-october-2023-powerblock.html">Unlocking the Potential | VMware Aria Operations | October 2023 PowerBlock</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vrealize-automation-8-1-powershell-abx.html">vRealize Automation 8.1 - PowerShell ABX</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-automation-how-to-send-messages-and-updates.html">VMware Aria Automation | How to send messages and updates</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-automation-input-arrays.html">VCF Automation | Input Arrays</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-explore-2025-success-vcommunity-and-inspiration.html">VMware Explore 2025: Success, vCommunity, and Inspiration</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="add-disk-to-a-remote-windows-server-vmware-vm.html">Add disk to a Remote Windows Server | VMware VM</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-operations-cpu-overcommit-details.html">VCF Operations | CPU|Overcommit Details</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="productive-apps-2022.html">Productive APPs | 2022</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-operations-rvtools-dashboard.html">VMware Aria Operations | RVTools Dashboard</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-operations-vm-console-access-with-vmrc.html">VMware Aria Operations | VM console access with VMRC</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-operations-use-vcenter-tags-custom-groups-super-metrics-to-get-vm-details.html">VMware Aria Operations | Use vCenter TAGS/Custom Groups/Super Metrics to get VM Details</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-automation-orchestrator-active-directory-ous.html">VMware Aria Automation Orchestrator | Active Directory OUs</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-aria-automation-and-ansible-integration.html">VMware Aria Automation and Ansible Integration</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="automating-automation-updated.html">Automating Automation (Updated)</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-explore-2023-review-and-experience.html">VMware Explore 2023 | Review and Experience</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vexpert-2025-sixth-year.html">VMware vExpert 2025 | Sixth Year</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="text-display-widget-more-powerful-than-just-displaying-text-on-a-dashboard.html">Text Display Widget - More Powerful than just displaying text on a Dashboard...</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="highlights-of-2025.html">Highlights of 2025</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="clay-thrower-powered-by-raspberry-pi.html">Clay Thrower | Powered By: Raspberry PI</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="openclaw-apple-app-for-my-home-lab.html">OpenClaw | Apple App for my Home Lab</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="end-of-year-review-2023.html">End of Year Review - 2023</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-5.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 5</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="automation-code-creation-with-ollama.html">Automation Code Creation with ollama</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="how-to-be-successful-with-vmware-vrealize-products-in-your-environment.html">How to be successful with VMware vRealize Products in your environment</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="the-12-days-of-tech.html">The 12 Days of Tech</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-explore-2024-my-sessions.html">VMware Explore 2024 | My Sessions</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-operations-extract-diagnostics-events-script.html">VCF Operations | Extract Diagnostics Events Script</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-operations-zoom-mp.html">VCF Operations | Zoom MP</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-deploy-scripted-install-home-lab.html">VCF Deploy | Scripted Install | Home Lab</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-operations-for-logs-how-to-automate-url-generation-for-filtering-results.html">VCF Operations for Logs | How to Automate URL Generation for Filtering Results</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="rest-api-calls-in-vmware-aria-automation-with-powershell.html">Rest API calls in VMware Aria Automation with PowerShell</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="unlocking-the-potential-vmware-aria-automation-custom-form-versioning.html">Unlocking the Potential | VMware Aria Automation | Custom Form Versioning</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="top-blog-highlights-of-2024.html">Top Blog Highlights of 2024</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="how-to-learn-about-vmware-products.html">How to learn about VMware Products</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="podcast-guest-virtually-speaking-and-vcommunity.html">Podcast Guest | Virtually Speaking and vCommunity</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="philly-vmug-vmware-aria-automation-and-operations.html">Philly VMUG | VMware Aria Automation and Operations</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-6.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 6</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="powershell-code-to-add-custom-registry-values.html">Powershell code to add custom Registry values</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="infoblox-1-1-plugin-for-vra-8-1.html">Infoblox 1.1 plugin for vRA 8.1</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="powercli-on-mac-linux-and-windows.html">PowerCLI on Mac, Linux, and Windows</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <div class="post-meta">April 10, 2026</div>
 </div>
 <div class="post-item" data-year="2026">
     <h3><a href="keyboard-corsair-galleon-100-sd.html">Keyboard | Corsair Galleon 100 SD</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <div class="post-meta">March 8, 2026</div>
 </div>
 <div class="post-item" data-year="2026">
-    <h3><a href="vcf-operations-for-logs-how-to-use-with-automation-scripts.html">VCF Operations for Logs | How to use with Automation Scripts</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <h3><a href="openclaw-apple-app-for-my-home-lab.html">OpenClaw | Apple App for my Home Lab</a></h3>
+    <div class="post-meta">March 1, 2026</div>
 </div>
 <div class="post-item" data-year="2026">
-    <h3><a href="vmware-explore-2024-my-insights-session-recording-links-and-pics.html">VMware Explore 2024 | My Insights, Session Recording Links and PICs</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <h3><a href="custom-app-claude-code.html">Custom App | Claude Code</a></h3>
+    <div class="post-meta">February 16, 2026</div>
 </div>
 <div class="post-item" data-year="2026">
-    <h3><a href="one-way-to-do-automation-in-a-zero-trust-environment.html">One way to do Automation in a Zero Trust Environment</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <h3><a href="chisoku-knowing-when-technology-is-enough.html">Chisoku: Knowing When Technology Is Enough</a></h3>
+    <div class="post-meta">February 15, 2026</div>
 </div>
 <div class="post-item" data-year="2026">
-    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-1.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 1</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="productive-apps-2023.html">Productive APPs | 2023</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="vcf-automation-deployments-overview-tab.html">VCF Automation Deployments | Overview Tab</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="powershell-script-as-a-web-api-server.html">PowerShell Script as a Web/API Server</a></h3>
-    <div class="post-meta">May 3, 2026</div>
-</div>
-<div class="post-item" data-year="2026">
-    <h3><a href="what-have-i-been-up-to-2nd-half-2022.html">What have I been up to? | 2nd half 2022</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <h3><a href="why-i-give-back-my-7-year-vexpert-story.html">Why I Give Back: My 7-Year vExpert Story</a></h3>
+    <div class="post-meta">February 1, 2026</div>
 </div>
 <div class="post-item" data-year="2026">
     <h3><a href="vcf-operations-custom-summary.html">VCF Operations | Custom Summary</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <div class="post-meta">January 31, 2026</div>
 </div>
-<div class="post-item" data-year="2026">
+</section>
+<section class="archive-year-section" data-year="2025" id="year-2025">
+    <h2>2025</h2>
+    <div class="post-item" data-year="2025">
+    <h3><a href="highlights-of-2025.html">Highlights of 2025</a></h3>
+    <div class="post-meta">December 26, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="home-lab-current-bom.html">Home Lab | Current BOM</a></h3>
+    <div class="post-meta">November 27, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vcommunity-mp-windows-servers-services.html">vCommunity MP | Windows Servers Services</a></h3>
+    <div class="post-meta">November 8, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="podcast-guest-virtually-speaking-and-vcommunity.html">Podcast Guest | Virtually Speaking and vCommunity</a></h3>
+    <div class="post-meta">October 11, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vmware-explore-2025-success-vcommunity-and-inspiration.html">VMware Explore 2025: Success, vCommunity, and Inspiration</a></h3>
+    <div class="post-meta">September 1, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vmware-explore-2025-my-sessions-and-more.html">VMware Explore 2025 | My Sessions and more...</a></h3>
+    <div class="post-meta">July 24, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="tech-enhanced-camping-adventures-july-2025.html">Tech-Enhanced Camping Adventures | July 2025</a></h3>
+    <div class="post-meta">July 10, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vmware-vexpert-2025-sixth-year.html">VMware vExpert 2025 | Sixth Year</a></h3>
+    <div class="post-meta">June 8, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vcf-operations-cpu-overcommit-details.html">VCF Operations | CPU|Overcommit Details</a></h3>
+    <div class="post-meta">June 4, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vcf-operations-zoom-mp.html">VCF Operations | Zoom MP</a></h3>
+    <div class="post-meta">April 20, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="powershell-script-as-a-web-api-server.html">PowerShell Script as a Web/API Server</a></h3>
+    <div class="post-meta">April 9, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vcf-automation-customproperties.html">VCF Automation | CustomProperties</a></h3>
+    <div class="post-meta">March 30, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vcf-automation-linux-powershell-host.html">VCF Automation | Linux PowerShell Host</a></h3>
+    <div class="post-meta">March 15, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="powercli-and-yaml.html">PowerCLI and YAML</a></h3>
+    <div class="post-meta">March 8, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="powercli-on-mac-linux-and-windows.html">PowerCLI on Mac, Linux, and Windows</a></h3>
+    <div class="post-meta">February 21, 2025</div>
+</div>
+<div class="post-item" data-year="2025">
+    <h3><a href="vcf-automation-input-arrays.html">VCF Automation | Input Arrays</a></h3>
+    <div class="post-meta">January 31, 2025</div>
+</div>
+</section>
+<section class="archive-year-section" data-year="2024" id="year-2024">
+    <h2>2024</h2>
+    <div class="post-item" data-year="2024">
+    <h3><a href="vcf-deploy-scripted-install-home-lab.html">VCF Deploy | Scripted Install | Home Lab</a></h3>
+    <div class="post-meta">December 26, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="top-blog-highlights-of-2024.html">Top Blog Highlights of 2024</a></h3>
+    <div class="post-meta">December 22, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vcf-operations-extract-diagnostics-events-script.html">VCF Operations | Extract Diagnostics Events Script</a></h3>
+    <div class="post-meta">December 21, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="the-12-days-of-tech.html">The 12 Days of Tech</a></h3>
+    <div class="post-meta">December 21, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vcf-operations-ideas-for-practical-and-effective-dashboards.html">VCF Operations | Ideas for Practical and Effective Dashboards</a></h3>
+    <div class="post-meta">October 29, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vcf-operations-for-logs-how-to-automate-url-generation-for-filtering-results.html">VCF Operations for Logs | How to Automate URL Generation for Filtering Results</a></h3>
+    <div class="post-meta">October 21, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vcf-operations-for-logs-how-to-use-with-automation-scripts.html">VCF Operations for Logs | How to use with Automation Scripts</a></h3>
+    <div class="post-meta">October 19, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vcf-automation-deployments-overview-tab.html">VCF Automation Deployments | Overview Tab</a></h3>
+    <div class="post-meta">October 12, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vcf-operations-dashboard-esxi-tiered-memory.html">VCF Operations Dashboard | ESXi Tiered Memory</a></h3>
+    <div class="post-meta">October 5, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-explore-2024-my-insights-session-recording-links-and-pics.html">VMware Explore 2024 | My Insights, Session Recording Links and PICs</a></h3>
+    <div class="post-meta">August 30, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-the-hvc-community-remains-strong-and-active.html">VMware | The HVC Community remains strong and active</a></h3>
+    <div class="post-meta">July 13, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-explore-2024-my-sessions.html">VMware Explore 2024 | My Sessions</a></h3>
+    <div class="post-meta">June 20, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-aria-automation-options-for-cpu-memory-values.html">VMware Aria Automation | Options for CPU|Memory values</a></h3>
+    <div class="post-meta">June 19, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="aria-operations-aria-appliances-observability.html">Aria Operations | Aria Appliances Observability</a></h3>
+    <div class="post-meta">June 4, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="aria-operations-vcenter-observability.html">Aria Operations | vCenter Observability</a></h3>
+    <div class="post-meta">May 31, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-explore-2024.html">VMware Explore 2024</a></h3>
+    <div class="post-meta">May 1, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-vexpert-2024-fifth-year.html">VMware vExpert 2024 | Fifth Year</a></h3>
+    <div class="post-meta">April 27, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="automation-code-creation-with-ollama.html">Automation Code Creation with ollama</a></h3>
+    <div class="post-meta">April 27, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-aria-operations-broadcom-services-management-pack.html">VMware Aria Operations | Broadcom Services | Management Pack</a></h3>
+    <div class="post-meta">April 1, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-aria-automation-how-to-send-messages-and-updates.html">VMware Aria Automation | How to send messages and updates</a></h3>
+    <div class="post-meta">March 17, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="how-to-learn-about-vmware-products.html">How to learn about VMware Products</a></h3>
+    <div class="post-meta">March 9, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-aria-operations-vm-console-access-with-vmrc.html">VMware Aria Operations | VM console access with VMRC</a></h3>
+    <div class="post-meta">February 18, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="schedule-rvtools-data-export.html">Schedule RVTools Data Export</a></h3>
+    <div class="post-meta">February 8, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-aria-operations-use-vcenter-tags-custom-groups-super-metrics-to-get-vm-details.html">VMware Aria Operations | Use vCenter TAGS/Custom Groups/Super Metrics to get VM Details</a></h3>
+    <div class="post-meta">January 26, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-aria-automation-custom-form-with-chatgpt.html">VMware Aria Automation | Custom Form with ChatGPT</a></h3>
+    <div class="post-meta">January 8, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="vmware-aria-automation-orchestrator-active-directory-ous.html">VMware Aria Automation Orchestrator | Active Directory OUs</a></h3>
+    <div class="post-meta">January 7, 2024</div>
+</div>
+<div class="post-item" data-year="2024">
+    <h3><a href="end-of-year-review-2023.html">End of Year Review - 2023</a></h3>
+    <div class="post-meta">January 1, 2024</div>
+</div>
+</section>
+<section class="archive-year-section" data-year="2023" id="year-2023">
+    <h2>2023</h2>
+    <div class="post-item" data-year="2023">
+    <h3><a href="vmware-aria-operations-servicenow-management-pack.html">VMware Aria Operations | Servicenow | Management Pack</a></h3>
+    <div class="post-meta">December 22, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="productive-apps-2023.html">Productive APPs | 2023</a></h3>
+    <div class="post-meta">December 2, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="unlocking-the-potential-vmware-aria-automation-abx-action-constants-and-secrets.html">Unlocking the Potential | VMware Aria Automation | ABX Action Constants and Secrets</a></h3>
+    <div class="post-meta">November 14, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="unlocking-the-potential-vmware-aria-automation-config-api.html">Unlocking the Potential | VMware Aria Automation Config API</a></h3>
+    <div class="post-meta">November 12, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="unlocking-the-potential-vmware-aria-operations-october-2023-powerblock.html">Unlocking the Potential | VMware Aria Operations | October 2023 PowerBlock</a></h3>
+    <div class="post-meta">October 25, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="unlocking-the-potential-vmware-aria-operations-automation-central-snapshot-age.html">Unlocking the Potential | VMware Aria Operations | Automation Central | Snapshot Age</a></h3>
+    <div class="post-meta">October 16, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="vmware-aria-operations-for-logs-saas-esxi-host-syslog-setting.html">VMware Aria Operations for Logs (SaaS) | ESXi Host syslog setting</a></h3>
+    <div class="post-meta">October 7, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="the-vmware-community-podcast-i-was-a-guest-on-the-show.html">The VMware Community Podcast | I was a Guest on the show</a></h3>
+    <div class="post-meta">September 6, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="vmware-explore-2023-review-and-experience.html">VMware Explore 2023 | Review and Experience</a></h3>
+    <div class="post-meta">August 26, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="vmware-explore-2023-presentation.html">VMware Explore 2023 | Presentation</a></h3>
+    <div class="post-meta">August 18, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
     <h3><a href="vmware-explore-2023-hackathon.html">VMware Explore 2023 | Hackathon</a></h3>
-    <div class="post-meta">May 3, 2026</div>
+    <div class="post-meta">August 15, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="github-repository-code-and-examples-to-help-you-get-started.html">GitHub Repository | Code and Examples to help you get started</a></h3>
+    <div class="post-meta">June 24, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="unlocking-the-potential-vmware-aria-automation-custom-form-versioning.html">Unlocking the Potential | VMware Aria Automation | Custom Form Versioning</a></h3>
+    <div class="post-meta">May 20, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="unlocking-the-potential-vmware-aria-operations-automation-central-vm-snaps.html">Unlocking the Potential | VMware Aria Operations | Automation Central | VM Snaps</a></h3>
+    <div class="post-meta">May 13, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="unlocking-the-potential-vmware-aria-operations-metric-search.html">Unlocking the Potential | VMware Aria Operations | Metric Search</a></h3>
+    <div class="post-meta">May 6, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="vmware-aria-operations-rvtools-dashboard.html">VMware Aria Operations | RVTools Dashboard</a></h3>
+    <div class="post-meta">April 1, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="rest-api-calls-in-vmware-aria-automation-with-powershell.html">Rest API calls in VMware Aria Automation with PowerShell</a></h3>
+    <div class="post-meta">March 20, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="the-powershell-podcast-i-was-a-guest-on-the-show.html">The PowerShell Podcast | I was a Guest on the show</a></h3>
+    <div class="post-meta">March 12, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="philly-vmug-vmware-aria-automation-and-operations.html">Philly VMUG | VMware Aria Automation and Operations</a></h3>
+    <div class="post-meta">March 10, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="vmware-aria-automation-working-with-windows-server-drives.html">VMware Aria Automation | Working with Windows Server Drives</a></h3>
+    <div class="post-meta">February 18, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="vexpert-2023-vexpert-cloud-management.html">vExpert 2023 | vExpert Cloud Management</a></h3>
+    <div class="post-meta">February 17, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="vmware-aria-automation-and-saltstack-config-resource.html">VMware Aria Automation and SaltStack Config Resource</a></h3>
+    <div class="post-meta">February 11, 2023</div>
+</div>
+<div class="post-item" data-year="2023">
+    <h3><a href="use-vcenter-tags-to-maintain-vm-storage-placement.html">Use vCenter TAGs to maintain VM Storage Placement</a></h3>
+    <div class="post-meta">January 27, 2023</div>
+</div>
+</section>
+<section class="archive-year-section" data-year="2022" id="year-2022">
+    <h2>2022</h2>
+    <div class="post-item" data-year="2022">
+    <h3><a href="vmware-aria-automation-and-ansible-integration.html">VMware Aria Automation and Ansible Integration</a></h3>
+    <div class="post-meta">December 30, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="productive-apps-2022.html">Productive APPs | 2022</a></h3>
+    <div class="post-meta">November 26, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="what-have-i-been-up-to-2nd-half-2022.html">What have I been up to? | 2nd half 2022</a></h3>
+    <div class="post-meta">November 1, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="central-pa-vmug-august-2022.html">Central PA VMUG | August 2022</a></h3>
+    <div class="post-meta">August 24, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="vmware-powerblock-august-2022.html">VMware PowerBlock | August 2022</a></h3>
+    <div class="post-meta">August 19, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="vmware-vrealize-saltstack-config-api.html">VMware vRealize SaltStack Config API</a></h3>
+    <div class="post-meta">June 26, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-9.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 9</a></h3>
+    <div class="post-meta">June 10, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="vmware-vrealize-saltstack-config-cheat-sheet-for-a-windows-server-admin.html">VMware vRealize SaltStack Config cheat sheet for a Windows Server Admin</a></h3>
+    <div class="post-meta">March 6, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="vexpert-2022-vexpert-cloud-management.html">vExpert 2022 | vExpert Cloud Management</a></h3>
+    <div class="post-meta">February 22, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-8.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 8</a></h3>
+    <div class="post-meta">February 12, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-7.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 7</a></h3>
+    <div class="post-meta">January 14, 2022</div>
+</div>
+<div class="post-item" data-year="2022">
+    <h3><a href="year-in-review-2021-2022-goals.html">Year in Review - 2021 | 2022 Goals</a></h3>
+    <div class="post-meta">January 1, 2022</div>
+</div>
+</section>
+<section class="archive-year-section" data-year="2021" id="year-2021">
+    <h2>2021</h2>
+    <div class="post-item" data-year="2021">
+    <h3><a href="nsx-t-security-tags-and-powershell.html">NSX-T security Tags and PowerShell</a></h3>
+    <div class="post-meta">December 31, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-6.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 6</a></h3>
+    <div class="post-meta">October 9, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="saltconf-2021-saltstack-config-session.html">SaltConf 2021 | SaltStack Config Session</a></h3>
+    <div class="post-meta">October 2, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-5.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 5</a></h3>
+    <div class="post-meta">October 1, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-4.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 4</a></h3>
+    <div class="post-meta">September 5, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-3.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 3</a></h3>
+    <div class="post-meta">August 27, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="vmworld-2021-saltstack-config-session.html">VMworld 2021 - SaltStack Config Session</a></h3>
+    <div class="post-meta">August 12, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-1.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 1</a></h3>
+    <div class="post-meta">July 16, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="how-vrealize-operations-can-help-with-right-sizing-vms.html">How vRealize Operations can help with Right Sizing VMs</a></h3>
+    <div class="post-meta">May 15, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="automating-automation-updated.html">Automating Automation (Updated)</a></h3>
+    <div class="post-meta">April 29, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="open-ports-zero-trust.html">Open Ports | Zero Trust</a></h3>
+    <div class="post-meta">April 24, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="vrealize-operations-8-x-new-features.html">vRealize Operations 8.x - New Features</a></h3>
+    <div class="post-meta">February 20, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="how-to-use-powershell-modules-with-vra-8-2.html">How to use PowerShell Modules with vRA 8.2</a></h3>
+    <div class="post-meta">January 18, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="how-to-be-successful-with-vmware-vrealize-products-in-your-environment.html">How to be successful with VMware vRealize Products in your environment</a></h3>
+    <div class="post-meta">January 15, 2021</div>
+</div>
+<div class="post-item" data-year="2021">
+    <h3><a href="creating-charts-with-chartjs-and-displaying-in-vrealize-operations.html">Creating Charts with ChartJS and displaying in vRealize Operations</a></h3>
+    <div class="post-meta">January 3, 2021</div>
+</div>
+</section>
+<section class="archive-year-section" data-year="2020" id="year-2020">
+    <h2>2020</h2>
+    <div class="post-item" data-year="2020">
+    <h3><a href="esxi-on-raspberry-pi.html">ESXi on Raspberry PI</a></h3>
+    <div class="post-meta">October 11, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="vbrownbag-vmworld-presentation.html">vBrownbag VMworld Presentation</a></h3>
+    <div class="post-meta">October 1, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="text-display-widget-more-powerful-than-just-displaying-text-on-a-dashboard.html">Text Display Widget - More Powerful than just displaying text on a Dashboard...</a></h3>
+    <div class="post-meta">July 17, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="smart-desk-and-homelab.html">Smart Desk and Homelab.</a></h3>
+    <div class="post-meta">July 11, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="infoblox-1-1-plugin-for-vra-8-1.html">Infoblox 1.1 plugin for vRA 8.1</a></h3>
+    <div class="post-meta">June 14, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="what-is-vrealize-automation-episode-21.html">What is vRealize Automation - Episode 21</a></h3>
+    <div class="post-meta">May 29, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="vrealize-automation-8-1-powershell-abx.html">vRealize Automation 8.1 - PowerShell ABX</a></h3>
+    <div class="post-meta">May 17, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="hugo-static-site-generator.html">Hugo | Static Site Generator</a></h3>
+    <div class="post-meta">April 26, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="powercli-getting-started.html">PowerCLI Getting Started</a></h3>
+    <div class="post-meta">April 19, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="powershell-code-to-add-custom-registry-values.html">Powershell code to add custom Registry values</a></h3>
+    <div class="post-meta">April 19, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="add-disk-to-a-remote-windows-server-vmware-vm.html">Add disk to a Remote Windows Server | VMware VM</a></h3>
+    <div class="post-meta">April 19, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="one-way-to-do-automation-in-a-zero-trust-environment.html">One way to do Automation in a Zero Trust Environment</a></h3>
+    <div class="post-meta">April 19, 2020</div>
+</div>
+<div class="post-item" data-year="2020">
+    <h3><a href="clay-thrower-powered-by-raspberry-pi.html">Clay Thrower | Powered By: Raspberry PI</a></h3>
+    <div class="post-meta">April 19, 2020</div>
 </div>
 </section>
                 </main>
@@ -596,7 +661,37 @@
             <li>
     <a href="archive.html?year=2026" class="archive-filter-link" data-year="2026">
         <span>2026</span>
-        <span class="count">114</span>
+        <span class="count">8</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2025" class="archive-filter-link" data-year="2025">
+        <span>2025</span>
+        <span class="count">16</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2024" class="archive-filter-link" data-year="2024">
+        <span>2024</span>
+        <span class="count">27</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2023" class="archive-filter-link" data-year="2023">
+        <span>2023</span>
+        <span class="count">23</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2022" class="archive-filter-link" data-year="2022">
+        <span>2022</span>
+        <span class="count">12</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?years=2021,2020" class="archive-filter-link" data-years="2021,2020">
+        <span>Older</span>
+        <span class="count">28</span>
     </a>
 </li>
         </ul>
@@ -622,7 +717,9 @@
     <div class="widget tags-widget">
         <h3>🏷️ Tags</h3>
         <div class="tags-cloud">
-            <a href="tags/abx.html" class="tag-item">#ABX</a>
+            <a href="tags/2024.html" class="tag-item">#2024</a>
+<a href="tags/2025.html" class="tag-item">#2025</a>
+<a href="tags/abx.html" class="tag-item">#ABX</a>
 <a href="tags/ai.html" class="tag-item">#AI</a>
 <a href="tags/api.html" class="tag-item">#API</a>
 <a href="tags/apps.html" class="tag-item">#APPs</a>
@@ -631,6 +728,7 @@
 <a href="tags/actions.html" class="tag-item">#Actions</a>
 <a href="tags/active-directory.html" class="tag-item">#Active Directory</a>
 <a href="tags/add-disk.html" class="tag-item">#Add Disk</a>
+<a href="tags/alerts.html" class="tag-item">#Alerts</a>
 <a href="tags/ansible.html" class="tag-item">#Ansible</a>
 <a href="tags/apple.html" class="tag-item">#Apple</a>
 <a href="tags/aria.html" class="tag-item">#Aria</a>
@@ -640,6 +738,7 @@
 <a href="tags/bom.html" class="tag-item">#BOM</a>
 <a href="tags/beach.html" class="tag-item">#Beach</a>
 <a href="tags/beacons.html" class="tag-item">#Beacons</a>
+<a href="tags/benefits.html" class="tag-item">#Benefits</a>
 <a href="tags/blog.html" class="tag-item">#Blog</a>
 <a href="tags/blogs.html" class="tag-item">#Blogs</a>
 <a href="tags/broadcom.html" class="tag-item">#Broadcom</a>
@@ -662,6 +761,7 @@
 <a href="tags/customproperties.html" class="tag-item">#CustomProperties</a>
 <a href="tags/dan-grove.html" class="tag-item">#Dan Grove</a>
 <a href="tags/dashboard.html" class="tag-item">#Dashboard</a>
+<a href="tags/dashboards.html" class="tag-item">#Dashboards</a>
 <a href="tags/dave-kaber.html" class="tag-item">#Dave Kaber</a>
 <a href="tags/delaware.html" class="tag-item">#Delaware</a>
 <a href="tags/deployments.html" class="tag-item">#Deployments</a>
@@ -674,6 +774,7 @@
 <a href="tags/fun.html" class="tag-item">#Fun</a>
 <a href="tags/giving-back.html" class="tag-item">#Giving Back</a>
 <a href="tags/goals.html" class="tag-item">#Goals</a>
+<a href="tags/google-spaces.html" class="tag-item">#Google Spaces</a>
 <a href="tags/grains.html" class="tag-item">#Grains</a>
 <a href="tags/hol.html" class="tag-item">#HOL</a>
 <a href="tags/hvc.html" class="tag-item">#HVC</a>
@@ -684,6 +785,7 @@
 <a href="tags/home-lab.html" class="tag-item">#Home Lab</a>
 <a href="tags/hugo.html" class="tag-item">#Hugo</a>
 <a href="tags/it-reality.html" class="tag-item">#IT Reality</a>
+<a href="tags/ideas.html" class="tag-item">#Ideas</a>
 <a href="tags/infoblox.html" class="tag-item">#InfoBlox</a>
 <a href="tags/keyboard.html" class="tag-item">#Keyboard</a>
 <a href="tags/linux.html" class="tag-item">#Linux</a>
@@ -694,6 +796,7 @@
 <a href="tags/mp-builder.html" class="tag-item">#MP Builder</a>
 <a href="tags/management-pack.html" class="tag-item">#Management Pack</a>
 <a href="tags/management-pack-builder.html" class="tag-item">#Management Pack Builder</a>
+<a href="tags/messages.html" class="tag-item">#Messages</a>
 <a href="tags/metrics.html" class="tag-item">#Metrics</a>
 <a href="tags/monitoring.html" class="tag-item">#Monitoring</a>
 <a href="tags/nsx.html" class="tag-item">#NSX</a>
@@ -704,6 +807,7 @@
 <a href="tags/organizational-units.html" class="tag-item">#Organizational Units</a>
 <a href="tags/php.html" class="tag-item">#PHP</a>
 <a href="tags/posh-ssh.html" class="tag-item">#POSH SSH</a>
+<a href="tags/posh-ssh.html" class="tag-item">#POSH-SSH</a>
 <a href="tags/performance.html" class="tag-item">#Performance</a>
 <a href="tags/ping-monitoring.html" class="tag-item">#Ping Monitoring</a>
 <a href="tags/podcast.html" class="tag-item">#Podcast</a>
@@ -734,6 +838,7 @@
 <a href="tags/saltconf21.html" class="tag-item">#SaltConf21</a>
 <a href="tags/saltstack.html" class="tag-item">#SaltStack</a>
 <a href="tags/saltstack-config.html" class="tag-item">#SaltStack Config</a>
+<a href="tags/samples.html" class="tag-item">#Samples</a>
 <a href="tags/searches.html" class="tag-item">#Searches</a>
 <a href="tags/secrets.html" class="tag-item">#Secrets</a>
 <a href="tags/servicenow.html" class="tag-item">#Servicenow</a>
@@ -745,6 +850,7 @@
 <a href="tags/storage.html" class="tag-item">#Storage</a>
 <a href="tags/streamdeck.html" class="tag-item">#StreamDeck</a>
 <a href="tags/super-metric.html" class="tag-item">#Super Metric</a>
+<a href="tags/teams-messages.html" class="tag-item">#Teams Messages</a>
 <a href="tags/technology.html" class="tag-item">#Technology</a>
 <a href="tags/templates.html" class="tag-item">#Templates</a>
 <a href="tags/text-display-widget.html" class="tag-item">#Text Display Widget</a>

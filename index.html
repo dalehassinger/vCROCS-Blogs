@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="style.css">
     <link rel="alternate" type="application/rss+xml" title="vCROCS" href="feed.xml">
     <script src="lightbox.js" defer></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
+<script>
+  var doNotTrack = false;
+  if ( true ) {
+    var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+    var doNotTrack = (dnt == "1" || dnt == "yes");
+  }
+  if (!doNotTrack) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KSLC6FHF36');
+  }
+</script>
 </head>
 <body>
     <!-- Sidebar Navigation -->
@@ -40,9 +54,17 @@
             </a>
 
         </div>
+        <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+            <span class="hamburger-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="mobile-nav-label">Menu</span>
+        </button>
     </div>
     
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" id="site-navigation">
         <ul>
             <li>
                 <a href="index.html">
@@ -65,6 +87,31 @@
         </ul>
     </nav>
 </aside>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = sidebar ? sidebar.querySelector('.mobile-nav-toggle') : null;
+        const navLinks = sidebar ? sidebar.querySelectorAll('.sidebar-nav a') : [];
+
+        if (!sidebar || !toggle) {
+            return;
+        }
+
+        toggle.addEventListener('click', function() {
+            const isOpen = sidebar.classList.toggle('mobile-nav-open');
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-nav-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    });
+</script>
 
     <!-- Main Content -->
     <div class="main-wrapper">
@@ -72,95 +119,107 @@
             <div class="content-area">
                 <main>
                     <div class="post-item">
-    <img src="images/hugo-static-site-generator-featured.png" alt="Hugo | Static Site Generator" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="hugo-static-site-generator.html">Hugo | Static Site Generator</a></h2>
+    <img src="images/vmug-connect-2026-minneapolis-featured.png" alt="VMUG Connect 2026 | Minneapolis" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="vmug-connect-2026-minneapolis.html">VMUG Connect 2026 | Minneapolis</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:13:05Z">
-            May 3, 2026
+        <time datetime="2026-04-10T04:00:00Z">
+            April 10, 2026
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/technology.html" class="category">Technology</a></div>
-    <div class="tags"><a href="tags/hugo.html" class="tag">#Hugo</a> <a href="tags/static-site-generator.html" class="tag">#Static Site Generator</a> <a href="tags/blog.html" class="tag">#Blog</a> <a href="tags/web-site.html" class="tag">#Web Site</a></div>
+    <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
+    <div class="tags"><a href="tags/career.html" class="tag">#Career</a> <a href="tags/vcommunity.html" class="tag">#vCommunity</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/vmug-connect.html" class="tag">#VMUG Connect</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-8-featured.png" alt="VMware vRealize SaltStack Config as a Windows Server Admin - Part 8" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vmware-vrealize-saltstack-config-as-a-windows-server-admin-part-8.html">VMware vRealize SaltStack Config as a Windows Server Admin - Part 8</a></h2>
+    <img src="images/keyboard-corsair-galleon-100-sd-featured.png" alt="Keyboard | Corsair Galleon 100 SD" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="keyboard-corsair-galleon-100-sd.html">Keyboard | Corsair Galleon 100 SD</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:13:04Z">
-            May 3, 2026
+        <time datetime="2026-03-08T05:00:00Z">
+            March 8, 2026
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/saltstack-config.html" class="tag">#SaltStack Config</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a> <a href="tags/configuration-management.html" class="tag">#Configuration Management</a> <a href="tags/grains.html" class="tag">#grains</a></div>
+    <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
+    <div class="tags"><a href="tags/streamdeck.html" class="tag">#StreamDeck</a> <a href="tags/keyboard.html" class="tag">#Keyboard</a> <a href="tags/corsair.html" class="tag">#Corsair</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/home-lab.html" class="tag">#Home Lab</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vcf-automation-linux-powershell-host-featured.png" alt="VCF Automation | Linux PowerShell Host" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vcf-automation-linux-powershell-host.html">VCF Automation | Linux PowerShell Host</a></h2>
+    <img src="images/openclaw-apple-app-for-my-home-lab-featured.png" alt="OpenClaw | Apple App for my Home Lab" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="openclaw-apple-app-for-my-home-lab.html">OpenClaw | Apple App for my Home Lab</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:13:02Z">
-            May 3, 2026
+        <time datetime="2026-03-01T05:00:00Z">
+            March 1, 2026
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/vcf.html" class="tag">#VCF</a> <a href="tags/automation.html" class="tag">#Automation</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/vmware-code-coach.html" class="tag">#VMware Code Coach</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/linux.html" class="tag">#Linux</a></div>
+    <div class="categories"><a href="categories/ai.html" class="category">AI</a></div>
+    <div class="tags"><a href="tags/openclaw.html" class="tag">#OpenClaw</a> <a href="tags/vcf.html" class="tag">#VCF</a> <a href="tags/operations.html" class="tag">#Operations</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/home-lab.html" class="tag">#Home Lab</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vmware-aria-automation-options-for-cpu-memory-values-featured.png" alt="VMware Aria Automation | Options for CPU|Memory values" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vmware-aria-automation-options-for-cpu-memory-values.html">VMware Aria Automation | Options for CPU|Memory values</a></h2>
+    <img src="images/custom-app-claude-code-featured.png" alt="Custom App | Claude Code" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="custom-app-claude-code.html">Custom App | Claude Code</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:13:01Z">
-            May 3, 2026
+        <time datetime="2026-02-16T05:00:00Z">
+            February 16, 2026
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/templates.html" class="tag">#Templates</a></div>
+    <div class="categories"><a href="categories/ai.html" class="category">AI</a></div>
+    <div class="tags"><a href="tags/vcf.html" class="tag">#VCF</a> <a href="tags/operations.html" class="tag">#Operations</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/home-lab.html" class="tag">#Home Lab</a></div>
 </div>
 <div class="post-item">
-    <img src="images/github-repository-code-and-examples-to-help-you-get-started-featured.png" alt="GitHub Repository | Code and Examples to help you get started" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="github-repository-code-and-examples-to-help-you-get-started.html">GitHub Repository | Code and Examples to help you get started</a></h2>
+    <img src="images/chisoku-knowing-when-technology-is-enough-featured.png" alt="Chisoku: Knowing When Technology Is Enough" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="chisoku-knowing-when-technology-is-enough.html">Chisoku: Knowing When Technology Is Enough</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:13:01Z">
-            May 3, 2026
+        <time datetime="2026-02-15T05:00:00Z">
+            February 15, 2026
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/automation.html" class="tag">#Automation</a> <a href="tags/salt.html" class="tag">#Salt</a> <a href="tags/vmware-aria-automation-config.html" class="tag">#VMware Aria Automation Config</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a> <a href="tags/linux-server.html" class="tag">#Linux Server</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria.html" class="tag">#VMware Aria</a> <a href="tags/configuration-management.html" class="tag">#Configuration Management</a></div>
+    <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
+    <div class="tags"><a href="tags/career.html" class="tag">#Career</a> <a href="tags/vcommunity.html" class="tag">#vCommunity</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/chisoku.html" class="tag">#Chisoku</a></div>
 </div>
 <div class="post-item">
-    <img src="images/powercli-getting-started-featured.png" alt="PowerCLI Getting Started" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="powercli-getting-started.html">PowerCLI Getting Started</a></h2>
+    <img src="images/why-i-give-back-my-7-year-vexpert-story-featured.png" alt="Why I Give Back: My 7-Year vExpert Story" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="why-i-give-back-my-7-year-vexpert-story.html">Why I Give Back: My 7-Year vExpert Story</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:13:00Z">
-            May 3, 2026
+        <time datetime="2026-02-01T05:00:00Z">
+            February 1, 2026
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a></div>
+    <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
+    <div class="tags"><a href="tags/career.html" class="tag">#Career</a> <a href="tags/vcommunity.html" class="tag">#vCommunity</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vmware-aria-automation-and-saltstack-config-resource-featured.png" alt="VMware Aria Automation and SaltStack Config Resource" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vmware-aria-automation-and-saltstack-config-resource.html">VMware Aria Automation and SaltStack Config Resource</a></h2>
+    <img src="images/vcf-operations-custom-summary-featured.png" alt="VCF Operations | Custom Summary" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="vcf-operations-custom-summary.html">VCF Operations | Custom Summary</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:59Z">
-            May 3, 2026
+        <time datetime="2026-01-31T05:00:00Z">
+            January 31, 2026
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/saltstack-config.html" class="tag">#SaltStack Config</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a> <a href="tags/salt.html" class="tag">#Salt</a> <a href="tags/minion.html" class="tag">#minion</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a> <a href="tags/ubuntu-server.html" class="tag">#Ubuntu Server</a> <a href="tags/cloud-template.html" class="tag">#Cloud Template</a></div>
+    <div class="categories"><a href="categories/vcf-operations.html" class="category">VCF Operations</a></div>
+    <div class="tags"><a href="tags/vcf.html" class="tag">#VCF</a> <a href="tags/operations.html" class="tag">#Operations</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/dashboard.html" class="tag">#Dashboard</a></div>
+</div>
+<div class="post-item">
+    <img src="images/highlights-of-2025-featured.png" alt="Highlights of 2025" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="highlights-of-2025.html">Highlights of 2025</a></h2>
+    <div class="post-meta">
+        <time datetime="2025-12-26T05:00:00Z">
+            December 26, 2025
+        </time>
+         &bull; by Dale Hassinger
+    </div>
+    <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a> <a href="categories/career.html" class="category">Career</a></div>
+    <div class="tags"><a href="tags/blogs.html" class="tag">#Blogs</a> <a href="tags/stats.html" class="tag">#Stats</a> <a href="tags/2025.html" class="tag">#2025</a> <a href="tags/career.html" class="tag">#Career</a> <a href="tags/vcommunity.html" class="tag">#vCommunity</a></div>
 </div>
 <div class="post-item">
     <img src="images/home-lab-current-bom-featured.png" alt="Home Lab | Current BOM" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
     <h2><a href="home-lab-current-bom.html">Home Lab | Current BOM</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:58Z">
-            May 3, 2026
+        <time datetime="2025-11-27T05:00:00Z">
+            November 27, 2025
         </time>
          &bull; by Dale Hassinger
     </div>
@@ -168,28 +227,16 @@
     <div class="tags"><a href="tags/home-lab.html" class="tag">#Home Lab</a> <a href="tags/bom.html" class="tag">#BOM</a> <a href="tags/hardware.html" class="tag">#Hardware</a> <a href="tags/software.html" class="tag">#Software</a></div>
 </div>
 <div class="post-item">
-    <img src="images/saltconf-2021-saltstack-config-session-featured.png" alt="SaltConf 2021 | SaltStack Config Session" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="saltconf-2021-saltstack-config-session.html">SaltConf 2021 | SaltStack Config Session</a></h2>
+    <img src="images/vcommunity-mp-windows-servers-services-featured.png" alt="vCommunity MP | Windows Servers Services" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="vcommunity-mp-windows-servers-services.html">vCommunity MP | Windows Servers Services</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:57Z">
-            May 3, 2026
+        <time datetime="2025-11-08T05:00:00Z">
+            November 8, 2025
         </time>
          &bull; by Dale Hassinger
     </div>
-    <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
-    <div class="tags"><a href="tags/salt.html" class="tag">#Salt</a> <a href="tags/saltstack.html" class="tag">#SaltStack</a> <a href="tags/saltstack-config.html" class="tag">#SaltStack Config</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vrealize.html" class="tag">#vRealize</a> <a href="tags/configuration-management.html" class="tag">#Configuration Management</a> <a href="tags/automation.html" class="tag">#Automation</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a> <a href="tags/vra.html" class="tag">#vRA</a> <a href="tags/saltconf-2021.html" class="tag">#SaltConf 2021</a> <a href="tags/salt-beacons.html" class="tag">#Salt Beacons</a> <a href="tags/salt-grains.html" class="tag">#Salt Grains</a> <a href="tags/salt-reactors.html" class="tag">#Salt Reactors</a> <a href="tags/salt-targets.html" class="tag">#Salt Targets</a> <a href="tags/salt-jobs.html" class="tag">#Salt Jobs</a> <a href="tags/salt-states.html" class="tag">#Salt States</a></div>
-</div>
-<div class="post-item">
-    <img src="images/open-ports-zero-trust-featured.png" alt="Open Ports | Zero Trust" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="open-ports-zero-trust.html">Open Ports | Zero Trust</a></h2>
-    <div class="post-meta">
-        <time datetime="2026-05-04T01:12:57Z">
-            May 3, 2026
-        </time>
-         &bull; by Dale Hassinger
-    </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/nsx.html" class="tag">#NSX</a> <a href="tags/zero-trust.html" class="tag">#Zero Trust</a></div>
+    <div class="categories"><a href="categories/vcf-operations.html" class="category">VCF Operations</a></div>
+    <div class="tags"><a href="tags/vcf.html" class="tag">#VCF</a> <a href="tags/operations.html" class="tag">#Operations</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/dashboard.html" class="tag">#Dashboard</a> <a href="tags/vcommunity-mp.html" class="tag">#vCommunity-MP</a></div>
 </div>
                     <nav class="pagination">
     <span class="pagination-info">Page 1 of 12</span>
@@ -216,7 +263,37 @@
             <li>
     <a href="archive.html?year=2026" class="archive-filter-link" data-year="2026">
         <span>2026</span>
-        <span class="count">114</span>
+        <span class="count">8</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2025" class="archive-filter-link" data-year="2025">
+        <span>2025</span>
+        <span class="count">16</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2024" class="archive-filter-link" data-year="2024">
+        <span>2024</span>
+        <span class="count">27</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2023" class="archive-filter-link" data-year="2023">
+        <span>2023</span>
+        <span class="count">23</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2022" class="archive-filter-link" data-year="2022">
+        <span>2022</span>
+        <span class="count">12</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?years=2021,2020" class="archive-filter-link" data-years="2021,2020">
+        <span>Older</span>
+        <span class="count">28</span>
     </a>
 </li>
         </ul>
@@ -242,7 +319,9 @@
     <div class="widget tags-widget">
         <h3>🏷️ Tags</h3>
         <div class="tags-cloud">
-            <a href="tags/abx.html" class="tag-item">#ABX</a>
+            <a href="tags/2024.html" class="tag-item">#2024</a>
+<a href="tags/2025.html" class="tag-item">#2025</a>
+<a href="tags/abx.html" class="tag-item">#ABX</a>
 <a href="tags/ai.html" class="tag-item">#AI</a>
 <a href="tags/api.html" class="tag-item">#API</a>
 <a href="tags/apps.html" class="tag-item">#APPs</a>
@@ -251,6 +330,7 @@
 <a href="tags/actions.html" class="tag-item">#Actions</a>
 <a href="tags/active-directory.html" class="tag-item">#Active Directory</a>
 <a href="tags/add-disk.html" class="tag-item">#Add Disk</a>
+<a href="tags/alerts.html" class="tag-item">#Alerts</a>
 <a href="tags/ansible.html" class="tag-item">#Ansible</a>
 <a href="tags/apple.html" class="tag-item">#Apple</a>
 <a href="tags/aria.html" class="tag-item">#Aria</a>
@@ -260,6 +340,7 @@
 <a href="tags/bom.html" class="tag-item">#BOM</a>
 <a href="tags/beach.html" class="tag-item">#Beach</a>
 <a href="tags/beacons.html" class="tag-item">#Beacons</a>
+<a href="tags/benefits.html" class="tag-item">#Benefits</a>
 <a href="tags/blog.html" class="tag-item">#Blog</a>
 <a href="tags/blogs.html" class="tag-item">#Blogs</a>
 <a href="tags/broadcom.html" class="tag-item">#Broadcom</a>
@@ -282,6 +363,7 @@
 <a href="tags/customproperties.html" class="tag-item">#CustomProperties</a>
 <a href="tags/dan-grove.html" class="tag-item">#Dan Grove</a>
 <a href="tags/dashboard.html" class="tag-item">#Dashboard</a>
+<a href="tags/dashboards.html" class="tag-item">#Dashboards</a>
 <a href="tags/dave-kaber.html" class="tag-item">#Dave Kaber</a>
 <a href="tags/delaware.html" class="tag-item">#Delaware</a>
 <a href="tags/deployments.html" class="tag-item">#Deployments</a>
@@ -294,6 +376,7 @@
 <a href="tags/fun.html" class="tag-item">#Fun</a>
 <a href="tags/giving-back.html" class="tag-item">#Giving Back</a>
 <a href="tags/goals.html" class="tag-item">#Goals</a>
+<a href="tags/google-spaces.html" class="tag-item">#Google Spaces</a>
 <a href="tags/grains.html" class="tag-item">#Grains</a>
 <a href="tags/hol.html" class="tag-item">#HOL</a>
 <a href="tags/hvc.html" class="tag-item">#HVC</a>
@@ -304,6 +387,7 @@
 <a href="tags/home-lab.html" class="tag-item">#Home Lab</a>
 <a href="tags/hugo.html" class="tag-item">#Hugo</a>
 <a href="tags/it-reality.html" class="tag-item">#IT Reality</a>
+<a href="tags/ideas.html" class="tag-item">#Ideas</a>
 <a href="tags/infoblox.html" class="tag-item">#InfoBlox</a>
 <a href="tags/keyboard.html" class="tag-item">#Keyboard</a>
 <a href="tags/linux.html" class="tag-item">#Linux</a>
@@ -314,6 +398,7 @@
 <a href="tags/mp-builder.html" class="tag-item">#MP Builder</a>
 <a href="tags/management-pack.html" class="tag-item">#Management Pack</a>
 <a href="tags/management-pack-builder.html" class="tag-item">#Management Pack Builder</a>
+<a href="tags/messages.html" class="tag-item">#Messages</a>
 <a href="tags/metrics.html" class="tag-item">#Metrics</a>
 <a href="tags/monitoring.html" class="tag-item">#Monitoring</a>
 <a href="tags/nsx.html" class="tag-item">#NSX</a>
@@ -324,6 +409,7 @@
 <a href="tags/organizational-units.html" class="tag-item">#Organizational Units</a>
 <a href="tags/php.html" class="tag-item">#PHP</a>
 <a href="tags/posh-ssh.html" class="tag-item">#POSH SSH</a>
+<a href="tags/posh-ssh.html" class="tag-item">#POSH-SSH</a>
 <a href="tags/performance.html" class="tag-item">#Performance</a>
 <a href="tags/ping-monitoring.html" class="tag-item">#Ping Monitoring</a>
 <a href="tags/podcast.html" class="tag-item">#Podcast</a>
@@ -354,6 +440,7 @@
 <a href="tags/saltconf21.html" class="tag-item">#SaltConf21</a>
 <a href="tags/saltstack.html" class="tag-item">#SaltStack</a>
 <a href="tags/saltstack-config.html" class="tag-item">#SaltStack Config</a>
+<a href="tags/samples.html" class="tag-item">#Samples</a>
 <a href="tags/searches.html" class="tag-item">#Searches</a>
 <a href="tags/secrets.html" class="tag-item">#Secrets</a>
 <a href="tags/servicenow.html" class="tag-item">#Servicenow</a>
@@ -365,6 +452,7 @@
 <a href="tags/storage.html" class="tag-item">#Storage</a>
 <a href="tags/streamdeck.html" class="tag-item">#StreamDeck</a>
 <a href="tags/super-metric.html" class="tag-item">#Super Metric</a>
+<a href="tags/teams-messages.html" class="tag-item">#Teams Messages</a>
 <a href="tags/technology.html" class="tag-item">#Technology</a>
 <a href="tags/templates.html" class="tag-item">#Templates</a>
 <a href="tags/text-display-widget.html" class="tag-item">#Text Display Widget</a>

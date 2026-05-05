@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="style.css">
     <link rel="alternate" type="application/rss+xml" title="vCROCS" href="feed.xml">
     <script src="lightbox.js" defer></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
+<script>
+  var doNotTrack = false;
+  if ( true ) {
+    var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+    var doNotTrack = (dnt == "1" || dnt == "yes");
+  }
+  if (!doNotTrack) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KSLC6FHF36');
+  }
+</script>
 </head>
 <body>
     <!-- Sidebar Navigation -->
@@ -40,9 +54,17 @@
             </a>
 
         </div>
+        <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+            <span class="hamburger-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="mobile-nav-label">Menu</span>
+        </button>
     </div>
     
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" id="site-navigation">
         <ul>
             <li>
                 <a href="index.html">
@@ -65,6 +87,31 @@
         </ul>
     </nav>
 </aside>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = sidebar ? sidebar.querySelector('.mobile-nav-toggle') : null;
+        const navLinks = sidebar ? sidebar.querySelectorAll('.sidebar-nav a') : [];
+
+        if (!sidebar || !toggle) {
+            return;
+        }
+
+        toggle.addEventListener('click', function() {
+            const isOpen = sidebar.classList.toggle('mobile-nav-open');
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-nav-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    });
+</script>
 
     <!-- Main Content -->
     <div class="main-wrapper">
@@ -72,124 +119,124 @@
             <div class="content-area">
                 <main>
                     <div class="post-item">
-    <img src="images/vmware-powerblock-august-2022-featured.png" alt="VMware PowerBlock | August 2022" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vmware-powerblock-august-2022.html">VMware PowerBlock | August 2022</a></h2>
+    <img src="images/vmware-explore-2023-hackathon-featured.png" alt="VMware Explore 2023 | Hackathon" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="vmware-explore-2023-hackathon.html">VMware Explore 2023 | Hackathon</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:15Z">
-            May 3, 2026
+        <time datetime="2023-08-15T04:00:00Z">
+            August 15, 2023
         </time>
          &bull; by Dale Hassinger
     </div>
     <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
-    <div class="tags"><a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/powerblock.html" class="tag">#PowerBlock</a> <a href="tags/automation.html" class="tag">#Automation</a> <a href="tags/vra.html" class="tag">#vRA</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a></div>
+    <div class="tags"><a href="tags/chatgpt.html" class="tag">#ChatGPT</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria.html" class="tag">#VMware Aria</a> <a href="tags/automation.html" class="tag">#Automation</a> <a href="tags/vmware-explore-2023.html" class="tag">#VMware Explore 2023</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vrealize-operations-8-x-new-features-featured.png" alt="vRealize Operations 8.x - New Features" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vrealize-operations-8-x-new-features.html">vRealize Operations 8.x - New Features</a></h2>
+    <img src="images/github-repository-code-and-examples-to-help-you-get-started-featured.png" alt="GitHub Repository | Code and Examples to help you get started" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="github-repository-code-and-examples-to-help-you-get-started.html">GitHub Repository | Code and Examples to help you get started</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:14Z">
-            May 3, 2026
+        <time datetime="2023-06-24T04:00:00Z">
+            June 24, 2023
+        </time>
+         &bull; by Dale Hassinger
+    </div>
+    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
+    <div class="tags"><a href="tags/automation.html" class="tag">#Automation</a> <a href="tags/salt.html" class="tag">#Salt</a> <a href="tags/vmware-aria-automation-config.html" class="tag">#VMware Aria Automation Config</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a> <a href="tags/linux-server.html" class="tag">#Linux Server</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria.html" class="tag">#VMware Aria</a> <a href="tags/configuration-management.html" class="tag">#Configuration Management</a></div>
+</div>
+<div class="post-item">
+    <img src="images/unlocking-the-potential-vmware-aria-automation-custom-form-versioning-featured.png" alt="Unlocking the Potential | VMware Aria Automation | Custom Form Versioning" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="unlocking-the-potential-vmware-aria-automation-custom-form-versioning.html">Unlocking the Potential | VMware Aria Automation | Custom Form Versioning</a></h2>
+    <div class="post-meta">
+        <time datetime="2023-05-20T04:00:00Z">
+            May 20, 2023
+        </time>
+         &bull; by Dale Hassinger
+    </div>
+    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
+    <div class="tags"><a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/custom-forms.html" class="tag">#Custom Forms</a> <a href="tags/versioning.html" class="tag">#Versioning</a></div>
+</div>
+<div class="post-item">
+    <img src="images/unlocking-the-potential-vmware-aria-operations-automation-central-vm-snaps-featured.png" alt="Unlocking the Potential | VMware Aria Operations | Automation Central | VM Snaps" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="unlocking-the-potential-vmware-aria-operations-automation-central-vm-snaps.html">Unlocking the Potential | VMware Aria Operations | Automation Central | VM Snaps</a></h2>
+    <div class="post-meta">
+        <time datetime="2023-05-13T04:00:00Z">
+            May 13, 2023
         </time>
          &bull; by Dale Hassinger
     </div>
     <div class="categories"><a href="categories/vcf-operations.html" class="category">VCF Operations</a></div>
-    <div class="tags"><a href="tags/vrops.html" class="tag">#vROPS</a> <a href="tags/vrealize-operations.html" class="tag">#vRealize Operations</a> <a href="tags/donut-charts.html" class="tag">#Donut Charts</a> <a href="tags/top-n-charts.html" class="tag">#Top-N Charts</a> <a href="tags/ping-monitoring.html" class="tag">#Ping Monitoring</a> <a href="tags/vmware-aria.html" class="tag">#VMware Aria</a></div>
+    <div class="tags"><a href="tags/vmware-aria-operations.html" class="tag">#VMware Aria Operations</a> <a href="tags/snaps.html" class="tag">#Snaps</a> <a href="tags/automation.html" class="tag">#Automation</a></div>
 </div>
 <div class="post-item">
-    <img src="images/unlocking-the-potential-vmware-aria-operations-october-2023-powerblock-featured.png" alt="Unlocking the Potential | VMware Aria Operations | October 2023 PowerBlock" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="unlocking-the-potential-vmware-aria-operations-october-2023-powerblock.html">Unlocking the Potential | VMware Aria Operations | October 2023 PowerBlock</a></h2>
+    <img src="images/unlocking-the-potential-vmware-aria-operations-metric-search-featured.png" alt="Unlocking the Potential | VMware Aria Operations | Metric Search" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="unlocking-the-potential-vmware-aria-operations-metric-search.html">Unlocking the Potential | VMware Aria Operations | Metric Search</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:14Z">
-            May 3, 2026
+        <time datetime="2023-05-06T04:00:00Z">
+            May 6, 2023
         </time>
          &bull; by Dale Hassinger
     </div>
     <div class="categories"><a href="categories/vcf-operations.html" class="category">VCF Operations</a></div>
-    <div class="tags"><a href="tags/vmware-aria-operations.html" class="tag">#VMware Aria Operations</a> <a href="tags/snaps.html" class="tag">#Snaps</a> <a href="tags/snapshot-age.html" class="tag">#Snapshot Age</a> <a href="tags/automation-central.html" class="tag">#Automation Central</a></div>
+    <div class="tags"><a href="tags/vmware-aria-operations.html" class="tag">#VMware Aria Operations</a> <a href="tags/metrics.html" class="tag">#Metrics</a> <a href="tags/searches.html" class="tag">#Searches</a> <a href="tags/trouble-shooting.html" class="tag">#Trouble Shooting</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vrealize-automation-8-1-powershell-abx-featured.png" alt="vRealize Automation 8.1 - PowerShell ABX" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vrealize-automation-8-1-powershell-abx.html">vRealize Automation 8.1 - PowerShell ABX</a></h2>
+    <img src="images/vmware-aria-operations-rvtools-dashboard-featured.png" alt="VMware Aria Operations | RVTools Dashboard" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="vmware-aria-operations-rvtools-dashboard.html">VMware Aria Operations | RVTools Dashboard</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:13Z">
-            May 3, 2026
+        <time datetime="2023-04-01T04:00:00Z">
+            April 1, 2023
         </time>
          &bull; by Dale Hassinger
     </div>
     <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/vra.html" class="tag">#vRA</a> <a href="tags/abx.html" class="tag">#ABX</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a> <a href="tags/vmware-aria.html" class="tag">#VMware Aria</a></div>
+    <div class="tags"><a href="tags/rvtools.html" class="tag">#RVTools</a> <a href="tags/vmware-aria-operations.html" class="tag">#VMware Aria Operations</a> <a href="tags/dashboard.html" class="tag">#Dashboard</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/importexcel.html" class="tag">#importExcel</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vmware-aria-automation-how-to-send-messages-and-updates-featured.png" alt="VMware Aria Automation | How to send messages and updates" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vmware-aria-automation-how-to-send-messages-and-updates.html">VMware Aria Automation | How to send messages and updates</a></h2>
+    <img src="images/rest-api-calls-in-vmware-aria-automation-with-powershell-featured.png" alt="Rest API calls in VMware Aria Automation with PowerShell" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="rest-api-calls-in-vmware-aria-automation-with-powershell.html">Rest API calls in VMware Aria Automation with PowerShell</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:12Z">
-            May 3, 2026
+        <time datetime="2023-03-20T04:00:00Z">
+            March 20, 2023
         </time>
-         &bull; by Dale Hassinger
+         &bull; by Dave Kaber
     </div>
     <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a></div>
+    <div class="tags"><a href="tags/dave-kaber.html" class="tag">#Dave Kaber</a> <a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/rest-api.html" class="tag">#Rest-API</a></div>
 </div>
 <div class="post-item">
-    <img src="images/vcf-automation-input-arrays-featured.png" alt="VCF Automation | Input Arrays" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vcf-automation-input-arrays.html">VCF Automation | Input Arrays</a></h2>
+    <img src="images/the-powershell-podcast-i-was-a-guest-on-the-show-featured.png" alt="The PowerShell Podcast | I was a Guest on the show" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="the-powershell-podcast-i-was-a-guest-on-the-show.html">The PowerShell Podcast | I was a Guest on the show</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:11Z">
-            May 3, 2026
-        </time>
-         &bull; by Dale Hassinger
-    </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/vcf.html" class="tag">#VCF</a> <a href="tags/automation.html" class="tag">#Automation</a> <a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/vmware-code-coach.html" class="tag">#VMware Code Coach</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a></div>
-</div>
-<div class="post-item">
-    <img src="images/vmware-explore-2025-success-vcommunity-and-inspiration-featured.png" alt="VMware Explore 2025: Success, vCommunity, and Inspiration" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vmware-explore-2025-success-vcommunity-and-inspiration.html">VMware Explore 2025: Success, vCommunity, and Inspiration</a></h2>
-    <div class="post-meta">
-        <time datetime="2026-05-04T01:12:11Z">
-            May 3, 2026
+        <time datetime="2023-03-12T05:00:00Z">
+            March 12, 2023
         </time>
          &bull; by Dale Hassinger
     </div>
     <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
-    <div class="tags"><a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-explore-2025.html" class="tag">#VMware Explore 2025</a> <a href="tags/vcf-automation.html" class="tag">#VCF Automation</a> <a href="tags/vcf-operations.html" class="tag">#VCF Operations</a> <a href="tags/vcf-operations-management-pack-builder.html" class="tag">#VCF Operations Management Pack Builder</a> <a href="tags/hackathon.html" class="tag">#Hackathon</a> <a href="tags/hol.html" class="tag">#HOL</a></div>
+    <div class="tags"><a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/vmware-aria-automation-config.html" class="tag">#VMware Aria Automation Config</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/vexpert.html" class="tag">#vExpert</a> <a href="tags/vcommunity.html" class="tag">#vCommunity</a> <a href="tags/podcast.html" class="tag">#Podcast</a></div>
 </div>
 <div class="post-item">
-    <img src="images/add-disk-to-a-remote-windows-server-vmware-vm-featured.png" alt="Add disk to a Remote Windows Server | VMware VM" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="add-disk-to-a-remote-windows-server-vmware-vm.html">Add disk to a Remote Windows Server | VMware VM</a></h2>
+    <img src="images/philly-vmug-vmware-aria-automation-and-operations-featured.png" alt="Philly VMUG | VMware Aria Automation and Operations" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="philly-vmug-vmware-aria-automation-and-operations.html">Philly VMUG | VMware Aria Automation and Operations</a></h2>
     <div class="post-meta">
-        <time datetime="2026-05-04T01:12:10Z">
-            May 3, 2026
-        </time>
-         &bull; by Dale Hassinger
-    </div>
-    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
-    <div class="tags"><a href="tags/powershell.html" class="tag">#PowerShell</a> <a href="tags/powercli.html" class="tag">#PowerCLI</a> <a href="tags/add-disk.html" class="tag">#Add Disk</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a></div>
-</div>
-<div class="post-item">
-    <img src="images/vcf-operations-cpu-overcommit-details-featured.png" alt="VCF Operations | CPU|Overcommit Details" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="vcf-operations-cpu-overcommit-details.html">VCF Operations | CPU|Overcommit Details</a></h2>
-    <div class="post-meta">
-        <time datetime="2026-05-04T01:12:09Z">
-            May 3, 2026
-        </time>
-         &bull; by Dale Hassinger
-    </div>
-    <div class="categories"><a href="categories/vcf-operations.html" class="category">VCF Operations</a></div>
-    <div class="tags"><a href="tags/vcf.html" class="tag">#VCF</a> <a href="tags/operations.html" class="tag">#Operations</a> <a href="tags/vmware-vexpert.html" class="tag">#VMware vExpert</a> <a href="tags/dashboard.html" class="tag">#Dashboard</a> <a href="tags/super-metric.html" class="tag">#Super Metric</a></div>
-</div>
-<div class="post-item">
-    <img src="images/productive-apps-2022-featured.png" alt="Productive APPs | 2022" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-    <h2><a href="productive-apps-2022.html">Productive APPs | 2022</a></h2>
-    <div class="post-meta">
-        <time datetime="2026-05-04T01:12:08Z">
-            May 3, 2026
+        <time datetime="2023-03-10T05:00:00Z">
+            March 10, 2023
         </time>
          &bull; by Dale Hassinger
     </div>
     <div class="categories"><a href="categories/vmware-community.html" class="category">VMware Community</a></div>
-    <div class="tags"><a href="tags/mac.html" class="tag">#MAC</a> <a href="tags/apple.html" class="tag">#Apple</a> <a href="tags/apps.html" class="tag">#APPs</a></div>
+    <div class="tags"><a href="tags/vmware.html" class="tag">#VMware</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/vmware-aria-automation-config.html" class="tag">#VMware Aria Automation Config</a> <a href="tags/vmware-aria-operations.html" class="tag">#VMware Aria Operations</a> <a href="tags/vexpert.html" class="tag">#vExpert</a> <a href="tags/vcommunity.html" class="tag">#vCommunity</a></div>
+</div>
+<div class="post-item">
+    <img src="images/vmware-aria-automation-working-with-windows-server-drives-featured.png" alt="VMware Aria Automation | Working with Windows Server Drives" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+    <h2><a href="vmware-aria-automation-working-with-windows-server-drives.html">VMware Aria Automation | Working with Windows Server Drives</a></h2>
+    <div class="post-meta">
+        <time datetime="2023-02-18T05:00:00Z">
+            February 18, 2023
+        </time>
+         &bull; by Dale Hassinger
+    </div>
+    <div class="categories"><a href="categories/vcf-automation.html" class="category">VCF Automation</a></div>
+    <div class="tags"><a href="tags/saltstack-config.html" class="tag">#SaltStack Config</a> <a href="tags/vmware-aria-automation.html" class="tag">#VMware Aria Automation</a> <a href="tags/vrealize-automation.html" class="tag">#vRealize Automation</a> <a href="tags/salt.html" class="tag">#Salt</a> <a href="tags/minion.html" class="tag">#minion</a> <a href="tags/windows-server.html" class="tag">#Windows Server</a> <a href="tags/ubuntu-server.html" class="tag">#Ubuntu Server</a> <a href="tags/cloud-template.html" class="tag">#Cloud Template</a></div>
 </div>
                     <nav class="pagination">
     <a href="page-6.html" class="pagination-link">&laquo; Newer Posts</a>
@@ -217,7 +264,37 @@
             <li>
     <a href="archive.html?year=2026" class="archive-filter-link" data-year="2026">
         <span>2026</span>
-        <span class="count">114</span>
+        <span class="count">8</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2025" class="archive-filter-link" data-year="2025">
+        <span>2025</span>
+        <span class="count">16</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2024" class="archive-filter-link" data-year="2024">
+        <span>2024</span>
+        <span class="count">27</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2023" class="archive-filter-link" data-year="2023">
+        <span>2023</span>
+        <span class="count">23</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?year=2022" class="archive-filter-link" data-year="2022">
+        <span>2022</span>
+        <span class="count">12</span>
+    </a>
+</li>
+<li>
+    <a href="archive.html?years=2021,2020" class="archive-filter-link" data-years="2021,2020">
+        <span>Older</span>
+        <span class="count">28</span>
     </a>
 </li>
         </ul>
@@ -243,7 +320,9 @@
     <div class="widget tags-widget">
         <h3>🏷️ Tags</h3>
         <div class="tags-cloud">
-            <a href="tags/abx.html" class="tag-item">#ABX</a>
+            <a href="tags/2024.html" class="tag-item">#2024</a>
+<a href="tags/2025.html" class="tag-item">#2025</a>
+<a href="tags/abx.html" class="tag-item">#ABX</a>
 <a href="tags/ai.html" class="tag-item">#AI</a>
 <a href="tags/api.html" class="tag-item">#API</a>
 <a href="tags/apps.html" class="tag-item">#APPs</a>
@@ -252,6 +331,7 @@
 <a href="tags/actions.html" class="tag-item">#Actions</a>
 <a href="tags/active-directory.html" class="tag-item">#Active Directory</a>
 <a href="tags/add-disk.html" class="tag-item">#Add Disk</a>
+<a href="tags/alerts.html" class="tag-item">#Alerts</a>
 <a href="tags/ansible.html" class="tag-item">#Ansible</a>
 <a href="tags/apple.html" class="tag-item">#Apple</a>
 <a href="tags/aria.html" class="tag-item">#Aria</a>
@@ -261,6 +341,7 @@
 <a href="tags/bom.html" class="tag-item">#BOM</a>
 <a href="tags/beach.html" class="tag-item">#Beach</a>
 <a href="tags/beacons.html" class="tag-item">#Beacons</a>
+<a href="tags/benefits.html" class="tag-item">#Benefits</a>
 <a href="tags/blog.html" class="tag-item">#Blog</a>
 <a href="tags/blogs.html" class="tag-item">#Blogs</a>
 <a href="tags/broadcom.html" class="tag-item">#Broadcom</a>
@@ -283,6 +364,7 @@
 <a href="tags/customproperties.html" class="tag-item">#CustomProperties</a>
 <a href="tags/dan-grove.html" class="tag-item">#Dan Grove</a>
 <a href="tags/dashboard.html" class="tag-item">#Dashboard</a>
+<a href="tags/dashboards.html" class="tag-item">#Dashboards</a>
 <a href="tags/dave-kaber.html" class="tag-item">#Dave Kaber</a>
 <a href="tags/delaware.html" class="tag-item">#Delaware</a>
 <a href="tags/deployments.html" class="tag-item">#Deployments</a>
@@ -295,6 +377,7 @@
 <a href="tags/fun.html" class="tag-item">#Fun</a>
 <a href="tags/giving-back.html" class="tag-item">#Giving Back</a>
 <a href="tags/goals.html" class="tag-item">#Goals</a>
+<a href="tags/google-spaces.html" class="tag-item">#Google Spaces</a>
 <a href="tags/grains.html" class="tag-item">#Grains</a>
 <a href="tags/hol.html" class="tag-item">#HOL</a>
 <a href="tags/hvc.html" class="tag-item">#HVC</a>
@@ -305,6 +388,7 @@
 <a href="tags/home-lab.html" class="tag-item">#Home Lab</a>
 <a href="tags/hugo.html" class="tag-item">#Hugo</a>
 <a href="tags/it-reality.html" class="tag-item">#IT Reality</a>
+<a href="tags/ideas.html" class="tag-item">#Ideas</a>
 <a href="tags/infoblox.html" class="tag-item">#InfoBlox</a>
 <a href="tags/keyboard.html" class="tag-item">#Keyboard</a>
 <a href="tags/linux.html" class="tag-item">#Linux</a>
@@ -315,6 +399,7 @@
 <a href="tags/mp-builder.html" class="tag-item">#MP Builder</a>
 <a href="tags/management-pack.html" class="tag-item">#Management Pack</a>
 <a href="tags/management-pack-builder.html" class="tag-item">#Management Pack Builder</a>
+<a href="tags/messages.html" class="tag-item">#Messages</a>
 <a href="tags/metrics.html" class="tag-item">#Metrics</a>
 <a href="tags/monitoring.html" class="tag-item">#Monitoring</a>
 <a href="tags/nsx.html" class="tag-item">#NSX</a>
@@ -325,6 +410,7 @@
 <a href="tags/organizational-units.html" class="tag-item">#Organizational Units</a>
 <a href="tags/php.html" class="tag-item">#PHP</a>
 <a href="tags/posh-ssh.html" class="tag-item">#POSH SSH</a>
+<a href="tags/posh-ssh.html" class="tag-item">#POSH-SSH</a>
 <a href="tags/performance.html" class="tag-item">#Performance</a>
 <a href="tags/ping-monitoring.html" class="tag-item">#Ping Monitoring</a>
 <a href="tags/podcast.html" class="tag-item">#Podcast</a>
@@ -355,6 +441,7 @@
 <a href="tags/saltconf21.html" class="tag-item">#SaltConf21</a>
 <a href="tags/saltstack.html" class="tag-item">#SaltStack</a>
 <a href="tags/saltstack-config.html" class="tag-item">#SaltStack Config</a>
+<a href="tags/samples.html" class="tag-item">#Samples</a>
 <a href="tags/searches.html" class="tag-item">#Searches</a>
 <a href="tags/secrets.html" class="tag-item">#Secrets</a>
 <a href="tags/servicenow.html" class="tag-item">#Servicenow</a>
@@ -366,6 +453,7 @@
 <a href="tags/storage.html" class="tag-item">#Storage</a>
 <a href="tags/streamdeck.html" class="tag-item">#StreamDeck</a>
 <a href="tags/super-metric.html" class="tag-item">#Super Metric</a>
+<a href="tags/teams-messages.html" class="tag-item">#Teams Messages</a>
 <a href="tags/technology.html" class="tag-item">#Technology</a>
 <a href="tags/templates.html" class="tag-item">#Templates</a>
 <a href="tags/text-display-widget.html" class="tag-item">#Text Display Widget</a>
