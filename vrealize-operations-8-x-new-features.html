@@ -231,5 +231,29 @@
             </div>
         </div>
     </div>
+    <button class="back-to-top" type="button" aria-label="Back to top" title="Back to top">↑</button>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTopButton = document.querySelector('.back-to-top');
+        if (!backToTopButton) {
+            return;
+        }
+
+        function updateBackToTopVisibility() {
+            if (window.scrollY > 240) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        }
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        window.addEventListener('scroll', updateBackToTopVisibility, { passive: true });
+        updateBackToTopVisibility();
+    });
+</script>
 </body>
 </html>
