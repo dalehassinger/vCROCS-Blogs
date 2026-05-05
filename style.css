@@ -607,6 +607,45 @@ article ul li::marker {
     color: var(--vcrocs-blue);
 }
 
+/* Tables */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.75rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+article table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 520px;
+}
+
+article th,
+article td {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border-color);
+}
+
+article th {
+    background: var(--vcrocs-light);
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+article tbody tr:nth-child(even) {
+    background: rgba(0, 113, 227, 0.04);
+}
+
+article tbody tr:last-child td {
+    border-bottom: none;
+}
+
 /* Blockquotes */
 blockquote {
     border-left: 5px solid #d4a017;

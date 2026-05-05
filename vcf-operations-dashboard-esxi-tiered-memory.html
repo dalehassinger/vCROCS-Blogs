@@ -99,6 +99,18 @@
                 <span>About</span>
             </a>
         </li>
+        <li>
+            <a href="Links.html">
+                <span class="icon">📖</span>
+                <span>Links</span>
+            </a>
+        </li>
+        <li>
+            <a href="Pics.html">
+                <span class="icon">📷</span>
+                <span>Pics</span>
+            </a>
+        </li>
         </ul>
     </nav>
 </aside>
@@ -160,7 +172,7 @@
 <br>
 <hr>
 <br>
-<p>Here’s a use case that demonstrates the powerful capabilities of the <strong>VCF Operations Manager Pack Builder</strong> in your environment. With the introduction of <strong>Tiered Memory</strong> in ESXi 8.0.3, VMware hasn’t yet integrated tiered memory metrics visibility for VMs using tiered memory into <strong>VCF Operations</strong>. However, <strong>William Lam</strong> has provided a <strong>Blog</strong> outlining the necessary commands to retrieve the tiered memory metrics. <a href="https://williamlam.com/2024/09/how-much-virtual-machine-memory-is-using-nvme-tiering.html">Click here to see Blog</a></p>
+<p>Here’s a use case that demonstrates the powerful capabilities of the <strong>VCF Operations Manager Pack Builder</strong> in your environment. With the introduction of <strong>Tiered Memory</strong> in ESXi 8.0.3, VMware hasn’t yet integrated tiered memory metrics visibility for VMs using tiered memory into <strong>VCF Operations</strong>. However, <strong>William Lam</strong> has provided a <strong>Blog</strong> outlining the necessary commands to retrieve the tiered memory metrics. <a href="https://williamlam.com/2024/09/how-much-virtual-machine-memory-is-using-nvme-tiering.html" target="_blank" rel="noopener noreferrer">Click here to see Blog</a></p>
 <br>
 <p>To build an Operations Management Pack (MP) that captures this data, you need to utilize APIs. In my approach, I used <strong>FastAPI</strong> to execute a <strong>PowerShell Script</strong> that connects to vCenter to gather a list of ESXi hosts. The script then establishes an SSH connection to each host, retrieves the VM tiered memory metrics, and sends the results back to FastAPI. These metrics are then made available for Management Pack Builder, allowing you to incorporate the new metrics into the existing VM object within Operations.</p>
 <br>
@@ -172,7 +184,7 @@
 <br>
 <p>To create and edit code on my Rocky Linux server, I prefer using the Remote SSH add-in for VSCode, which I have installed on my Apple MacBook. This approach allows me to avoid using the graphical version of Rocky Linux Server, keeping the setup lean and mean. I use PowerShell on Linux servers all the time—I’ve loved it ever since PowerShell became cross-platform.</p>
 <br>
-<p>While working on this blog and sharing links to the discussed resources, I came across another  post by William Lam that also explains how to retrieve Host Tiered Memory settings. I adapted William's script to work with MPB and added the new properties to my FastAPI Management Pack. <a href="https://williamlam.com/2024/10/useful-nvme-tiering-reporting-using-vsphere-8-0-update-3-apis.html">Click here to see Blog</a></p>
+<p>While working on this blog and sharing links to the discussed resources, I came across another  post by William Lam that also explains how to retrieve Host Tiered Memory settings. I adapted William's script to work with MPB and added the new properties to my FastAPI Management Pack. <a href="https://williamlam.com/2024/10/useful-nvme-tiering-reporting-using-vsphere-8-0-update-3-apis.html" target="_blank" rel="noopener noreferrer">Click here to see Blog</a></p>
 <br>
 <p>I encourage you to install the VCF Operations Management Pack Builder appliance and download the MP export file linked at the end of this blog. My goal is for you to understand how Management Packs (MPs) work. While simply using a pre-built MP is easy, taking the time to learn how this MP works will inspire you with new ideas for integrating properties and metrics from other products into your enterprise environment.</p>
 <br>
@@ -486,7 +498,7 @@ Disconnect-VIServer -Confirm:$false
 <br>
 <ul>
 <li>The following screen shots are all the details I used to create the MP</li>
-<li>I presented at VMware Explore 2024, and one of the sessions includes a video on MP Builder. I recommend checking it out to get more familiar with MPB. <a href="https://www.youtube.com/live/EcQNwO_skAA?si=xkLv3PvocHy5ka0f">Link to session | CODE1161LV</a></li>
+<li>I presented at VMware Explore 2024, and one of the sessions includes a video on MP Builder. I recommend checking it out to get more familiar with MPB. <a href="https://www.youtube.com/live/EcQNwO_skAA?si=xkLv3PvocHy5ka0f" target="_blank" rel="noopener noreferrer">Link to session | CODE1161LV</a></li>
 <li>Brock Peterson has a great Blog on building a MP. [Link to Blog](https://www.brockpeterson.com/post/building-a-management-pack-with-the-aria-operations-management-pack-builder</li>
 </ul>
 <p>)</p>
@@ -590,11 +602,11 @@ Disconnect-VIServer -Confirm:$false
 <h2>Links to resources discussed is this Blog Post:</h2>
 <br>
 <ul>
-<li><a href="https://github.com/dalehassinger/unlocking-the-potential/tree/main/VMware-Aria-Operations/Management-Packs/FastAPI">Download Link for the MP Export File, Dashboard and Views</a></li>
-<li><a href="https://fastapi.tiangolo.com/">FastAPI</a></li>
-<li><a href="https://rockylinux.org/download">Rocky Linux | Downloads</a></li>
-<li><a href="https://marketplace.cloud.vmware.com/services/details/draft-vmware-aria-operation-management-pack-builder-1-1?slug=true">VCF Operations | Management Pack Builder | Download</a></li>
-<li><a href="https://www.brockpeterson.com">Brock Peterson Blogs | Great place to get Dashboard Ideas and see MPB examples</a></li>
+<li><a href="https://github.com/dalehassinger/unlocking-the-potential/tree/main/VMware-Aria-Operations/Management-Packs/FastAPI" target="_blank" rel="noopener noreferrer">Download Link for the MP Export File, Dashboard and Views</a></li>
+<li><a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener noreferrer">FastAPI</a></li>
+<li><a href="https://rockylinux.org/download" target="_blank" rel="noopener noreferrer">Rocky Linux | Downloads</a></li>
+<li><a href="https://marketplace.cloud.vmware.com/services/details/draft-vmware-aria-operation-management-pack-builder-1-1?slug=true" target="_blank" rel="noopener noreferrer">VCF Operations | Management Pack Builder | Download</a></li>
+<li><a href="https://www.brockpeterson.com" target="_blank" rel="noopener noreferrer">Brock Peterson Blogs | Great place to get Dashboard Ideas and see MPB examples</a></li>
 <hr>
 <br>
 </ul>

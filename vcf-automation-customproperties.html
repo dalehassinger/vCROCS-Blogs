@@ -99,6 +99,18 @@
                 <span>About</span>
             </a>
         </li>
+        <li>
+            <a href="Links.html">
+                <span class="icon">📖</span>
+                <span>Links</span>
+            </a>
+        </li>
+        <li>
+            <a href="Pics.html">
+                <span class="icon">📷</span>
+                <span>Pics</span>
+            </a>
+        </li>
         </ul>
     </nav>
 </aside>
@@ -166,7 +178,7 @@
 <br>
 <p>As part of the conversation, I was also asked how to capture a VM property that isn't available out of the box in VCF Automation: the "bios id". While you can retrieve it with PowerCLI by connecting to vCenter, the goal was to avoid pulling data from vCenter continuously just to populate the CMDB.</p>
 <br>
-<p>Fortunately, I found a <a href="https://techdocs.broadcom.com/us/en/vmware-cis/aria/aria-automation/8-17/aria-automation-api-programming-guide-on-prem-8-17/automation-assembler-api-tutorials/deploying-and-managing-resources/update-custom-properties-of-a-machine.html">Broadcom TechDoc</a> that explains how to add CustomProperties to an existing VM deployment. I'm all about real-world examples, so below is how I added the "bios id" as a custom property to a deployed VM—no direct vCenter calls required to keep CMDB accurate and current.</p>
+<p>Fortunately, I found a <a href="https://techdocs.broadcom.com/us/en/vmware-cis/aria/aria-automation/8-17/aria-automation-api-programming-guide-on-prem-8-17/automation-assembler-api-tutorials/deploying-and-managing-resources/update-custom-properties-of-a-machine.html" target="_blank" rel="noopener noreferrer">Broadcom TechDoc</a> that explains how to add CustomProperties to an existing VM deployment. I'm all about real-world examples, so below is how I added the "bios id" as a custom property to a deployed VM—no direct vCenter calls required to keep CMDB accurate and current.</p>
 <br>
 <hr>
 <br>
@@ -322,7 +334,7 @@ resources:
 <br>
 <ul>
 <li>Screen shot of ABX Action code and inputs</li>
-<li>I created a Blog that goes into detail about <a href="https://www.vcrocs.info/unlocking-the-potential-vmware-aria-automation-abx-secrets-action-constants/">ABX Action Constants and Secrets</a>. Take a look for more information.</li>
+<li>I created a Blog that goes into detail about <a href="https://www.vcrocs.info/unlocking-the-potential-vmware-aria-automation-abx-secrets-action-constants/" target="_blank" rel="noopener noreferrer">ABX Action Constants and Secrets</a>. Take a look for more information.</li>
 <li>Using ABX Action Constants and Secrets is a recommended best practice for enhancing security and simplifying updates to values shared across multiple ABX Actions.</li>
 <br>
 </ul>
