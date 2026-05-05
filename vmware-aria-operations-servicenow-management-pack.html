@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -218,14 +219,13 @@
 <br>
 <p><strong>Code:</strong></p>
 <br>
-<p>{{< highlight json >}}</p>
-<p>{</p>
-<p>"cmdbSync": {</p>
-<p>"syncMode": "POPULATE_ONLY",</p>
-<p>"objectIdentifierSource": "MOID"</p>
-<p>}</p>
-<p>}</p>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+{
+  &quot;cmdbSync&quot;: {
+    &quot;syncMode&quot;: &quot;POPULATE_ONLY&quot;,
+    &quot;objectIdentifierSource&quot;: &quot;MOID&quot;
+  }
+}</code></pre>
 <br>
 <hr>
 <br>
@@ -233,36 +233,35 @@
 <br>
 <p><strong>Code:</strong></p>
 <br>
-<p>{{< highlight json >}}</p>
-<p>{</p>
-<p>"cmdbSync": {</p>
-<p>"syncMode": "POPULATE_ONLY",</p>
-<p>"objectIdentifierSource": "MOID",</p>
-<p>"additionalColumns": {</p>
-<p>"builtInHostSystem": [</p>
-<p>{</p>
-<p>"cmdbColumn": "cpu_name",</p>
-<p>"vropsType": "PROPERTY",</p>
-<p>"vropsField": "cpu|cpuModel"</p>
-<p>}</p>
-<p>]</p>
-<p>,</p>
-<p>"builtInVirtualMachine": [</p>
-<p>{</p>
-<p>"cmdbColumn": "guest_os_fullname",</p>
-<p>"vropsType": "PROPERTY",</p>
-<p>"vropsField": "summary|guest|fullName"</p>
-<p>},</p>
-<p>{</p>
-<p>"cmdbColumn": "ip_address",</p>
-<p>"vropsType": "PROPERTY",</p>
-<p>"vropsField": "summary|guest|ipAddress"</p>
-<p>}</p>
-<p>]</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+{
+  &quot;cmdbSync&quot;: {
+    &quot;syncMode&quot;: &quot;POPULATE_ONLY&quot;,
+    &quot;objectIdentifierSource&quot;: &quot;MOID&quot;,
+    &quot;additionalColumns&quot;: {
+      &quot;builtInHostSystem&quot;: [
+        {
+          &quot;cmdbColumn&quot;: &quot;cpu_name&quot;,
+          &quot;vropsType&quot;: &quot;PROPERTY&quot;,
+          &quot;vropsField&quot;: &quot;cpu|cpuModel&quot;
+        }
+      ]
+        ,
+        &quot;builtInVirtualMachine&quot;: [
+          {
+            &quot;cmdbColumn&quot;: &quot;guest_os_fullname&quot;,
+            &quot;vropsType&quot;: &quot;PROPERTY&quot;,
+            &quot;vropsField&quot;: &quot;summary|guest|fullName&quot;
+          },
+          {
+            &quot;cmdbColumn&quot;: &quot;ip_address&quot;,
+            &quot;vropsType&quot;: &quot;PROPERTY&quot;,
+            &quot;vropsField&quot;: &quot;summary|guest|ipAddress&quot;
+          }
+        ]
+    }
+  }
+}</code></pre>
 <br>
 <hr>
 <br>
@@ -274,87 +273,85 @@
 <br>
 <p><strong>Code:</strong></p>
 <br>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<p>$opsURL      = "https://vao-ent.corp.local"</p>
-<p>$opsUsername = "admin"</p>
-<p>$opsPassword = "VMware1!"</p>
-<p>$vmName      = "LINUX-U-170"</p>
-<p>$authSource  = "local"</p>
-<br>
-<br>
-<h1>----- Get Aria Operations token</h1>
-<p>$uri = "$opsURL/suite-api/api/auth/token/acquire?_no_links=true"</p>
-<p>#$uri</p>
-<br>
-<h1>--- Create body</h1>
-<p>$bodyHashtable = @{</p>
-<p>username = $opsUsername</p>
-<p>authSource = $authSource</p>
-<p>password = $opsPassword</p>
-<p>}</p>
-<br>
-<h1>--- Convert the hashtable to a JSON string</h1>
-<p>$body = $bodyHashtable | ConvertTo-Json</p>
-<br>
-<p>$token = Invoke-RestMethod -Uri $uri -Method Post -Headers @{</p>
-<p>"accept" = "application/json"</p>
-<p>"Content-Type" = "application/json"</p>
-<p>} -Body $body -SkipCertificateCheck</p>
-<br>
-<p>#$token.token</p>
-<br>
-<p>$authorization = "OpsToken " + $token.token</p>
-<p>#$authorization</p>
-<br>
-<br>
-<h1>----- Get the VM Operations identifier</h1>
-<p>#$uri = "$opsURL/suite-api/api/resources?maintenanceScheduleId=&name=$vmName&page=0&pageSize=1000&_no_links=true"</p>
-<p>$uri = "$opsURL/suite-api/api/resources?name=$vmName&page=0&pageSize=1000&_no_links=true"</p>
-<p>#$uri</p>
-<br>
-<p>$identifier = Invoke-RestMethod -Uri $uri -Method Get -Headers @{</p>
-<p>"accept" = "application/json"</p>
-<p>"Authorization" = $authorization</p>
-<p>} -SkipCertificateCheck</p>
-<br>
-<p>#$identifier</p>
-<p>$identifier = $identifier.resourceList</p>
-<p>$json = $identifier | ConvertTo-Json -Depth 10</p>
-<p>#$json</p>
-<br>
-<h1>Convert the JSON string to a PowerShell object</h1>
-<p>$data = $json | ConvertFrom-Json</p>
-<br>
-<h1>Search for the object where resourceKindKey is "VirtualMachine"</h1>
-<p>$targetResourceKindKey = "VirtualMachine"</p>
-<p>$matchedObject = $data | Where-Object { $_.resourceKey.resourceKindKey -eq $targetResourceKindKey }</p>
-<br>
-<h1>If a matching object is found, output the identifier</h1>
-<p>if ($matchedObject) {</p>
-<p>$vmIdentifier = $($matchedObject.identifier)</p>
-<p>#Write-Output $($matchedObject.identifier)</p>
-<p>} # End If</p>
-<p>else {</p>
-<p>Write-Output "No VirtualMachine resourceKindKey found"</p>
-<p>} # End Else</p>
-<br>
-<br>
-<br>
-<br>
-<h1>----- Get Field Names and Values</h1>
-<p>$uri = "$opsURL/suite-api/api/resources/properties?resourceId=$vmidentifier&_no_links=true"</p>
-<p>#$uri</p>
-<br>
-<p>$resourcePropertiesList = Invoke-RestMethod -Uri $uri -Method Get -Headers @{</p>
-<p>"accept" = "application/json"</p>
-<p>"Authorization" = $authorization</p>
-<p>} -SkipCertificateCheck</p>
-<br>
-<p>$outPut = $resourcePropertiesList.resourcePropertiesList.property</p>
-<p>Write-Output $outPut</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+
+$opsURL      = &quot;https://vao-ent.corp.local&quot;
+$opsUsername = &quot;admin&quot;
+$opsPassword = &quot;VMware1!&quot;
+$vmName      = &quot;LINUX-U-170&quot;
+$authSource  = &quot;local&quot;
+
+
+# ----- Get Aria Operations token
+$uri = &quot;$opsURL/suite-api/api/auth/token/acquire?_no_links=true&quot;
+#$uri
+
+# --- Create body
+$bodyHashtable = @{
+    username = $opsUsername
+    authSource = $authSource
+    password = $opsPassword
+}
+
+# --- Convert the hashtable to a JSON string
+$body = $bodyHashtable | ConvertTo-Json
+
+$token = Invoke-RestMethod -Uri $uri -Method Post -Headers @{
+    &quot;accept&quot; = &quot;application/json&quot;
+    &quot;Content-Type&quot; = &quot;application/json&quot;
+} -Body $body -SkipCertificateCheck
+
+#$token.token
+
+$authorization = &quot;OpsToken &quot; + $token.token
+#$authorization
+
+
+# ----- Get the VM Operations identifier
+#$uri = &quot;$opsURL/suite-api/api/resources?maintenanceScheduleId=&amp;name=$vmName&amp;page=0&amp;pageSize=1000&amp;_no_links=true&quot;
+$uri = &quot;$opsURL/suite-api/api/resources?name=$vmName&amp;page=0&amp;pageSize=1000&amp;_no_links=true&quot;
+#$uri
+
+$identifier = Invoke-RestMethod -Uri $uri -Method Get -Headers @{
+    &quot;accept&quot; = &quot;application/json&quot;
+    &quot;Authorization&quot; = $authorization
+} -SkipCertificateCheck
+
+#$identifier
+$identifier = $identifier.resourceList
+$json = $identifier | ConvertTo-Json -Depth 10
+#$json
+
+# Convert the JSON string to a PowerShell object
+$data = $json | ConvertFrom-Json
+
+# Search for the object where resourceKindKey is &quot;VirtualMachine&quot;
+$targetResourceKindKey = &quot;VirtualMachine&quot;
+$matchedObject = $data | Where-Object { $_.resourceKey.resourceKindKey -eq $targetResourceKindKey }
+
+# If a matching object is found, output the identifier
+if ($matchedObject) {
+    $vmIdentifier = $($matchedObject.identifier)
+    #Write-Output $($matchedObject.identifier)
+} # End If
+else {
+    Write-Output &quot;No VirtualMachine resourceKindKey found&quot;
+} # End Else
+
+
+
+
+# ----- Get Field Names and Values
+$uri = &quot;$opsURL/suite-api/api/resources/properties?resourceId=$vmidentifier&amp;_no_links=true&quot;
+#$uri
+
+$resourcePropertiesList = Invoke-RestMethod -Uri $uri -Method Get -Headers @{
+    &quot;accept&quot; = &quot;application/json&quot;
+    &quot;Authorization&quot; = $authorization
+} -SkipCertificateCheck
+
+$outPut = $resourcePropertiesList.resourcePropertiesList.property
+Write-Output $outPut</code></pre>
 <br>
 <br>
 <hr>
@@ -363,86 +360,84 @@
 <br>
 <p><strong>Code:</strong></p>
 <br>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<p>$opsURL      = "https://vao-ent.corp.local"</p>
-<p>$opsUsername = "admin"</p>
-<p>$opsPassword = "VMware1!"</p>
-<p>$hostName      = "esxi8-04.corp.local"</p>
-<p>$authSource  = "local"</p>
-<br>
-<br>
-<h1>----- Get Aria Operations token</h1>
-<p>$uri = "$opsURL/suite-api/api/auth/token/acquire?_no_links=true"</p>
-<p>#$uri</p>
-<br>
-<h1>--- Create body</h1>
-<p>$bodyHashtable = @{</p>
-<p>username = $opsUsername</p>
-<p>authSource = $authSource</p>
-<p>password = $opsPassword</p>
-<p>}</p>
-<br>
-<h1>--- Convert the hashtable to a JSON string</h1>
-<p>$body = $bodyHashtable | ConvertTo-Json</p>
-<br>
-<p>$token = Invoke-RestMethod -Uri $uri -Method Post -Headers @{</p>
-<p>"accept" = "application/json"</p>
-<p>"Content-Type" = "application/json"</p>
-<p>} -Body $body -SkipCertificateCheck</p>
-<br>
-<p>#$token.token</p>
-<br>
-<p>$authorization = "OpsToken " + $token.token</p>
-<p>#$authorization</p>
-<br>
-<h1>----- Get the VM Operations identifier</h1>
-<p>$uri = "$opsURL/suite-api/api/resources?name=$hostName&page=0&pageSize=1000&_no_links=true"</p>
-<p>#$uri</p>
-<br>
-<p>$identifier = Invoke-RestMethod -Uri $uri -Method Get -Headers @{</p>
-<p>"accept" = "application/json"</p>
-<p>"Authorization" = $authorization</p>
-<p>} -SkipCertificateCheck</p>
-<br>
-<p>#$identifier</p>
-<p>$identifier = $identifier.resourceList</p>
-<p>$json = $identifier | ConvertTo-Json -Depth 10</p>
-<p>#$json</p>
-<br>
-<h1>Convert the JSON string to a PowerShell object</h1>
-<p>$data = $json | ConvertFrom-Json</p>
-<p>#$data</p>
-<br>
-<h1>Search for the object where resourceKindKey is "VirtualMachine"</h1>
-<p>$targetResourceKindKey = "Hostsystem"</p>
-<p>$matchedObject = $data | Where-Object { $_.resourceKey.resourceKindKey -eq $targetResourceKindKey }</p>
-<br>
-<h1>If a matching object is found, output the identifier</h1>
-<p>if ($matchedObject) {</p>
-<p>$vmIdentifier = $($matchedObject.identifier)</p>
-<p>#Write-Output $($matchedObject.identifier)</p>
-<p>} # End If</p>
-<p>else {</p>
-<p>Write-Output "No VirtualMachine resourceKindKey found"</p>
-<p>} # End Else</p>
-<br>
-<br>
-<br>
-<br>
-<h1>----- Get Field Names and Values</h1>
-<p>$uri = "$opsURL/suite-api/api/resources/properties?resourceId=$vmidentifier&_no_links=true"</p>
-<p>#$uri</p>
-<br>
-<p>$resourcePropertiesList = Invoke-RestMethod -Uri $uri -Method Get -Headers @{</p>
-<p>"accept" = "application/json"</p>
-<p>"Authorization" = $authorization</p>
-<p>} -SkipCertificateCheck</p>
-<br>
-<p>$outPut = $resourcePropertiesList.resourcePropertiesList.property</p>
-<p>Write-Output $outPut</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+
+$opsURL      = &quot;https://vao-ent.corp.local&quot;
+$opsUsername = &quot;admin&quot;
+$opsPassword = &quot;VMware1!&quot;
+$hostName      = &quot;esxi8-04.corp.local&quot;
+$authSource  = &quot;local&quot;
+
+
+# ----- Get Aria Operations token
+$uri = &quot;$opsURL/suite-api/api/auth/token/acquire?_no_links=true&quot;
+#$uri
+
+# --- Create body
+$bodyHashtable = @{
+    username = $opsUsername
+    authSource = $authSource
+    password = $opsPassword
+}
+
+# --- Convert the hashtable to a JSON string
+$body = $bodyHashtable | ConvertTo-Json
+
+$token = Invoke-RestMethod -Uri $uri -Method Post -Headers @{
+    &quot;accept&quot; = &quot;application/json&quot;
+    &quot;Content-Type&quot; = &quot;application/json&quot;
+} -Body $body -SkipCertificateCheck
+
+#$token.token
+
+$authorization = &quot;OpsToken &quot; + $token.token
+#$authorization
+
+# ----- Get the VM Operations identifier
+$uri = &quot;$opsURL/suite-api/api/resources?name=$hostName&amp;page=0&amp;pageSize=1000&amp;_no_links=true&quot;
+#$uri
+
+$identifier = Invoke-RestMethod -Uri $uri -Method Get -Headers @{
+    &quot;accept&quot; = &quot;application/json&quot;
+    &quot;Authorization&quot; = $authorization
+} -SkipCertificateCheck
+
+#$identifier
+$identifier = $identifier.resourceList
+$json = $identifier | ConvertTo-Json -Depth 10
+#$json
+
+# Convert the JSON string to a PowerShell object
+$data = $json | ConvertFrom-Json
+#$data
+
+# Search for the object where resourceKindKey is &quot;VirtualMachine&quot;
+$targetResourceKindKey = &quot;Hostsystem&quot;
+$matchedObject = $data | Where-Object { $_.resourceKey.resourceKindKey -eq $targetResourceKindKey }
+
+# If a matching object is found, output the identifier
+if ($matchedObject) {
+    $vmIdentifier = $($matchedObject.identifier)
+    #Write-Output $($matchedObject.identifier)
+} # End If
+else {
+    Write-Output &quot;No VirtualMachine resourceKindKey found&quot;
+} # End Else
+
+
+
+
+# ----- Get Field Names and Values
+$uri = &quot;$opsURL/suite-api/api/resources/properties?resourceId=$vmidentifier&amp;_no_links=true&quot;
+#$uri
+
+$resourcePropertiesList = Invoke-RestMethod -Uri $uri -Method Get -Headers @{
+    &quot;accept&quot; = &quot;application/json&quot;
+    &quot;Authorization&quot; = $authorization
+} -SkipCertificateCheck
+
+$outPut = $resourcePropertiesList.resourcePropertiesList.property
+Write-Output $outPut</code></pre>
 <br>
 <hr>
 <br>

@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -163,25 +164,21 @@
 <br>
 <hr>
 <br>
-<p>{{< highlight Powershell >}}</p>
-<br>
-<p>$PortNumber = '443'</p>
-<p>$Destination = 'Server.vCrocs.info'</p>
-<br>
-<p>$socket = New-Object Net.Sockets.TcpClient</p>
-<p>$socket.Connect($Destination,$PortNumber)</p>
-<br>
-<p>if($socket.Connected){</p>
-<p>$PortOpened = 'Port: ' + $PortNumber + ' to ' + $Destination +' is Open! :)'</p>
-<p>$socket.Close()</p>
-<p>} # end if</p>
-<p>else{</p>
-<p>$PortOpened = 'Port: ' + $PortNumber + ' to ' + $Destination +' IS NOT Open! :('</p>
-<p>} # end else</p>
-<br>
-<p>Write-Output  $PortOpened</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>$PortNumber = &#39;443&#39;
+$Destination = &#39;Server.vCrocs.info&#39;
+
+$socket = New-Object Net.Sockets.TcpClient
+$socket.Connect($Destination,$PortNumber)
+
+if($socket.Connected){
+    $PortOpened = &#39;Port: &#39; + $PortNumber + &#39; to &#39; + $Destination +&#39; is Open! :)&#39;
+    $socket.Close()
+} # end if
+else{
+    $PortOpened = &#39;Port: &#39; + $PortNumber + &#39; to &#39; + $Destination +&#39; IS NOT Open! :(&#39;
+} # end else
+
+Write-Output  $PortOpened</code></pre>
 <br>
 <hr>
 <br>
@@ -189,12 +186,8 @@
 <br>
 <p>If you work with VMware vRealize Suite of appliances here are some commands (curl and Netcat) that can be used with Linux OS to test if ports are open to destination servers.</p>
 <br>
-<p>{{< highlight Bash >}}</p>
-<br>
-<p>curl -v telnet://server01.vCROCS.info:443</p>
-<p>nc -ztv server01.vCROCS.info 443 -w 3</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>curl -v telnet://server01.vCROCS.info:443
+nc -ztv server01.vCROCS.info 443 -w 3</code></pre>
 <br>
 <hr>
 <br>

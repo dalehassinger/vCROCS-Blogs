@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -161,16 +162,12 @@
 <br>
 <hr>
 <br>
-<p>{{< highlight powershell >}}</p>
-<br>
-<p>#vCrocs Registry Changes</p>
-<p>invoke-command -computername $FQDNVMname -ScriptBlock {new-Item HKLM:\SOFTWARE\vCrocs -f }</p>
-<p>invoke-command -computername $FQDNVMname -ScriptBlock {param ($SG) Set-ItemProperty hklm:\software\vCrocs -Name SupportGroup -Value "$SG" -Force} -ArgumentList $SG</p>
-<p>invoke-command -computername $FQDNVMname -ScriptBlock {param ($APP) Set-ItemProperty hklm:\software\vCrocs -Name Application -Value "$APP" -Force} -ArgumentList $APP</p>
-<p>invoke-command -computername $FQDNVMname -ScriptBlock {param ($LOC) Set-ItemProperty hklm:\software\vCrocs -Name Location -Value "$LOC" -Force} -ArgumentList $LOC</p>
-<p>invoke-command -computername $FQDNVMname -ScriptBlock {param ($SL) Set-ItemProperty hklm:\software\vCrocs -Name ServiceLevel -Value "$SL" -Force} -ArgumentList $SL</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>#vCrocs Registry Changes
+invoke-command -computername $FQDNVMname -ScriptBlock {new-Item HKLM:\SOFTWARE\vCrocs -f }
+invoke-command -computername $FQDNVMname -ScriptBlock {param ($SG) Set-ItemProperty hklm:\software\vCrocs -Name SupportGroup -Value &quot;$SG&quot; -Force} -ArgumentList $SG
+invoke-command -computername $FQDNVMname -ScriptBlock {param ($APP) Set-ItemProperty hklm:\software\vCrocs -Name Application -Value &quot;$APP&quot; -Force} -ArgumentList $APP
+invoke-command -computername $FQDNVMname -ScriptBlock {param ($LOC) Set-ItemProperty hklm:\software\vCrocs -Name Location -Value &quot;$LOC&quot; -Force} -ArgumentList $LOC
+invoke-command -computername $FQDNVMname -ScriptBlock {param ($SL) Set-ItemProperty hklm:\software\vCrocs -Name ServiceLevel -Value &quot;$SL&quot; -Force} -ArgumentList $SL</code></pre>
 <br>
 <hr>
 <br>

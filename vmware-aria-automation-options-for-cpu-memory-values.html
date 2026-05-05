@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -181,11 +182,8 @@
 <br>
 <br>
 <br>
-<p>{{< highlight YAML >}}</p>
-<p>cpuCount: "${(input.Flavor == 'small') ? 1 : (input.Flavor == 'medium') ? 2 : (input.Flavor == 'large') ? 4 : (input.Flavor == 'other') ? input.CPU : 1}"</p>
-<p>totalMemoryMB: "${(input.Flavor == 'small') ? 2048 : (input.Flavor == 'medium') ? 4096 : (input.Flavor == 'large') ? 8192 : (input.Flavor == 'other') ? input.Memory * 1024 : 1024}"</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>cpuCount: &quot;${(input.Flavor == &#39;small&#39;) ? 1 : (input.Flavor == &#39;medium&#39;) ? 2 : (input.Flavor == &#39;large&#39;) ? 4 : (input.Flavor == &#39;other&#39;) ? input.CPU : 1}&quot;
+totalMemoryMB: &quot;${(input.Flavor == &#39;small&#39;) ? 2048 : (input.Flavor == &#39;medium&#39;) ? 4096 : (input.Flavor == &#39;large&#39;) ? 8192 : (input.Flavor == &#39;other&#39;) ? input.Memory * 1024 : 1024}&quot;</code></pre>
 <br>
 <hr>
 <br>

@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -187,39 +188,37 @@
 <br>
 <p><strong>Code:</strong></p>
 <br>
-<p>{{< highlight javascript >}}</p>
-<p>// Orchestrator Action to list AD Sub OUs</p>
-<p>// Created by the VMware by Broadcom Healthcare Aria Team</p>
-<br>
-<p>// Before you use this Action you MUST run the next 2 Workflows</p>
-<p>// You MUST run the Workflow "Add an Active Directory server" to add Active Directory Server to Orchestrator</p>
-<p>// You MUST also run the Workflow "Configure Active Directory plug-in options" and set the "Default Active Directory server"</p>
-<br>
-<p>// Set the Parent OU value (APP Name)</p>
-<p>var parentOU = "APPS";</p>
-<br>
-<p>//Search for Parent OU Value</p>
-<p>var parentOUPath = ActiveDirectory.search('OrganizationalUnit',parentOU);</p>
-<p>System.log("Parent OU: " + parentOUPath);</p>
-<br>
-<p>// Create Array of Sub OUs</p>
-<p>for each (ou in parentOUPath){</p>
-<p>var childOUs = ou.organizationalUnits;</p>
-<p>//System.log("Child OUs: " + childOUs);</p>
-<p>}</p>
-<p>//System.log("Child OUs Length: " + childOUs.length);</p>
-<br>
-<br>
-<p>var data = new Array();</p>
-<p>for each (var ouObject in childOUs){</p>
-<p>data.push(ouObject.name)</p>
-<p>//System.log("Existing OU Name: " + ouObject.name);</p>
-<p>}</p>
-<p>System.log("Existing Sub OUs: " + data);</p>
-<br>
-<p>return data</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+// Orchestrator Action to list AD Sub OUs
+// Created by the VMware by Broadcom Healthcare Aria Team
+
+// Before you use this Action you MUST run the next 2 Workflows
+// You MUST run the Workflow &quot;Add an Active Directory server&quot; to add Active Directory Server to Orchestrator
+// You MUST also run the Workflow &quot;Configure Active Directory plug-in options&quot; and set the &quot;Default Active Directory server&quot;
+
+// Set the Parent OU value (APP Name)
+var parentOU = &quot;APPS&quot;;
+
+//Search for Parent OU Value
+var parentOUPath = ActiveDirectory.search(&#39;OrganizationalUnit&#39;,parentOU);
+System.log(&quot;Parent OU: &quot; + parentOUPath);
+
+// Create Array of Sub OUs
+for each (ou in parentOUPath){
+    var childOUs = ou.organizationalUnits;
+    //System.log(&quot;Child OUs: &quot; + childOUs);
+}
+//System.log(&quot;Child OUs Length: &quot; + childOUs.length);
+
+
+var data = new Array();
+for each (var ouObject in childOUs){
+    data.push(ouObject.name)
+    //System.log(&quot;Existing OU Name: &quot; + ouObject.name);
+}
+System.log(&quot;Existing Sub OUs: &quot; + data);
+
+return data</code></pre>
 <br>
 <hr>
 <br>
@@ -227,82 +226,80 @@
 <br>
 <p><strong>Code:</strong></p>
 <br>
-<p>{{< highlight javascript >}}</p>
-<p>// Orchestrator Action to Verify AD OU Structure</p>
-<p>// Created by the VMware by Broadcom Healthcare Aria Team</p>
-<br>
-<p>// Before you use this Action you MUST run the next 2 Workflows</p>
-<p>// You MUST run the Workflow "Add an Active Directory server" to add Active Directory Server to Orchestrator</p>
-<p>// You MUST also run the Workflow "Configure Active Directory plug-in options" and set the "Default Active Directory server"</p>
-<br>
-<p>// Function to create a sub OU</p>
-<p>function performAction(item, substring) {</p>
-<p>try {</p>
-<p>// Attempt to create the sub OU</p>
-<p>item.createOrganizationalUnit(substring);</p>
-<p>System.log("Sub OU '" + substring + "' created successfully.");</p>
-<p>} catch (e) {</p>
-<p>System.error("Error creating Sub OU '" + substring + "': " + e.message);</p>
-<p>}</p>
-<p>}</p>
-<br>
-<p>// Set the Parent OU value (APP Name). Create an Action input named parentOU and type is string.</p>
-<p>//var parentOU = "MGMT";</p>
-<p>//var parentOU = "Epic";</p>
-<br>
-<p>//Search for Parent OU Value+</p>
-<p>var ous = ActiveDirectory.search('OrganizationalUnit',parentOU);</p>
-<p>System.log("ous: " + ous);</p>
-<p>//System.log("ous: " + ous.length);</p>
-<br>
-<p>if(ous.length > 0){</p>
-<p>// Create Array of Sub OUs</p>
-<p>for each (ou in ous){</p>
-<p>var childOUs = ou.organizationalUnits;</p>
-<p>//System.log("Child OUs: " + childOUs);</p>
-<p>}</p>
-<br>
-<p>// Build a string of Sub OU Values</p>
-<p>var subOUs = "";</p>
-<p>for each (var ouObject in childOUs){</p>
-<p>subOUs = subOUs + ouObject.name + ":"</p>
-<p>System.log("Existing OU Name: " + ouObject.name);</p>
-<p>}</p>
-<p>System.log("Existing Sub OUs: " + subOUs);</p>
-<br>
-<br>
-<p>// Define the array of sub OU Names to look for</p>
-<p>var subOUNames = ["Groups", "Servers", "Computers"];</p>
-<br>
-<p>// Loop through each substring</p>
-<p>subOUNames.forEach(function(substring) {</p>
-<p>// Check if the string contains the substring</p>
-<p>if (subOUs.indexOf(substring) !== -1) {</p>
-<p>System.log("Sub OU '" + substring + "' Exists.");</p>
-<p>} else {</p>
-<p>System.log("Sub OU '" + substring + "' DOES NOT Exist! Creating..");</p>
-<p>// Code to create the AD Sub OUs</p>
-<p>//System.log("substring: " + substring)</p>
-<br>
-<p>var ous = ActiveDirectory.searchExactMatch("OrganizationalUnit",parentOU);</p>
-<p>//System.log("ous: " + ous)</p>
-<br>
-<p>// Iterate over the items using forEach</p>
-<p>ous.forEach(function(item) {</p>
-<p>performAction(item, substring);</p>
-<p>});</p>
-<p>}</p>
-<p>});</p>
-<br>
-<p>System.log("All Sub OUs exist!")</p>
-<p>return "All Sub OUs exist!"</p>
-<br>
-<p>} else {</p>
-<p>System.log("OU " + parentOU + " Not Found")</p>
-<p>return "OU " + parentOU + " Not Found"</p>
-<p>}</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+// Orchestrator Action to Verify AD OU Structure
+// Created by the VMware by Broadcom Healthcare Aria Team
+
+// Before you use this Action you MUST run the next 2 Workflows
+// You MUST run the Workflow &quot;Add an Active Directory server&quot; to add Active Directory Server to Orchestrator
+// You MUST also run the Workflow &quot;Configure Active Directory plug-in options&quot; and set the &quot;Default Active Directory server&quot;
+
+// Function to create a sub OU
+function performAction(item, substring) {
+    try {
+        // Attempt to create the sub OU
+        item.createOrganizationalUnit(substring);
+        System.log(&quot;Sub OU &#39;&quot; + substring + &quot;&#39; created successfully.&quot;);
+    } catch (e) {
+        System.error(&quot;Error creating Sub OU &#39;&quot; + substring + &quot;&#39;: &quot; + e.message);
+    }
+}
+
+// Set the Parent OU value (APP Name). Create an Action input named parentOU and type is string.
+//var parentOU = &quot;MGMT&quot;;
+//var parentOU = &quot;Epic&quot;;
+
+//Search for Parent OU Value+
+var ous = ActiveDirectory.search(&#39;OrganizationalUnit&#39;,parentOU);
+System.log(&quot;ous: &quot; + ous);
+//System.log(&quot;ous: &quot; + ous.length);
+
+if(ous.length &gt; 0){
+    // Create Array of Sub OUs
+    for each (ou in ous){
+        var childOUs = ou.organizationalUnits;
+        //System.log(&quot;Child OUs: &quot; + childOUs);
+    }
+
+    // Build a string of Sub OU Values
+    var subOUs = &quot;&quot;;
+    for each (var ouObject in childOUs){
+        subOUs = subOUs + ouObject.name + &quot;:&quot;
+        System.log(&quot;Existing OU Name: &quot; + ouObject.name);
+    }
+    System.log(&quot;Existing Sub OUs: &quot; + subOUs);
+
+
+    // Define the array of sub OU Names to look for
+    var subOUNames = [&quot;Groups&quot;, &quot;Servers&quot;, &quot;Computers&quot;];
+
+    // Loop through each substring
+    subOUNames.forEach(function(substring) {
+        // Check if the string contains the substring
+        if (subOUs.indexOf(substring) !== -1) {
+            System.log(&quot;Sub OU &#39;&quot; + substring + &quot;&#39; Exists.&quot;);
+        } else {
+            System.log(&quot;Sub OU &#39;&quot; + substring + &quot;&#39; DOES NOT Exist! Creating..&quot;);
+            // Code to create the AD Sub OUs
+            //System.log(&quot;substring: &quot; + substring)
+
+            var ous = ActiveDirectory.searchExactMatch(&quot;OrganizationalUnit&quot;,parentOU);
+            //System.log(&quot;ous: &quot; + ous)
+
+            // Iterate over the items using forEach
+            ous.forEach(function(item) {
+                performAction(item, substring);
+            });
+        }
+    });
+
+    System.log(&quot;All Sub OUs exist!&quot;)
+    return &quot;All Sub OUs exist!&quot;
+
+} else {
+    System.log(&quot;OU &quot; + parentOU + &quot; Not Found&quot;)
+    return &quot;OU &quot; + parentOU + &quot; Not Found&quot;
+}</code></pre>
 <br>
 <br>
 <br>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results - vCROCS</title>
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -191,7 +192,7 @@
     <!-- Search Widget -->
     <div class="widget search-widget">
         <h3>🔍 Search</h3>
-        <input type="text" placeholder="Type something..." id="searchInput">
+        <input type="text" placeholder="Type something..." id="searchInput" data-site-root="">
     </div>
     
     <!-- Archives Widget -->
@@ -469,97 +470,49 @@
     </div>
     
     <script>
-        // Display search results from sessionStorage
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const query = urlParams.get('q');
-            const searchData = sessionStorage.getItem('searchResults');
-            
-            console.log('Search Results Page:');
-            console.log('  Query:', query);
-            console.log('  Has data:', !!searchData);
-            
-            if (!query || !searchData) {
-                console.log('  Missing query or data');
+            const query = (urlParams.get('q') || '').trim();
+
+            if (!query) {
+                document.getElementById('searchQuery').textContent = '""';
+                document.getElementById('resultsCount').textContent = 'Enter a search term to see results.';
                 return;
             }
-            
-            const data = JSON.parse(searchData);
-            const results = data.results || [];
-            
-            console.log('  Results count:', results.length);
-            
+
             document.getElementById('searchQuery').textContent = '"' + query + '"';
-            document.getElementById('resultsCount').textContent = 
-                'Found ' + results.length + ' result' + (results.length !== 1 ? 's' : '');
-            
-            if (results.length === 0) {
-                return;
-            }
-            
-            function highlightMatch(text, query) {
-                if (!text) return '';
-                const regex = new RegExp('(' + escapeRegex(query) + ')', 'gi');
-                return text.replace(regex, '<mark style="background: #00a8ff; color: white; padding: 0.1rem 0.2rem; border-radius: 3px;">$1</mark>');
-            }
-            
-            function escapeRegex(string) {
-                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            }
-            
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-            }
-            
+
             function slugify(text) {
                 return text.toLowerCase()
                     .replace(/[^\w\s-]/g, '')
                     .replace(/[\s_-]+/g, '-')
                     .replace(/^-+|-+$/g, '');
             }
-            
-            function extractContextSnippet(text, query, contextLength) {
-                if (!text) return '';
-                
-                const lowerText = text.toLowerCase();
-                const lowerQuery = query.toLowerCase();
-                const index = lowerText.indexOf(lowerQuery);
-                
-                if (index === -1) return text.substring(0, contextLength) + '...';
-                
-                // Calculate start and end positions for context
-                const start = Math.max(0, index - Math.floor(contextLength / 2));
-                const end = Math.min(text.length, index + query.length + Math.floor(contextLength / 2));
-                
-                let snippet = text.substring(start, end);
-                
-                // Add ellipsis if needed
-                if (start > 0) snippet = '...' + snippet;
-                if (end < text.length) snippet = snippet + '...';
-                
-                return snippet;
-            }
-            
-            const resultsHTML = results.map(function(post) {
+
+            try {
+                const posts = await window.vcrocsSearchUtils.loadSearchIndex('search-index.json');
+                const results = window.vcrocsSearchUtils.searchPosts(posts, query, 50);
+
+                document.getElementById('resultsCount').textContent =
+                    'Found ' + results.length + ' result' + (results.length !== 1 ? 's' : '');
+
+                if (results.length === 0) {
+                    return;
+                }
+
+                const resultsHTML = results.map(function(post) {
                 var html = '<div class="search-result-item">';
-                html += '<h2><a href="' + post.url + '">' + highlightMatch(post.title, query) + '</a></h2>';
+                html += '<h2><a href="' + post.url + '">' + window.vcrocsSearchUtils.highlightMatch(post.title, query) + '</a></h2>';
                 
-                // Show context snippet - prioritize content match over excerpt
-                if (post.content && post.content.toLowerCase().includes(query.toLowerCase())) {
-                    const snippet = extractContextSnippet(post.content, query, 200);
-                    html += '<p class="search-result-excerpt">' + highlightMatch(snippet, query) + '</p>';
-                } else if (post.excerpt) {
-                    html += '<p class="search-result-excerpt">' + highlightMatch(post.excerpt, query) + '</p>';
+                const snippetSource = post.content || post.excerpt || '';
+                const snippet = window.vcrocsSearchUtils.extractContextSnippet(snippetSource, query, 220);
+                if (snippet) {
+                    html += '<p class="search-result-excerpt">' + window.vcrocsSearchUtils.highlightMatch(snippet, query) + '</p>';
                 }
                 
                 html += '<div class="search-result-meta">';
                 if (post.date) {
-                    html += '<span>📅 ' + formatDate(post.date) + '</span>';
+                    html += '<span>📅 ' + window.vcrocsSearchUtils.formatDate(post.date) + '</span>';
                 }
                 if (post.tags && post.tags.length > 0) {
                     html += '<span>🏷️ ' + post.tags.map(function(tag) {
@@ -570,9 +523,13 @@
                 html += '</div>';
                 
                 return html;
-            }).join('');
-            
-            document.getElementById('searchResults').innerHTML = resultsHTML;
+                }).join('');
+
+                document.getElementById('searchResults').innerHTML = resultsHTML;
+            } catch (error) {
+                console.error('Failed to load search results:', error);
+                document.getElementById('resultsCount').textContent = 'Search index could not be loaded.';
+            }
         });
     </script>
     <button class="back-to-top" type="button" aria-label="Back to top" title="Back to top">↑</button>

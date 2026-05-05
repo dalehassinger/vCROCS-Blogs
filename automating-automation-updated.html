@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -182,113 +183,108 @@
 <br>
 <h2>(Note: When vRealize Automation 8.4 was released there was a small change to api to get Bearer Token.  See the changes in the code area. Everything else has stayed the same for my processes.)</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<h1>Get Bearer Token from vRA REST API Call</h1>
-<br>
-<h1>Some of the commented lines are in the code for testing.  I use to check variable</h1>
-<h1>values when building the Automation.</h1>
-<br>
-<h1>I am showing password in this example. In Production I get the Password from a Hashi</h1>
-<h1>Secret Server and DO NOT have the password Hard Coded.</h1>
-<br>
-<h1>--- [ Variables ] ---</h1>
-<p>$password = 'VMware1'</p>
-<br>
-<h1>--- [ Headers ] ---</h1>
-<p>$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"</p>
-<p>$headers.Add("Content-Type", "application/json")</p>
-<p>$headers.Add("Accept", "application/json")</p>
-<br>
-<h1>--- [ Body ] ---</h1>
-<p>$body = "{</p>
-<p><code>n    </code>"password<code>":  </code>"passwordString`",</p>
-<p><code>n    </code>"username<code>":  </code>"administrator`"</p>
-<p>`n}"</p>
-<br>
-<p>$body = $body -Replace("passwordString",$password)</p>
-<p>#$body</p>
-<br>
-<h1>--- [ Invoke REST API ] ---</h1>
-<h1>vRA 8.3 Use next line</h1>
-<p>$response = Invoke-RestMethod -SkipCertificateCheck 'https://vRA-FQDN.domain.name/csp/gateway/am/api/login?access_token' -Method 'POST' -Headers $headers -Body $body</p>
-<br>
-<h1>vRA 8.4 Use next line</h1>
-<p>$response = Invoke-RestMethod -SkipCertificateCheck 'https://vRA-FQDN.domain.name/csp/gateway/am/api/login?cspAuthToken' -Method 'POST' -Headers $headers -Body $body</p>
-<br>
-<p>$response | ConvertTo-Json</p>
-<p>#$response</p>
-<br>
-<h1>vRA 8.3 Use next line</h1>
-<p>#$response.access_token</p>
-<br>
-<h1>vRA 8.4 Use next line</h1>
-<p>#$response.cspAuthToken</p>
-<br>
-<h1>vRA 8.3 Use next line</h1>
-<p>$bearer_token = "Bearer " + $response.access_token</p>
-<br>
-<h1>vRA 8.4 Use next line</h1>
-<p>$bearer_token = "Bearer " + $response.cspAuthToken</p>
-<br>
-<h1>$bearer_token</h1>
-<p>{{< /highlight >}}</p>
+<pre><code># Get Bearer Token from vRA REST API Call
+
+# Some of the commented lines are in the code for testing.  I use to check variable
+# values when building the Automation.
+
+# I am showing password in this example. In Production I get the Password from a Hashi
+# Secret Server and DO NOT have the password Hard Coded.
+
+# --- [ Variables ] ---
+$password = &#39;VMware1&#39;
+
+# --- [ Headers ] ---
+$headers = New-Object &quot;System.Collections.Generic.Dictionary[[String],[String]]&quot;
+$headers.Add(&quot;Content-Type&quot;, &quot;application/json&quot;)
+$headers.Add(&quot;Accept&quot;, &quot;application/json&quot;)
+
+# --- [ Body ] ---
+$body = &quot;{
+`n    `&quot;password`&quot;:  `&quot;passwordString`&quot;,
+`n    `&quot;username`&quot;:  `&quot;administrator`&quot;
+`n}&quot;
+   
+$body = $body -Replace(&quot;passwordString&quot;,$password)
+#$body
+
+# --- [ Invoke REST API ] ---
+# vRA 8.3 Use next line
+$response = Invoke-RestMethod -SkipCertificateCheck &#39;https://vRA-FQDN.domain.name/csp/gateway/am/api/login?access_token&#39; -Method &#39;POST&#39; -Headers $headers -Body $body
+
+# vRA 8.4 Use next line
+$response = Invoke-RestMethod -SkipCertificateCheck &#39;https://vRA-FQDN.domain.name/csp/gateway/am/api/login?cspAuthToken&#39; -Method &#39;POST&#39; -Headers $headers -Body $body
+
+$response | ConvertTo-Json
+#$response
+
+# vRA 8.3 Use next line
+#$response.access_token
+
+# vRA 8.4 Use next line
+#$response.cspAuthToken
+
+# vRA 8.3 Use next line
+$bearer_token = &quot;Bearer &quot; + $response.access_token
+
+# vRA 8.4 Use next line
+$bearer_token = &quot;Bearer &quot; + $response.cspAuthToken
+
+# $bearer_token</code></pre>
 <br>
 <h2>Code to get execute a vRO Workflow using API Call (PowerShell):</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<h1>Run vRA Workflow using API Call</h1>
-<br>
-<h1>--- [ Variables ] ---</h1>
-<p>$vmName = 'DBH-1234'</p>
-<p>$emailAddress = Dale.Hassinger@vCROCS.info'</p>
-<p>$OSVersion = 'Ubuntu18044'</p>
-<br>
-<p>$PSText = 'G:\Scripts\Create-Linux-Server-Step-1-v01-PROD.ps1 -vmNAME $vmName -emailAddress $emailAddress -OSVersion $OSVersion'</p>
-<br>
-<h1>--- [ Headers ] ---</h1>
-<p>$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"</p>
-<p>$headers.Add("Content-Type", "application/xml")</p>
-<p>$headers.Add("Authorization", $bearer_token)</p>
-<br>
-<h1>--- [ Body ] ---</h1>
-<p>$body = '</p>
-<p><execution-context xmlns="http://www.vmware.com/vco"></p>
-<p><parameters></p>
-<p><parameter name="vm" type="VC:VirtualMachine" scope="local"></p>
-<p><sdk-object type="VC:VirtualMachine" id="vCenter.FQDN,id:vm-12345"/></p>
-<p></parameter></p>
-<p><parameter name="vmUsername" type="string" scope="local"></p>
-<p><string>username@domain.name</string></p>
-<p></parameter></p>
-<p><parameter name="vmPassword" type="SecureString" scope="local"></p>
-<p><string>vmPassword_string</string></p>
-<p></parameter></p>
-<p><parameter name="programPath" type="string" scope="local"></p>
-<p><string>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</string></p>
-<p></parameter></p>
-<p><parameter name="arguments" type="string" scope="local"></p>
-<p><string>arguments_string</string></p>
-<p></parameter></p>
-<p><parameter name="workingDirectory" type="string" scope="local"></p>
-<p><string>G:\Scripts</string></p>
-<p></parameter></p>
-<p></parameters></p>
-<p></execution-context></p>
-<p>'</p>
-<br>
-<h1>$body</h1>
-<h1>I define the Body format and then replace strings of text that I define with variables</h1>
-<h1>in the code.</h1>
-<br>
-<p>$body = $body -Replace("vmPassword_string",$password)</p>
-<p>$body = $body -Replace("arguments_string",$PSText)</p>
-<br>
-<h1>--- [ Invoke REST API ] ---</h1>
-<p>$response = Invoke-RestMethod -SkipCertificateCheck 'https://vRA-FQDN.domain.name/vco/api/workflows/9cc3ac9d-062b-4e98-aa9d-e781e47f1234/executions' -Method 'POST' -Headers $headers -Body $body</p>
-<p>$response | ConvertTo-Json</p>
-<p>#$response</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># Run vRA Workflow using API Call
+
+# --- [ Variables ] ---
+$vmName = &#39;DBH-1234&#39;
+$emailAddress = Dale.Hassinger@vCROCS.info&#39;
+$OSVersion = &#39;Ubuntu18044&#39;
+
+$PSText = &#39;G:\Scripts\Create-Linux-Server-Step-1-v01-PROD.ps1 -vmNAME $vmName -emailAddress $emailAddress -OSVersion $OSVersion&#39;
+
+# --- [ Headers ] ---
+$headers = New-Object &quot;System.Collections.Generic.Dictionary[[String],[String]]&quot;
+$headers.Add(&quot;Content-Type&quot;, &quot;application/xml&quot;)
+$headers.Add(&quot;Authorization&quot;, $bearer_token)
+
+# --- [ Body ] ---
+$body = &#39;
+&lt;execution-context xmlns=&quot;http://www.vmware.com/vco&quot;&gt;
+   &lt;parameters&gt;
+      &lt;parameter name=&quot;vm&quot; type=&quot;VC:VirtualMachine&quot; scope=&quot;local&quot;&gt;
+         &lt;sdk-object type=&quot;VC:VirtualMachine&quot; id=&quot;vCenter.FQDN,id:vm-12345&quot;/&gt;
+      &lt;/parameter&gt;
+      &lt;parameter name=&quot;vmUsername&quot; type=&quot;string&quot; scope=&quot;local&quot;&gt;
+         &lt;string&gt;username@domain.name&lt;/string&gt;
+      &lt;/parameter&gt;
+      &lt;parameter name=&quot;vmPassword&quot; type=&quot;SecureString&quot; scope=&quot;local&quot;&gt;
+         &lt;string&gt;vmPassword_string&lt;/string&gt;
+      &lt;/parameter&gt;
+      &lt;parameter name=&quot;programPath&quot; type=&quot;string&quot; scope=&quot;local&quot;&gt;
+         &lt;string&gt;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&lt;/string&gt;
+      &lt;/parameter&gt;
+      &lt;parameter name=&quot;arguments&quot; type=&quot;string&quot; scope=&quot;local&quot;&gt;
+         &lt;string&gt;arguments_string&lt;/string&gt;
+      &lt;/parameter&gt;
+      &lt;parameter name=&quot;workingDirectory&quot; type=&quot;string&quot; scope=&quot;local&quot;&gt;
+         &lt;string&gt;G:\Scripts&lt;/string&gt;
+      &lt;/parameter&gt;
+   &lt;/parameters&gt;
+&lt;/execution-context&gt;
+&#39;
+
+# $body
+# I define the Body format and then replace strings of text that I define with variables
+# in the code.
+
+$body = $body -Replace(&quot;vmPassword_string&quot;,$password)
+$body = $body -Replace(&quot;arguments_string&quot;,$PSText)
+
+# --- [ Invoke REST API ] ---
+$response = Invoke-RestMethod -SkipCertificateCheck &#39;https://vRA-FQDN.domain.name/vco/api/workflows/9cc3ac9d-062b-4e98-aa9d-e781e47f1234/executions&#39; -Method &#39;POST&#39; -Headers $headers -Body $body
+$response | ConvertTo-Json
+#$response</code></pre>
 <br>
 <br>
 <h2>Orchestrator Workflow:</h2>
@@ -298,11 +294,7 @@
 <br>
 <p>Sample Code to use Workflow ID:</p>
 <br>
-<p>{{< highlight powershell >}}</p>
-<br>
-<p>$response = Invoke-RestMethod -SkipCertificateCheck 'https://vRA-FQDN.domain.name/vco/api/workflows/7452cce6-c715-482d-9127-1f3aa11523ba/executions' -Method 'POST' -Headers $headers -Body $body</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>$response = Invoke-RestMethod -SkipCertificateCheck &#39;https://vRA-FQDN.domain.name/vco/api/workflows/7452cce6-c715-482d-9127-1f3aa11523ba/executions&#39; -Method &#39;POST&#39; -Headers $headers -Body $body</code></pre>
 <br>
 <br>
 <p>This is where you get the input variable values. See highlighted area.:</p>
@@ -321,50 +313,45 @@
 <br>
 <p>Sample Code to specify "VC:HostSystem" and ID value:</p>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p><parameter name="vm" type="VC:HostSystem" scope="local"></p>
-<p><sdk-object type="VC:VirtualMachine" id="192.168.86.200,id:host-14"/></p>
-<p></parameter></p>
-<p>{{< /highlight >}}</p>
+<pre><code>&lt;parameter name=&quot;vm&quot; type=&quot;VC:HostSystem&quot; scope=&quot;local&quot;&gt;
+   &lt;sdk-object type=&quot;VC:VirtualMachine&quot; id=&quot;192.168.86.200,id:host-14&quot;/&gt;
+&lt;/parameter&gt;</code></pre>
 <br>
 <strong>![](/img/vro-ss-06.png)</strong>
 <h2><a href="/img/vro-ss-06.png">Click Here to see Larger Image of Screen Shot</a></h2>
 <br>
 <p>Sample Code to specify "VC:VirtualMachine" and ID value (VM.ExtensionData.MoRef.Value):</p>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p><parameter name="vm" type="VC:VirtualMachine" scope="local"></p>
-<p><sdk-object type="VC:VirtualMachine" id="192.168.86.200,id:vm-3006"/></p>
-<p></parameter></p>
-<br>
-<br>
-<h1>Example of how to build the body.</h1>
-<br>
-<p>$vCenter = '192.168.86.200'</p>
-<p>$vmInfo = Get-VM -Name 'administrator-904'</p>
-<p>$vmMoref = $vmInfo.ExtensionData.MoRef.Value</p>
-<br>
-<h1>--- [ Body ] ---</h1>
-<p>$body = '</p>
-<p><execution-context xmlns="http://www.vmware.com/vco"></p>
-<p><parameters></p>
-<p><parameter name="vm" type="VC:VirtualMachine" scope="local"></p>
-<p><sdk-object type="VC:VirtualMachine" id="vCenterString,id:vmString"/></p>
-<p></parameter></p>
-<p></parameters></p>
-<p></execution-context></p>
-<p>'</p>
-<br>
-<p>$body</p>
-<h1>I define the Body format and then replace strings of text that I define with variables</h1>
-<h1>in the code.</h1>
-<br>
-<p>$body = $body -Replace("vmstring",$vmMoref)</p>
-<p>$body = $body -Replace("vCenterstring",$vCenter)</p>
-<br>
-<p>$body</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>&lt;parameter name=&quot;vm&quot; type=&quot;VC:VirtualMachine&quot; scope=&quot;local&quot;&gt;
+   &lt;sdk-object type=&quot;VC:VirtualMachine&quot; id=&quot;192.168.86.200,id:vm-3006&quot;/&gt;
+&lt;/parameter&gt;
+
+
+# Example of how to build the body. 
+
+$vCenter = &#39;192.168.86.200&#39;
+$vmInfo = Get-VM -Name &#39;administrator-904&#39;
+$vmMoref = $vmInfo.ExtensionData.MoRef.Value
+
+# --- [ Body ] ---
+$body = &#39;
+&lt;execution-context xmlns=&quot;http://www.vmware.com/vco&quot;&gt;
+   &lt;parameters&gt;
+      &lt;parameter name=&quot;vm&quot; type=&quot;VC:VirtualMachine&quot; scope=&quot;local&quot;&gt;
+         &lt;sdk-object type=&quot;VC:VirtualMachine&quot; id=&quot;vCenterString,id:vmString&quot;/&gt;
+      &lt;/parameter&gt;
+   &lt;/parameters&gt;
+&lt;/execution-context&gt;
+&#39;
+
+$body
+# I define the Body format and then replace strings of text that I define with variables
+# in the code.
+
+$body = $body -Replace(&quot;vmstring&quot;,$vmMoref)
+$body = $body -Replace(&quot;vCenterstring&quot;,$vCenter)
+
+$body</code></pre>
 <br>
 <hr>
 <br>

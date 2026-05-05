@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -165,101 +166,74 @@
 <br>
 <p>This beacon.conf example is for service state changes. The Beacon sends an event to the salt master if a Windows Service is started/stopped.</p>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>beacons:</p>
-<p>service:</p>
-<ul>
-<li>services:</li>
-</ul>
-<p>Spooler:</p>
-<p>onchangeonly: true</p>
-<p>{{< /highlight >}}</p>
+<pre><code>beacons:
+  service:
+    - services:
+       Spooler:
+         onchangeonly: true</code></pre>
 <br>
 <p>This is what the event will look like in the events if you are monitoring.</p>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>salt/beacon/DBH-211/service/Spooler     {</p>
-<p>"Spooler": {</p>
-<p>"running": true</p>
-<p>},</p>
-<p>"_stamp": "2021-08-06T11:53:57.212810",</p>
-<p>"id": "DBH-211",</p>
-<p>"service_name": "Spooler"</p>
-<p>}</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>salt/beacon/DBH-211/service/Spooler     {
+    &quot;Spooler&quot;: {
+        &quot;running&quot;: true
+    },
+    &quot;_stamp&quot;: &quot;2021-08-06T11:53:57.212810&quot;,
+    &quot;id&quot;: &quot;DBH-211&quot;,
+    &quot;service_name&quot;: &quot;Spooler&quot;
+}</code></pre>
 <br>
 <h2>Reactors:</h2>
 <br>
 <h2>Reactor File: Monitors the event bus for events specified. IE: salt/beacon/*/service/Spooler</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>reactor:</p>
-<ul>
-<li>'salt/auth':                              # React to a new minion</li>
-<li>salt://reactor/accept-key.sls           # Run this state to auto accept new minion</li>
-<li>'salt/beacon/*/service/Spooler':          # React to Spooler Service Change</li>
-<li>salt://vCROCS/spooler_auto_stop.sls     # Run this state</li>
-<br>
-</ul>
-<p>{{< /highlight >}}</p>
+<pre><code>reactor:
+  - &#39;salt/auth&#39;:                              # React to a new minion
+    - salt://reactor/accept-key.sls           # Run this state to auto accept new minion
+  - &#39;salt/beacon/*/service/Spooler&#39;:          # React to Spooler Service Change
+    - salt://vCROCS/spooler_auto_stop.sls     # Run this state</code></pre>
 <br>
 <h2>How the beacons and reactors work together:</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<h1>What this line is doing in the reactor is watching for an beacon event from any minion</h1>
-<h1>The * means all minions. You could specify a minion name.</h1>
-<h1>Looking for service events.</h1>
-<h1>The service event that is specified is the Spooler event.</h1>
-<br>
-<ul>
-<li>'salt/beacon/*/service/Spooler'</li>
-<br>
-<br>
-</ul>
-<h1>This is the event sent from the beacon to the event bus</h1>
-<br>
-<p>salt/beacon/DBH-211/service/Spooler</p>
-<br>
-<h1>What the reactor is looking for and what the beacon sent matches.</h1>
-<h1>The state specified in the reactor will now run</h1>
-<h1>This is the state specified in my example</h1>
-<br>
-<ul>
-<li>salt://vCROCS/spooler_auto_stop.sls</li>
-<br>
-</ul>
-<p>{{< /highlight >}}</p>
+<pre><code># What this line is doing in the reactor is watching for an beacon event from any minion
+# The * means all minions. You could specify a minion name.
+# Looking for service events.  
+# The service event that is specified is the Spooler event.
+
+  - &#39;salt/beacon/*/service/Spooler&#39;
+
+
+# This is the event sent from the beacon to the event bus
+
+salt/beacon/DBH-211/service/Spooler
+
+# What the reactor is looking for and what the beacon sent matches.
+# The state specified in the reactor will now run
+# This is the state specified in my example
+
+    - salt://vCROCS/spooler_auto_stop.sls</code></pre>
 <br>
 <h2>State File:</h2>
 <br>
 <h2>State File: Stops the Spooler Service if it was started</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>{% if data['Spooler']['running'] == true %}</p>
-<p>stop_service:</p>
-<p>local.service.stop:</p>
-<ul>
-<li>tgt: {{ data['id'] }}</li>
-<li>arg:</li>
-<li>Spooler</li>
-</ul>
-<p>{% endif %}</p>
-<p>{{< /highlight >}}</p>
+<pre><code>{% if data[&#39;Spooler&#39;][&#39;running&#39;] == true %}
+stop_service:
+  local.service.stop:
+    - tgt: {{ data[&#39;id&#39;] }}
+    - arg:
+      - Spooler
+{% endif %}</code></pre>
 <br>
 <h2>State File: Starts the Spooler Service if it was stopped</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>{% if data['Spooler']['running'] == False %}</p>
-<p>start_service:</p>
-<p>local.service.start:</p>
-<ul>
-<li>tgt: {{ data['id'] }}</li>
-<li>arg:</li>
-<li>Spooler</li>
-</ul>
-<p>{% endif %}</p>
-<p>{{< /highlight >}}</p>
+<pre><code>{% if data[&#39;Spooler&#39;][&#39;running&#39;] == False %}
+start_service:
+  local.service.start:
+    - tgt: {{ data[&#39;id&#39;] }}
+    - arg:
+      - Spooler
+{% endif %}</code></pre>
 <br>
 <hr>
 <br>

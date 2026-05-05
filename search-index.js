@@ -1,4 +1,4 @@
-{
+window.vcrocsSearchIndex = {
   "posts" : [
     {
       "categories" : [
@@ -2000,4 +2000,4 @@
       "url" : "clay-thrower-powered-by-raspberry-pi.html"
     }
   ]
-}
+};

@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -193,153 +194,116 @@
 <ul>
 <li>Install CherryPy:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<p>pip3 install cherrypy</p>
-<p>{{< /highlight >}}</p>
+<pre><code>pip3 install cherrypy</code></pre>
 <br>
-<ul>
 <li>Install the PyOpenSSL package:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<p>pip3 install pyopenssl</p>
-<p>{{< /highlight >}}</p>
+<pre><code>pip3 install pyopenssl</code></pre>
 <br>
-<ul>
 <li>Generate a self-signed certificate:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<p>salt-call --local tls.create_self_signed_cert</p>
-<p>{{< /highlight >}}</p>
+<pre><code>salt-call --local tls.create_self_signed_cert</code></pre>
 <br>
-<ul>
 <li>open firewall port 8000:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<p>iptables -A INPUT -i eth0 -p tcp --dport 8000 -j ACCEPT</p>
-<p>{{< /highlight >}}</p>
+<pre><code>iptables -A INPUT -i eth0 -p tcp --dport 8000 -j ACCEPT</code></pre>
 <br>
 <br>
-<ul>
 <li>Edit /etc/salt/master file:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<p>vi /etc/salt/master</p>
-<p>{{< /highlight >}}</p>
+<pre><code>vi /etc/salt/master</code></pre>
 <br>
+</ul>
 <p>Add these lines to the /etc/salt/master file:</p>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>external_auth:</p>
-<p>pam:</p>
-<p>root:</p>
-<ul>
-<li>.*</li>
-<br>
-</ul>
-<p>rest_cherrypy:</p>
-<p>port: 8000</p>
-<p>ssl_crt: /etc/pki/tls/certs/localhost.crt</p>
-<p>ssl_key: /etc/pki/tls/certs/localhost.key</p>
-<p>{{< /highlight >}}</p>
+<pre><code>external_auth:
+  pam:
+    root:
+      - .*
+
+rest_cherrypy:
+  port: 8000
+  ssl_crt: /etc/pki/tls/certs/localhost.crt
+  ssl_key: /etc/pki/tls/certs/localhost.key</code></pre>
 <br>
 <ul>
 <li>Restart salt-master and check service status for any errors:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<p>systemctl restart salt-master</p>
-<p>systemctl status salt-master</p>
-<p>{{< /highlight >}}</p>
+<pre><code>systemctl restart salt-master
+systemctl status salt-master</code></pre>
 <br>
-<ul>
 <li>Enable | Start salt-api and check service status for any errors:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<p>systemctl enable salt-api</p>
-<p>systemctl start salt-api</p>
-<p>systemctl status salt-api</p>
-<p>{{< /highlight >}}</p>
+<pre><code>systemctl enable salt-api
+systemctl start salt-api
+systemctl status salt-api</code></pre>
 <br>
 <hr>
 <br>
+</ul>
 <h2>Tests to make sure SaltStack Config Changes are working:</h2>
 <br>
 <ul>
 <li>I did all this PowerShell code from my mac.  To use self-signed certs I use -SkipCertificateCheck. On a Windows OS the code is different.</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>--- PowerShell Code ---</h1>
-<p>Invoke-WebRequest -Uri 'https://192.168.86.141:8000' -SkipCertificateCheck</p>
+<pre><code># --- PowerShell Code ---
+Invoke-WebRequest -Uri &#39;https://192.168.86.141:8000&#39; -SkipCertificateCheck
+
+Results:
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : {&quot;return&quot;: &quot;Welcome&quot;, &quot;clients&quot;: [&quot;local&quot;, &quot;local_async&quot;, &quot;local_batch&quot;, &quot;local_subset&quot;, &quot;runner&quot;, &quot;runner_async&quot;, &quot;ssh&quot;, &quot;wheel&quot;, &quot;wheel_async&quot;]}
+RawContent        : HTTP/1.1 200 OK
+                    Server: CherryPy/8.9.1
+                    Date: Sat, 11 Jun 2022 20:57:46 GMT
+                    Access-Control-Allow-Origin: *
+                    Access-Control-Expose-Headers: GET, POST
+                    Access-Control-Allow-Credentials: true
+                    Vary: Accept-E…
+Headers           : {[Server, System.String[]], [Date, System.String[]], [Access-Control-Allow-Origin, System.String[]], [Access-Control-Expose-Headers, 
+                    System.String[]]…}
+Images            : {}
+InputFields       : {}
+Links             : {}
+RawContentLength  : 146
+RelationLink      : {}</code></pre>
 <br>
-<p>Results:</p>
-<br>
-<p>StatusCode        : 200</p>
-<p>StatusDescription : OK</p>
-<p>Content           : {"return": "Welcome", "clients": ["local", "local_async", "local_batch", "local_subset", "runner", "runner_async", "ssh", "wheel", "wheel_async"]}</p>
-<p>RawContent        : HTTP/1.1 200 OK</p>
-<p>Server: CherryPy/8.9.1</p>
-<p>Date: Sat, 11 Jun 2022 20:57:46 GMT</p>
-<p>Access-Control-Allow-Origin: *</p>
-<p>Access-Control-Expose-Headers: GET, POST</p>
-<p>Access-Control-Allow-Credentials: true</p>
-<p>Vary: Accept-E…</p>
-<p>Headers           : {[Server, System.String[]], [Date, System.String[]], [Access-Control-Allow-Origin, System.String[]], [Access-Control-Expose-Headers,</p>
-<p>System.String[]]…}</p>
-<p>Images            : {}</p>
-<p>InputFields       : {}</p>
-<p>Links             : {}</p>
-<p>RawContentLength  : 146</p>
-<p>RelationLink      : {}</p>
-<p>{{< /highlight >}}</p>
-<br>
-<ul>
 <li>Make sure you see StatusCode: 200</li>
 <br>
 <li>Next step is to make sure you get a token:</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>--- PowerShell Code ---</h1>
-<h1>--- In my code I show the PassWord. In Production DO NOT DO THIS.</h1>
-<h1>--- There are so many different ways to include encrypted PWs in the code.</h1>
-<h1>--- Use what works best in your environment.</h1>
+<pre><code># --- PowerShell Code ---
+# --- In my code I show the PassWord. In Production DO NOT DO THIS.
+# --- There are so many different ways to include encrypted PWs in the code. 
+# --- Use what works best in your environment.
+
+$saltServerAddress = &#39;https://192.168.86.110:8000&#39;
+
+# --- Set the json body
+$body = &#39;{ &quot;username&quot;: &quot;root&quot;,&quot;password&quot;: &quot;HackMe!&quot;,&quot;eauth&quot;: &quot;pam&quot;}&#39;
+
+# --- Fetch New Token from salt master
+$url = &quot;$saltServerAddress/login&quot;
+
+$Params = @{
+    Method = &quot;Post&quot;
+    Uri = $url
+    Body = $Body
+    ContentType = &quot;application/json&quot;
+}
+$fetch = Invoke-RestMethod @Params -SkipCertificateCheck
+
+$fetch
+$fetch.return.token
+
+Results:
+
+return
+------
+{@{token=6696846c802f78d5326a69b79d36e95015d37f5a; expire=1655025071.22838; start=1654981871.22838; user=root; eauth=pam; perms=System.Object[]}}
+6696846c802f78d5326a69b79d36e95015d37f5a</code></pre>
 <br>
-<p>$saltServerAddress = 'https://192.168.86.110:8000'</p>
-<br>
-<h1>--- Set the json body</h1>
-<p>$body = '{ "username": "root","password": "HackMe!","eauth": "pam"}'</p>
-<br>
-<h1>--- Fetch New Token from salt master</h1>
-<p>$url = "$saltServerAddress/login"</p>
-<br>
-<p>$Params = @{</p>
-<p>Method = "Post"</p>
-<p>Uri = $url</p>
-<p>Body = $Body</p>
-<p>ContentType = "application/json"</p>
-<p>}</p>
-<p>$fetch = Invoke-RestMethod @Params -SkipCertificateCheck</p>
-<br>
-<p>$fetch</p>
-<p>$fetch.return.token</p>
-<br>
-<p>Results:</p>
-<br>
-<p>return</p>
-<p>------</p>
-<p>{@{token=6696846c802f78d5326a69b79d36e95015d37f5a; expire=1655025071.22838; start=1654981871.22838; user=root; eauth=pam; perms=System.Object[]}}</p>
-<p>6696846c802f78d5326a69b79d36e95015d37f5a</p>
-<br>
-<p>{{< /highlight >}}</p>
-<br>
-<ul>
 <li>You will see "token=" in the return data</li>
 <br>
 <hr>
@@ -350,167 +314,147 @@
 <ul>
 <li>Run a test.ping</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>--- PowerShell Code ---</h1>
-<p>$minionName        = '2019DC'</p>
-<p>$saltServerAddress = 'https://192.168.86.110:8000'</p>
-<p>$userName          = 'root'</p>
-<p>$password          = 'HackMe!'</p>
-<p>$fun               = 'test.ping'</p>
-<p>$fetch             = ''</p>
+<pre><code># --- PowerShell Code ---
+$minionName        = &#39;2019DC&#39;
+$saltServerAddress = &#39;https://192.168.86.110:8000&#39;
+$userName          = &#39;root&#39;
+$password          = &#39;HackMe!&#39;
+$fun               = &#39;test.ping&#39;
+$fetch             = &#39;&#39;
+
+# --- Set the json body
+$body = &#39;{ &quot;username&quot;: &quot;&#39; + $userName + &#39;&quot;,&quot;password&quot;: &quot;&#39; + $password + &#39;&quot;,&quot;eauth&quot;: &quot;pam&quot;,&quot;tgt&quot;: &quot;&#39; + $minionName + &#39;&quot;,&quot;fun&quot;: &quot;&#39; + $fun + &#39;&quot;,&quot;client&quot;: &quot;local&quot;}&#39;
+
+# --- Create RESTful API Request
+$url = &quot;$saltServerAddress/run&quot;
+
+$Params = @{
+    Method = &quot;Post&quot;
+    Uri = $url
+    Body = $Body
+    ContentType = &quot;application/json&quot;
+}
+$fetch = Invoke-RestMethod @Params -SkipCertificateCheck
+
+# --- Showing different ways to show the return data
+#$fetch
+$fetch.return
+$fetch.return.$minionName</code></pre>
 <br>
-<h1>--- Set the json body</h1>
-<p>$body = '{ "username": "' + $userName + '","password": "' + $password + '","eauth": "pam","tgt": "' + $minionName + '","fun": "' + $fun + '","client": "local"}'</p>
-<br>
-<h1>--- Create RESTful API Request</h1>
-<p>$url = "$saltServerAddress/run"</p>
-<br>
-<p>$Params = @{</p>
-<p>Method = "Post"</p>
-<p>Uri = $url</p>
-<p>Body = $Body</p>
-<p>ContentType = "application/json"</p>
-<p>}</p>
-<p>$fetch = Invoke-RestMethod @Params -SkipCertificateCheck</p>
-<br>
-<h1>--- Showing different ways to show the return data</h1>
-<p>#$fetch</p>
-<p>$fetch.return</p>
-<p>$fetch.return.$minionName</p>
-<p>{{< /highlight >}}</p>
-<br>
-<ul>
 <li>Check disk.usage</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>--- PowerShell Code ---</h1>
-<p>$minionName        = '2019DC'</p>
-<p>$saltServerAddress = 'https://192.168.86.110:8000'</p>
-<p>$userName          = 'root'</p>
-<p>$password          = 'HackMe!'</p>
-<p>$fun               = 'disk.usage' # -salt function</p>
-<p>$fetch             = ''</p>
+<pre><code># --- PowerShell Code ---
+$minionName        = &#39;2019DC&#39;
+$saltServerAddress = &#39;https://192.168.86.110:8000&#39;
+$userName          = &#39;root&#39;
+$password          = &#39;HackMe!&#39;
+$fun               = &#39;disk.usage&#39; # -salt function
+$fetch             = &#39;&#39;
+
+# --- Set the json body
+$body = &#39;{ &quot;username&quot;: &quot;&#39; + $userName + &#39;&quot;,&quot;password&quot;: &quot;&#39; + $password + &#39;&quot;,&quot;eauth&quot;: &quot;pam&quot;,&quot;tgt&quot;: &quot;&#39; + $minionName + &#39;&quot;,&quot;fun&quot;: &quot;&#39; + $fun + &#39;&quot;,&quot;client&quot;: &quot;local&quot;}&#39;
+
+# --- Create RESTful API Request
+$url = &quot;$saltServerAddress/run&quot;
+
+$Params = @{
+    Method = &quot;Post&quot;
+    Uri = $url
+    Body = $Body
+    ContentType = &quot;application/json&quot;
+}
+$fetch = Invoke-RestMethod @Params -SkipCertificateCheck
+
+# --- Showing different ways to show the return data
+$fetch.return
+$fetch.return.$minionName
+$fetch.return.$minionName.&#39;C:\&#39;
+$fetch.return.$minionName.&#39;C:\&#39;.capacity</code></pre>
 <br>
-<h1>--- Set the json body</h1>
-<p>$body = '{ "username": "' + $userName + '","password": "' + $password + '","eauth": "pam","tgt": "' + $minionName + '","fun": "' + $fun + '","client": "local"}'</p>
-<br>
-<h1>--- Create RESTful API Request</h1>
-<p>$url = "$saltServerAddress/run"</p>
-<br>
-<p>$Params = @{</p>
-<p>Method = "Post"</p>
-<p>Uri = $url</p>
-<p>Body = $Body</p>
-<p>ContentType = "application/json"</p>
-<p>}</p>
-<p>$fetch = Invoke-RestMethod @Params -SkipCertificateCheck</p>
-<br>
-<h1>--- Showing different ways to show the return data</h1>
-<p>$fetch.return</p>
-<p>$fetch.return.$minionName</p>
-<p>$fetch.return.$minionName.'C:\'</p>
-<p>$fetch.return.$minionName.'C:\'.capacity</p>
-<p>{{< /highlight >}}</p>
-<br>
-<ul>
 <li>Check Service Status</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>--- PowerShell Code ---</h1>
-<p>$minionName        = '2019DC'</p>
-<p>$saltServerAddress = 'https://192.168.86.110:8000'</p>
-<p>$userName          = 'root'</p>
-<p>$password          = 'HackMe!'</p>
-<p>$fun               = 'service.status' # -salt function</p>
-<p>$arg               = 'spooler' # -Service Name</p>
-<p>$fetch             = ''</p>
+<pre><code># --- PowerShell Code ---
+$minionName        = &#39;2019DC&#39;
+$saltServerAddress = &#39;https://192.168.86.110:8000&#39;
+$userName          = &#39;root&#39;
+$password          = &#39;HackMe!&#39;
+$fun               = &#39;service.status&#39; # -salt function
+$arg               = &#39;spooler&#39; # -Service Name
+$fetch             = &#39;&#39;
+
+# --- Set the json body
+$body = &#39;{&quot;username&quot;: &quot;&#39; + $userName + &#39;&quot;,&quot;password&quot;: &quot;&#39; + $password + &#39;&quot;,&quot;eauth&quot;: &quot;pam&quot;,&quot;tgt&quot;: &quot;&#39; + $minionName + &#39;&quot;,&quot;fun&quot;: &quot;&#39; + $fun + &#39;&quot;,&quot;arg&quot;: &quot;&#39; + $arg + &#39;&quot;,&quot;client&quot;: &quot;local&quot;}&#39;
+
+# --- Create RESTful API Request
+$url = &quot;$saltServerAddress/run&quot;
+
+$Params = @{
+    Method = &quot;Post&quot;
+    Uri = $url
+    Body = $Body
+    ContentType = &quot;application/json&quot;
+}
+$fetch = Invoke-RestMethod @Params -SkipCertificateCheck
+
+# --- Service Status | True = Running | False = Stopped
+$fetch.return.$minionName</code></pre>
 <br>
-<h1>--- Set the json body</h1>
-<p>$body = '{"username": "' + $userName + '","password": "' + $password + '","eauth": "pam","tgt": "' + $minionName + '","fun": "' + $fun + '","arg": "' + $arg + '","client": "local"}'</p>
-<br>
-<h1>--- Create RESTful API Request</h1>
-<p>$url = "$saltServerAddress/run"</p>
-<br>
-<p>$Params = @{</p>
-<p>Method = "Post"</p>
-<p>Uri = $url</p>
-<p>Body = $Body</p>
-<p>ContentType = "application/json"</p>
-<p>}</p>
-<p>$fetch = Invoke-RestMethod @Params -SkipCertificateCheck</p>
-<br>
-<h1>--- Service Status | True = Running | False = Stopped</h1>
-<p>$fetch.return.$minionName</p>
-<p>{{< /highlight >}}</p>
-<br>
-<ul>
 <li>Stop Service</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>--- PowerShell Code ---</h1>
-<p>$minionName        = '2019DC'</p>
-<p>$saltServerAddress = 'https://192.168.86.110:8000'</p>
-<p>$userName          = 'root'</p>
-<p>$password          = 'HackMe!'</p>
-<p>$fun               = 'service.stop' # -salt function</p>
-<p>$arg               = 'spooler' # -Service Name</p>
-<p>$fetch             = ''</p>
+<pre><code># --- PowerShell Code ---
+$minionName        = &#39;2019DC&#39;
+$saltServerAddress = &#39;https://192.168.86.110:8000&#39;
+$userName          = &#39;root&#39;
+$password          = &#39;HackMe!&#39;
+$fun               = &#39;service.stop&#39; # -salt function
+$arg               = &#39;spooler&#39; # -Service Name
+$fetch             = &#39;&#39;
+
+# --- Set the json body
+$body = &#39;{&quot;username&quot;: &quot;&#39; + $userName + &#39;&quot;,&quot;password&quot;: &quot;&#39; + $password + &#39;&quot;,&quot;eauth&quot;: &quot;pam&quot;,&quot;tgt&quot;: &quot;&#39; + $minionName + &#39;&quot;,&quot;fun&quot;: &quot;&#39; + $fun + &#39;&quot;,&quot;arg&quot;: &quot;&#39; + $arg + &#39;&quot;,&quot;client&quot;: &quot;local&quot;}&#39;
+
+# --- Create RESTful API Request
+$url = &quot;$saltServerAddress/run&quot;
+
+$Params = @{
+    Method = &quot;Post&quot;
+    Uri = $url
+    Body = $Body
+    ContentType = &quot;application/json&quot;
+}
+$fetch = Invoke-RestMethod @Params -SkipCertificateCheck
+
+# --- Service Stopped | True = Stopped | False = Not Stopped
+$fetch.return.$minionName</code></pre>
 <br>
-<h1>--- Set the json body</h1>
-<p>$body = '{"username": "' + $userName + '","password": "' + $password + '","eauth": "pam","tgt": "' + $minionName + '","fun": "' + $fun + '","arg": "' + $arg + '","client": "local"}'</p>
-<br>
-<h1>--- Create RESTful API Request</h1>
-<p>$url = "$saltServerAddress/run"</p>
-<br>
-<p>$Params = @{</p>
-<p>Method = "Post"</p>
-<p>Uri = $url</p>
-<p>Body = $Body</p>
-<p>ContentType = "application/json"</p>
-<p>}</p>
-<p>$fetch = Invoke-RestMethod @Params -SkipCertificateCheck</p>
-<br>
-<h1>--- Service Stopped | True = Stopped | False = Not Stopped</h1>
-<p>$fetch.return.$minionName</p>
-<p>{{< /highlight >}}</p>
-<br>
-<ul>
 <li>Disable Service</li>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>--- PowerShell Code ---</h1>
-<p>$minionName        = '2019DC'</p>
-<p>$saltServerAddress = 'https://192.168.86.110:8000'</p>
-<p>$userName          = 'root'</p>
-<p>$password          = 'HackMe!'</p>
-<p>$fun               = 'service.disable' # -salt function</p>
-<p>$arg               = 'spooler' # -Service Name</p>
-<p>$fetch             = ''</p>
+<pre><code># --- PowerShell Code ---
+$minionName        = &#39;2019DC&#39;
+$saltServerAddress = &#39;https://192.168.86.110:8000&#39;
+$userName          = &#39;root&#39;
+$password          = &#39;HackMe!&#39;
+$fun               = &#39;service.disable&#39; # -salt function
+$arg               = &#39;spooler&#39; # -Service Name
+$fetch             = &#39;&#39;
+
+# --- Set the json body
+$body = &#39;{&quot;username&quot;: &quot;&#39; + $userName + &#39;&quot;,&quot;password&quot;: &quot;&#39; + $password + &#39;&quot;,&quot;eauth&quot;: &quot;pam&quot;,&quot;tgt&quot;: &quot;&#39; + $minionName + &#39;&quot;,&quot;fun&quot;: &quot;&#39; + $fun + &#39;&quot;,&quot;arg&quot;: &quot;&#39; + $arg + &#39;&quot;,&quot;client&quot;: &quot;local&quot;}&#39;
+
+# --- Create RESTful API Request
+$url = &quot;$saltServerAddress/run&quot;
+
+$Params = @{
+    Method = &quot;Post&quot;
+    Uri = $url
+    Body = $Body
+    ContentType = &quot;application/json&quot;
+}
+$fetch = Invoke-RestMethod @Params -SkipCertificateCheck
+
+# --- Service Disabled | True = Disabled | False = Not Disabled
+$fetch.return.$minionName</code></pre>
 <br>
-<h1>--- Set the json body</h1>
-<p>$body = '{"username": "' + $userName + '","password": "' + $password + '","eauth": "pam","tgt": "' + $minionName + '","fun": "' + $fun + '","arg": "' + $arg + '","client": "local"}'</p>
-<br>
-<h1>--- Create RESTful API Request</h1>
-<p>$url = "$saltServerAddress/run"</p>
-<br>
-<p>$Params = @{</p>
-<p>Method = "Post"</p>
-<p>Uri = $url</p>
-<p>Body = $Body</p>
-<p>ContentType = "application/json"</p>
-<p>}</p>
-<p>$fetch = Invoke-RestMethod @Params -SkipCertificateCheck</p>
-<br>
-<h1>--- Service Disabled | True = Disabled | False = Not Disabled</h1>
-<p>$fetch.return.$minionName</p>
-<p>{{< /highlight >}}</p>
-<br>
-<ul>
 <li>I hope the code was helpful to get started.</li>
 <br>
 <hr>

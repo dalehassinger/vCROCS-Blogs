@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -231,198 +232,192 @@
 <br>
 <p><strong>Code:</strong></p>
 <br>
-</ul>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<h1>----- Set Variable Values to use with Script</h1>
-<p>$vcServer     = "vcsa8x.corp.local"</p>
-<p>$vcUser       = "administrator@corp.local"</p>
-<p>$vcPassword   = "VMware1!"</p>
-<br>
-<h1>----- This example uses (1) syslog setting for each host.</h1>
-<p>#$syslogServers = "udp://vaol-vip.corp.local:514"</p>
-<br>
-<h1>----- This example uses (2) syslog settings for each host.</h1>
-<p>#$syslogServers = "udp://vaol-vip.corp.local:514,tcp://DBH-CP-VAOL-01.corp.local:514"</p>
-<br>
-<h1>----- This example uses (2) syslog settings divided equally between hosts.</h1>
-<p>#$syslogServers = "udp://vaol-vip.corp.local:514;udp://vaol-01.corp.local:514"</p>
-<br>
-<h1>----- This example uses (3) syslog settings divided equally between hosts.</h1>
-<p>$syslogServers = "udp://vaol-vip-03.corp.local:514;udp://vaol-vip-02.corp.local:514;udp://vaol-vip-01.corp.local:514"</p>
-<br>
-<h1>----- This example uses (4) syslog settings divided equally between hosts.</h1>
-<p>#$syslogServers = "udp://vaol-vip-01.corp.local:514;udp://vaol-vip-02.corp.local:514;udp://vaol-vip-03.corp.local:514;udp://vaol-vip-04.corp.local:514"</p>
-<br>
-<br>
-<h1>----- Get list of syslog server specifed and seperated by semicolons. Semicolons were used in case you would want to specify (2) syslog servers seperated by commas.</h1>
-<p>$syslogServerList = $syslogServers.Split(";")</p>
-<p>$syslogServerList = $syslogServerList | Sort-Object</p>
-<br>
-<p>$output = "syslog Server List: " + $syslogServerList</p>
-<p>Write-Output $output</p>
-<br>
-<p>[int]$syslogServerCount = $syslogServerList.Count</p>
-<br>
-<p>$output = "syslog Server Count: " + $syslogServerCount</p>
-<p>Write-Output $output</p>
-<br>
-<br>
-<h1>----- Connect to the vCenter Server or ESXi host</h1>
-<p>Connect-VIServer -Server $vcServer -User $vcUser -Password $vcPassword -Protocol https -Force</p>
-<br>
-<p>if($syslogServerCount -gt 1){</p>
-<br>
-<h1>----- Get Number of Hosts</h1>
-<p>$hostList = Get-VMHost | Select-Object Name | Sort-Object Name</p>
-<p>#$hostList</p>
-<br>
-<p>[int]$hostCount = $hostList.Count</p>
-<h1>----- Total Number of Hosts</h1>
-<p>$output = "Host Count: " + $hostCount</p>
-<p>Write-Output $output</p>
-<br>
-<h1>----- Calculate how to divide the hosts</h1>
-<p>$baseValue = [math]::Floor($hostCount / $syslogServerCount)</p>
-<p>$remainder = $hostCount % $syslogServerCount</p>
-<br>
-<h1>----- Create an array to hold the results</h1>
-<p>$syslogProxyNumber = @(1..$syslogServerCount | ForEach-Object { $baseValue })</p>
-<p>#$syslogProxyNumber</p>
-<br>
-<h1>----- Distribute the remainder among the numbers</h1>
-<p>for ($i = 0; $i -lt $syslogServerCount; $i++) {</p>
-<p>if ($remainder -eq 0) { break }</p>
-<p>$syslogProxyNumber[$i]++</p>
-<p>$remainder--</p>
-<p>}</p>
-<p>$output = "Hosts Per Syslog Group: " + $syslogProxyNumber</p>
-<p>Write-Output $output</p>
-<br>
-<br>
-<p>$output = "Highest sysloggroup array value: " + ($syslogProxyNumber.Count - 1)</p>
-<p>Write-Output $output</p>
-<br>
-<p>$output = "Syslog Group Count: " + $syslogProxyNumber.Count</p>
-<p>Write-Output $output</p>
-<br>
-<h1>----- Calculate the sum</h1>
-<p>[int]$sum = ($syslogProxyNumber | Measure-Object -Sum).Sum</p>
-<p>$output = "Total Hosts to add syslog info: " + $sum</p>
-<p>Write-Output $output</p>
-<br>
-<br>
-<p>if($sum -eq $hostCount){</p>
-<p>Write-Output "Hosts were divided as equal as posible"</p>
-<p>}</p>
-<p>else{</p>
-<p>Write-Output "Hosts were NOT divided equal. TRY AGAIN!"</p>
-<p>}</p>
-<p>} # End If</p>
-<p>else{</p>
-<p>Write-Output "Only 1 syslog Server was specififed!"</p>
-<p>} # end else</p>
-<br>
-<p>$syslogProxyNumberArrayValue = 0</p>
-<p>$servercountstart = 1</p>
-<p>$serverCountTotal = $syslogProxyNumber[$syslogProxyNumberArrayValue]</p>
-<br>
-<h1>Loop thru ESXi Hosts</h1>
-<p>foreach($esxiName in $hostList){</p>
-<h1>----- Create Server Count Number</h1>
-<p>$servercountstartstr = '0000' + $servercountstart</p>
-<p>$servercountstartstr = $servercountstartstr[-4..-1] -join ''</p>
-<br>
-<h1>----- Set the syslog Host value on Each ESXi Host</h1>
-<p>if($syslogServerCount -gt 1){</p>
-<p>$output = "Server Count: " + $servercountstartstr + " | ESXi Server Name: " + $esxiName.Name + " | Proxy Name: " + $syslogServerList[$syslogProxyNumberArrayValue]</p>
-<p>Write-Output $output</p>
-<br>
-<h1>----- Set the Syslog.global.logHost value</h1>
-<p>$output = "------------- Get-VMHost " + $esxiName.Name + " | Get-AdvancedSetting -Name 'Syslog.Global.Loghost' | Set-AdvancedSetting -Value " + $syslogServerList[$syslogProxyNumberArrayValue] + " -Confirm:$false"</p>
-<p>Write-Output $output</p>
-<h1>----- The next line will make the changes. Remove the line comment after you test the script and make sure you are getting the results you want to use.</h1>
-<p>#Get-VMHost $esxiName.Name | Get-AdvancedSetting -Name 'Syslog.Global.Loghost' | Set-AdvancedSetting -Value $syslogServerList[$syslogProxyNumberArrayValue] -Confirm:$false</p>
-<br>
-<p>} # End If</p>
-<p>elseif($syslogServerCount -eq 1){</p>
-<p>$output = "Server Count: " + $servercountstartstr + " | ESXi Server Name: " + $esxiName.Name + " | Proxy Name: " + $syslogServerList</p>
-<p>Write-Output $output</p>
-<h1>----- The next line will make the changes. Remove the line comment after you test the script and make sure you are getting the results you want to use.</h1>
-<p>#Get-VMHost $esxiName.Name | Get-AdvancedSetting -Name 'Syslog.Global.Loghost' | Set-AdvancedSetting -Value $syslogServerList -Confirm:$false</p>
-<p>} # End Elseif</p>
-<br>
-<h1>----- Increment Host Count and switch which Proxy to use based on count</h1>
-<p>$servercountstart++</p>
-<p>if($servercountstart -gt $serverCountTotal -and $syslogServerCount -gt 1){</p>
-<p>$servercountstart = 1</p>
-<p>$syslogProxyNumberArrayValue++</p>
-<p>$serverCountTotal = $syslogProxyNumber[$syslogProxyNumberArrayValue]</p>
-<p>} # End If</p>
-<p>} # End foreach</p>
-<br>
-<br>
-<h1>----- Disconnect from the vCenter Server or ESXi host</h1>
-<p>Disconnect-VIServer -Server $vcServer -Confirm:$false</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+
+# ----- Set Variable Values to use with Script
+$vcServer     = &quot;vcsa8x.corp.local&quot;
+$vcUser       = &quot;administrator@corp.local&quot;
+$vcPassword   = &quot;VMware1!&quot;
+
+# ----- This example uses (1) syslog setting for each host.
+#$syslogServers = &quot;udp://vaol-vip.corp.local:514&quot;
+
+# ----- This example uses (2) syslog settings for each host.
+#$syslogServers = &quot;udp://vaol-vip.corp.local:514,tcp://DBH-CP-VAOL-01.corp.local:514&quot;
+
+# ----- This example uses (2) syslog settings divided equally between hosts.
+#$syslogServers = &quot;udp://vaol-vip.corp.local:514;udp://vaol-01.corp.local:514&quot;
+
+# ----- This example uses (3) syslog settings divided equally between hosts.
+$syslogServers = &quot;udp://vaol-vip-03.corp.local:514;udp://vaol-vip-02.corp.local:514;udp://vaol-vip-01.corp.local:514&quot;
+
+# ----- This example uses (4) syslog settings divided equally between hosts.
+#$syslogServers = &quot;udp://vaol-vip-01.corp.local:514;udp://vaol-vip-02.corp.local:514;udp://vaol-vip-03.corp.local:514;udp://vaol-vip-04.corp.local:514&quot;
+
+
+# ----- Get list of syslog server specifed and seperated by semicolons. Semicolons were used in case you would want to specify (2) syslog servers seperated by commas.
+$syslogServerList = $syslogServers.Split(&quot;;&quot;)
+$syslogServerList = $syslogServerList | Sort-Object
+
+$output = &quot;syslog Server List: &quot; + $syslogServerList
+Write-Output $output
+
+[int]$syslogServerCount = $syslogServerList.Count
+
+$output = &quot;syslog Server Count: &quot; + $syslogServerCount
+Write-Output $output
+
+
+# ----- Connect to the vCenter Server or ESXi host
+Connect-VIServer -Server $vcServer -User $vcUser -Password $vcPassword -Protocol https -Force
+
+if($syslogServerCount -gt 1){
+
+    # ----- Get Number of Hosts
+    $hostList = Get-VMHost | Select-Object Name | Sort-Object Name
+    #$hostList
+
+    [int]$hostCount = $hostList.Count
+    # ----- Total Number of Hosts
+    $output = &quot;Host Count: &quot; + $hostCount
+    Write-Output $output
+
+    # ----- Calculate how to divide the hosts
+    $baseValue = [math]::Floor($hostCount / $syslogServerCount)
+    $remainder = $hostCount % $syslogServerCount
+
+    # ----- Create an array to hold the results
+    $syslogProxyNumber = @(1..$syslogServerCount | ForEach-Object { $baseValue })
+    #$syslogProxyNumber
+
+    # ----- Distribute the remainder among the numbers
+    for ($i = 0; $i -lt $syslogServerCount; $i++) {
+        if ($remainder -eq 0) { break }
+        $syslogProxyNumber[$i]++
+        $remainder--
+    }
+    $output = &quot;Hosts Per Syslog Group: &quot; + $syslogProxyNumber
+    Write-Output $output
+    
+
+    $output = &quot;Highest sysloggroup array value: &quot; + ($syslogProxyNumber.Count - 1)
+    Write-Output $output
+
+    $output = &quot;Syslog Group Count: &quot; + $syslogProxyNumber.Count
+    Write-Output $output
+
+    # ----- Calculate the sum
+    [int]$sum = ($syslogProxyNumber | Measure-Object -Sum).Sum
+    $output = &quot;Total Hosts to add syslog info: &quot; + $sum
+    Write-Output $output
+
+
+    if($sum -eq $hostCount){
+        Write-Output &quot;Hosts were divided as equal as posible&quot;
+    }
+    else{
+        Write-Output &quot;Hosts were NOT divided equal. TRY AGAIN!&quot;
+    }
+} # End If
+else{
+    Write-Output &quot;Only 1 syslog Server was specififed!&quot;
+} # end else
+
+$syslogProxyNumberArrayValue = 0
+$servercountstart = 1
+$serverCountTotal = $syslogProxyNumber[$syslogProxyNumberArrayValue]
+
+# Loop thru ESXi Hosts
+foreach($esxiName in $hostList){
+    # ----- Create Server Count Number
+    $servercountstartstr = &#39;0000&#39; + $servercountstart
+    $servercountstartstr = $servercountstartstr[-4..-1] -join &#39;&#39;
+
+    # ----- Set the syslog Host value on Each ESXi Host
+    if($syslogServerCount -gt 1){
+        $output = &quot;Server Count: &quot; + $servercountstartstr + &quot; | ESXi Server Name: &quot; + $esxiName.Name + &quot; | Proxy Name: &quot; + $syslogServerList[$syslogProxyNumberArrayValue]
+        Write-Output $output
+        
+        # ----- Set the Syslog.global.logHost value
+        $output = &quot;------------- Get-VMHost &quot; + $esxiName.Name + &quot; | Get-AdvancedSetting -Name &#39;Syslog.Global.Loghost&#39; | Set-AdvancedSetting -Value &quot; + $syslogServerList[$syslogProxyNumberArrayValue] + &quot; -Confirm:$false&quot;
+        Write-Output $output
+        # ----- The next line will make the changes. Remove the line comment after you test the script and make sure you are getting the results you want to use.
+        #Get-VMHost $esxiName.Name | Get-AdvancedSetting -Name &#39;Syslog.Global.Loghost&#39; | Set-AdvancedSetting -Value $syslogServerList[$syslogProxyNumberArrayValue] -Confirm:$false
+
+    } # End If
+    elseif($syslogServerCount -eq 1){
+        $output = &quot;Server Count: &quot; + $servercountstartstr + &quot; | ESXi Server Name: &quot; + $esxiName.Name + &quot; | Proxy Name: &quot; + $syslogServerList
+        Write-Output $output
+        # ----- The next line will make the changes. Remove the line comment after you test the script and make sure you are getting the results you want to use.
+        #Get-VMHost $esxiName.Name | Get-AdvancedSetting -Name &#39;Syslog.Global.Loghost&#39; | Set-AdvancedSetting -Value $syslogServerList -Confirm:$false
+    } # End Elseif
+    
+    # ----- Increment Host Count and switch which Proxy to use based on count
+    $servercountstart++
+    if($servercountstart -gt $serverCountTotal -and $syslogServerCount -gt 1){
+        $servercountstart = 1
+        $syslogProxyNumberArrayValue++
+        $serverCountTotal = $syslogProxyNumber[$syslogProxyNumberArrayValue]
+    } # End If
+} # End foreach
+
+
+# ----- Disconnect from the vCenter Server or ESXi host
+Disconnect-VIServer -Server $vcServer -Confirm:$false</code></pre>
 <br>
 <hr>
 <br>
+</ul>
 <h2>Get current “Syslog.global.logHost” value on all Hosts</h2>
 <br>
 <ul>
 <li>Here is a sample script that can be used to show the current "Syslog.global.logHost" values</li>
 <br>
 <p><strong>Code:</strong></p>
-</ul>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<h1>----- [ Get current sysloghost value on all Hosts ] -----</h1>
-<br>
-<h1>----- Set Variable Values to use with Script</h1>
-<p>$vcServer     = "vcsa8x.corp.local"</p>
-<p>$vcUser       = "administrator@corp.local"</p>
-<p>$vcPassword   = "VMware1!"</p>
-<br>
-<h1>----- File Name to store data</h1>
-<p>$filePath = "C:\Github\PS-TAM-Lab\syslog-current-info.csv"</p>
-<br>
-<h1>----- Connect to the vCenter Server or ESXi host</h1>
-<p>Connect-VIServer -Server $vcServer -User $vcUser -Password $vcPassword -Protocol https -Force</p>
-<br>
-<h1>----- Get list of all Hosts</h1>
-<p>$hostList = Get-VMHost | Select-Object Name | Sort-Object Name</p>
-<br>
-<h1>----- Create new CSV file</h1>
-<p>New-Item -Path $filePath -ItemType File -Force</p>
-<br>
-<h1>----- add header to CSV file</h1>
-<p>Add-Content -Path $filePath -Value "ServerName,syslogName"</p>
-<br>
-<h1>----- Get all ESXi Hosts</h1>
-<p>$hostList = Get-VMHost | Select-Object Name | Sort-Object Name</p>
-<br>
-<h1>----- Output Data to screen and the CSV file</h1>
-<p>foreach($hostName in $hostList){</p>
-<p>$syslogInfo = Get-VMHost -Name $hostName.Name | Get-AdvancedSetting -Name "Syslog.global.logHost"</p>
-<br>
-<p>$output = "Server Name: " + $syslogInfo.Entity.Name + " | syslog Name: " + $syslogInfo.Value</p>
-<p>Write-Output $output</p>
-<br>
-<h1>----- add info to csv file</h1>
-<p>$addContentstr = $syslogInfo.Entity.Name + "," + $syslogInfo.Value</p>
-<p>Add-Content -Path $filePath -Value $addContentstr</p>
-<p>} # End foreach</p>
-<br>
-<h1>----- Disconnect from the vCenter Server or ESXi host</h1>
-<p>Disconnect-VIServer -Server $vcServer -Confirm:$false</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+
+# ----- [ Get current sysloghost value on all Hosts ] -----
+
+# ----- Set Variable Values to use with Script
+$vcServer     = &quot;vcsa8x.corp.local&quot;
+$vcUser       = &quot;administrator@corp.local&quot;
+$vcPassword   = &quot;VMware1!&quot;
+
+# ----- File Name to store data
+$filePath = &quot;C:\Github\PS-TAM-Lab\syslog-current-info.csv&quot;
+
+# ----- Connect to the vCenter Server or ESXi host
+Connect-VIServer -Server $vcServer -User $vcUser -Password $vcPassword -Protocol https -Force
+
+# ----- Get list of all Hosts
+$hostList = Get-VMHost | Select-Object Name | Sort-Object Name
+
+# ----- Create new CSV file
+New-Item -Path $filePath -ItemType File -Force
+
+# ----- add header to CSV file
+Add-Content -Path $filePath -Value &quot;ServerName,syslogName&quot;
+
+# ----- Get all ESXi Hosts
+$hostList = Get-VMHost | Select-Object Name | Sort-Object Name
+
+# ----- Output Data to screen and the CSV file
+foreach($hostName in $hostList){
+    $syslogInfo = Get-VMHost -Name $hostName.Name | Get-AdvancedSetting -Name &quot;Syslog.global.logHost&quot;
+
+    $output = &quot;Server Name: &quot; + $syslogInfo.Entity.Name + &quot; | syslog Name: &quot; + $syslogInfo.Value
+    Write-Output $output
+    
+    # ----- add info to csv file
+    $addContentstr = $syslogInfo.Entity.Name + &quot;,&quot; + $syslogInfo.Value
+    Add-Content -Path $filePath -Value $addContentstr
+} # End foreach
+
+# ----- Disconnect from the vCenter Server or ESXi host
+Disconnect-VIServer -Server $vcServer -Confirm:$false</code></pre>
 <br>
 <hr>
 <br>
-<ul>
 <li>Sample Output from script:</li>
 <br>
 </ul>
@@ -436,58 +431,50 @@
 <li>Sample script if you would ever want to set the "Syslog.global.logHost" values to null on all the ESXi Hosts.</li>
 <br>
 <p><strong>Code:</strong></p>
-</ul>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<h1>----- [ Set sysloghost value to null on all Hosts ] -----</h1>
-<br>
-<h1>----- Set Variable Values to use with Script</h1>
-<p>$vcServer     = "vcsa8x.corp.local"</p>
-<p>$vcUser       = "administrator@corp.local"</p>
-<p>$vcPassword   = "VMware1!"</p>
-<br>
-<h1>----- Connect to the vCenter Server or ESXi host</h1>
-<p>Connect-VIServer -Server $vcServer -User $vcUser -Password $vcPassword -Protocol https -Force</p>
-<br>
-<h1>----- Get list of all Hosts</h1>
-<p>$hostList = Get-VMHost | Select-Object Name | Sort-Object Name</p>
-<br>
-<h1>----- Get all ESXi Hosts</h1>
-<p>$hostList = Get-VMHost | Select-Object Name | Sort-Object Name</p>
-<br>
-<h1>----- Output Data to screen and a CSV file.</h1>
-<p>foreach($hostName in $hostList){</p>
-<p>$output = "Server Name: " + $hostName.Name + " | syslog Name: Set to null"</p>
-<p>Write-Output $output</p>
-<br>
-<h1>----- Set logserver address to null</h1>
-<p>Set-VMHostSysLogServer -SysLogServer $null -VMHost $hostName.Name</p>
-<br>
-<p>} # End foreach</p>
-<br>
-<h1>----- Disconnect from the vCenter Server or ESXi host</h1>
-<p>Disconnect-VIServer -Server $vcServer -Confirm:$false</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- [ Set sysloghost value to null on all Hosts ] -----
+
+# ----- Set Variable Values to use with Script
+$vcServer     = &quot;vcsa8x.corp.local&quot;
+$vcUser       = &quot;administrator@corp.local&quot;
+$vcPassword   = &quot;VMware1!&quot;
+
+# ----- Connect to the vCenter Server or ESXi host
+Connect-VIServer -Server $vcServer -User $vcUser -Password $vcPassword -Protocol https -Force
+
+# ----- Get list of all Hosts
+$hostList = Get-VMHost | Select-Object Name | Sort-Object Name
+
+# ----- Get all ESXi Hosts
+$hostList = Get-VMHost | Select-Object Name | Sort-Object Name
+
+# ----- Output Data to screen and a CSV file.
+foreach($hostName in $hostList){
+    $output = &quot;Server Name: &quot; + $hostName.Name + &quot; | syslog Name: Set to null&quot;
+    Write-Output $output
+
+    # ----- Set logserver address to null
+    Set-VMHostSysLogServer -SysLogServer $null -VMHost $hostName.Name
+
+} # End foreach
+
+# ----- Disconnect from the vCenter Server or ESXi host
+Disconnect-VIServer -Server $vcServer -Confirm:$false</code></pre>
 <br>
 <hr>
 <br>
+</ul>
 <h2>Get “Syslog.global.logHost” address on a specific Host</h2>
 <br>
 <ul>
 <li>Very simple script to get the "Syslog.global.logHost" values on a single ESXi host.</li>
 <br>
 <p><strong>Code:</strong></p>
-</ul>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<h1>----- Simple Get syslogserver address on a specific Host</h1>
-<p>Get-VMHostSysLogServer -VMHost 'esxi8-05.corp.local'</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- Simple Get syslogserver address on a specific Host
+Get-VMHostSysLogServer -VMHost &#39;esxi8-05.corp.local&#39;</code></pre>
 <br>
 <hr>
 <br>
+</ul>
 <h2>Lessons Learned</h2>
 <br>
 <ul>

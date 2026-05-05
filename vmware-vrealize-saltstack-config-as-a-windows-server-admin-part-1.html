@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -175,121 +176,114 @@
 <p>After you get a working SaltStack Config Server setup, the first item you need to do is add the salt agent to some "Test" servers. Servers that have the salt agent installed are called minions. There is the option to not add the salt agent to servers but then you need to use SSH to connect.  Windows Servers do not have SSH available as default so you would need to install an SSH server like OpenSSH on your servers. My thoughts are I need to add something for the minions to communicate with the salt-master. Instead of adding OpenSSH to every Windows Server I chose to install and use the salt agent.</p>
 <br>
 <p>For testing you can manually install the minion agent on a server to become familiar with how the salt commands work. During the install there are two values you need to enter. The name of the master and the name you want to use for the minion. I did that on my first couple test servers but then I created some PowerShell code to install the salt minion agent.</p>
-<p>{{< highlight powershell >}}</p>
-<h1>----- [ Install minion ] -----------------------------------------------</h1>
-<br>
-<h1>Define Username/Password</h1>
-<p>$username = 'username@vCROCS.info'</p>
-<br>
-<h1>The next line is how to create the encrypted password</h1>
-<h1>Read-Host -Prompt "Enter your password - username" -AsSecureString | ConvertFrom-SecureString | Out-File "C:\PWkey\username.key"</h1>
-<p>$password = Get-Content "C:\PWkey\username.key" | ConvertTo-SecureString</p>
-<p>$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $password</p>
-<br>
-<h1>----- [ This section connects you to vCenter where VM is located ] -----</h1>
-<br>
-<h1>Connect to vCenter</h1>
-<p>vCenterName = 'vCenter.vCROCS.info'</p>
-<p>Connect-VIServer $vCenterName -Credential $cred</p>
-<br>
-<h1>----- [ Install Salt Agent ] -------------------------------------------</h1>
-<br>
-<h1>Name of Server to install the salt minion agent</h1>
-<p>$vmName = 'DBH-217'</p>
-<br>
-<h1>Copy the minion agent file to your windows server</h1>
-<p>Copy-VMGuestFile -Source G:\Salt-Minion-2019.2.4-Py3-AMD64-Setup.exe -Destination 'C:\vCROCS' -VM $vmName -LocalToGuest -GuestCredential $cred</p>
-<br>
-<h1>command string to install the Salt Minion Agent</h1>
-<p>$PSText = 'C:\vCROCS\Salt-Minion-2019.2.4-Py3-AMD64-Setup.exe /S /master=salt /minion-name=' + $vmName</p>
-<br>
-<h1>Run the command on remote Server</h1>
-<p>Invoke-VMScript -VM $VMName -ScriptType bat -ScriptText $PSText -GuestCredential $cred</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- [ Install minion ] -----------------------------------------------
+
+# Define Username/Password
+$username = &#39;username@vCROCS.info&#39;
+
+# The next line is how to create the encrypted password
+# Read-Host -Prompt &quot;Enter your password - username&quot; -AsSecureString | ConvertFrom-SecureString | Out-File &quot;C:\PWkey\username.key&quot;
+$password = Get-Content &quot;C:\PWkey\username.key&quot; | ConvertTo-SecureString
+$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $password
+
+# ----- [ This section connects you to vCenter where VM is located ] -----
+
+# Connect to vCenter
+vCenterName = &#39;vCenter.vCROCS.info&#39;
+Connect-VIServer $vCenterName -Credential $cred
+
+# ----- [ Install Salt Agent ] -------------------------------------------
+
+# Name of Server to install the salt minion agent
+$vmName = &#39;DBH-217&#39;
+
+# Copy the minion agent file to your windows server
+Copy-VMGuestFile -Source G:\Salt-Minion-2019.2.4-Py3-AMD64-Setup.exe -Destination &#39;C:\vCROCS&#39; -VM $vmName -LocalToGuest -GuestCredential $cred
+
+# command string to install the Salt Minion Agent
+$PSText = &#39;C:\vCROCS\Salt-Minion-2019.2.4-Py3-AMD64-Setup.exe /S /master=salt /minion-name=&#39; + $vmName
+
+# Run the command on remote Server
+Invoke-VMScript -VM $VMName -ScriptType bat -ScriptText $PSText -GuestCredential $cred</code></pre>
 <br>
 <p>After the minion agent is installed on your server you need to accept the key on the salt master. From the CLI you can run these commands.</p>
 <br>
 <p>List all keys. You should see you new minion listed in the Unaccepted Keys:</p>
-<p>{{< highlight powershell >}}salt-key -L{{< /highlight >}}</p>
+<pre><code>salt-key -L</code></pre>
 <br>
 <p>Accept the new minion key on the salt master:</p>
-<p>{{< highlight powershell >}}salt-key --accept="DBH-217"{{< /highlight >}}</p>
+<pre><code>salt-key --accept=&quot;DBH-217&quot;</code></pre>
 <br>
 <p>If you list all keys again you should see you new minion listed in the Accepted Keys:</p>
-<p>{{< highlight powershell >}}salt-key -L{{< /highlight >}}</p>
+<pre><code>salt-key -L</code></pre>
 <br>
 <p>My next update will include information on how to auto accept new minions.</p>
 <br>
 <hr>
 <h2>Here are some basic salt commands from CLI that I have been using:</h2>
 <p><strong>Show all events:</strong></p>
-<p>{{< highlight powershell >}}salt-run state.event{{< /highlight >}}</p>
+<pre><code>salt-run state.event</code></pre>
 <br>
 <img src="images/post/salt-03.png" alt="">
 <p><a href="https://github.com/dalehassinger/geeky/raw/main/assets/images/post/salt-03.png" target="_blank">Click Here to see Larger Image of Screen Shot</a></p>
 <br>
 <br>
 <p><strong>Show all events with a "Pretty" view:</strong></p>
-<p>{{< highlight powershell >}}salt-run state.event pretty=true{{< /highlight >}}</p>
+<pre><code>salt-run state.event pretty=true</code></pre>
 <br>
 <img src="images/post/salt-02.png" alt="">
 <p><a href="https://github.com/dalehassinger/geeky/raw/main/assets/images/post/salt-02.png" target="_blank">Click Here to see Larger Image of Screen Shot</a></p>
 <br>
 <br>
 <p><strong>List keys:</strong></p>
-<p>{{< highlight powershell >}}salt-key -L{{< /highlight >}}</p>
+<pre><code>salt-key -L</code></pre>
 <br>
 <p><strong>Accept Key:</strong></p>
-<p>{{< highlight powershell >}}salt-key --accept="DBH-214"{{< /highlight >}}</p>
+<pre><code>salt-key --accept=&quot;DBH-214&quot;</code></pre>
 <br>
 <p><strong>Delete Key:</strong></p>
-<p>{{< highlight powershell >}}salt-key -d "DBH-211,DBH-212"{{< /highlight >}}</p>
+<pre><code>salt-key -d &quot;DBH-211,DBH-212&quot;</code></pre>
 <br>
 <p><strong>Run a function on one minion:</strong></p>
-<p>{{< highlight powershell >}}salt "DBH-217" disk.usage{{< /highlight >}}</p>
+<pre><code>salt &quot;DBH-217&quot; disk.usage</code></pre>
 <br>
 <p><strong>Run a function on multiple minions:</strong></p>
-<p>{{< highlight powershell >}}salt "DBH-217,DBH-218" test.ping{{< /highlight >}}</p>
+<pre><code>salt &quot;DBH-217,DBH-218&quot; test.ping</code></pre>
 <br>
 <p><strong>Run a function on all minions:</strong></p>
-<p>{{< highlight powershell >}}salt "*" test.ping{{< /highlight >}}</p>
+<pre><code>salt &quot;*&quot; test.ping</code></pre>
 <br>
 <p><strong>Create a file:</strong></p>
-<p>{{< highlight powershell >}}salt "DBH-214" file.touch C:\vCROCS\salt.tst{{< /highlight >}}</p>
+<pre><code>salt &quot;DBH-214&quot; file.touch C:\vCROCS\salt.tst</code></pre>
 <br>
 <p><strong>Copy a file:</strong></p>
-<p>{{< highlight powershell >}}salt "DBH-214" cp.get_file salt://vCROCS/vCROCSTEST.ps1 "C:\vCROCS\vCROCSTEST.ps1"{{< /highlight >}}</p>
+<pre><code>salt &quot;DBH-214&quot; cp.get_file salt://vCROCS/vCROCSTEST.ps1 &quot;C:\vCROCS\vCROCSTEST.ps1&quot;</code></pre>
 <br>
 <p><strong>Delete a file:</strong></p>
-<p>{{< highlight powershell >}}salt "DBH-214" file.remove "C:\vCROCS\vCROCSTEST.ps1"{{< /highlight >}}</p>
+<pre><code>salt &quot;DBH-214&quot; file.remove &quot;C:\vCROCS\vCROCSTEST.ps1&quot;</code></pre>
 <br>
 <p><strong>Run a PowerShell Script:</strong></p>
-<p>{{< highlight powershell >}}salt "DBH-214" cmd.script source="salt://vCROCS/vCROCSTEST.ps1" shell=powershell{{< /highlight >}}</p>
+<pre><code>salt &quot;DBH-214&quot; cmd.script source=&quot;salt://vCROCS/vCROCSTEST.ps1&quot; shell=powershell</code></pre>
 <br>
 <p><strong>Restart the Salt Master Service:</strong></p>
-<p>{{< highlight powershell >}}service salt-master restart{{< /highlight >}}</p>
+<pre><code>service salt-master restart</code></pre>
 <br>
 <p><strong>Show the status of the raas and salt-master services:</strong></p>
-<p>{{< highlight powershell >}}</p>
-<p>systemctl status raas</p>
-<p>systemctl status salt-master</p>
-<p>{{< /highlight >}}</p>
+<pre><code>systemctl status raas
+systemctl status salt-master</code></pre>
 <br>
 <p><strong>Stop and start the salt-master service:</strong></p>
-<p>{{< highlight powershell >}}</p>
-<p>systemctl stop salt-master</p>
-<p>systemctl start salt-master</p>
-<p>{{< /highlight >}}</p>
+<pre><code>systemctl stop salt-master
+systemctl start salt-master</code></pre>
 <br>
 <p><strong>Get IP address of all minions:</strong></p>
-<p>{{< highlight powershell >}}salt '*' network.ip_addrs{{< /highlight >}}</p>
+<pre><code>salt &#39;*&#39; network.ip_addrs</code></pre>
 <br>
 <p><strong>Ping All Minions:</strong></p>
-<p>{{< highlight powershell >}}salt "*" test.ping{{< /highlight >}}</p>
+<pre><code>salt &quot;*&quot; test.ping</code></pre>
 <br>
 <p><strong>Disk Space Usage on all Minions:</strong></p>
-<p>{{< highlight powershell >}}salt "*" disk.usage{{< /highlight >}}</p>
+<pre><code>salt &quot;*&quot; disk.usage</code></pre>
 <br>
 <hr>
 <br>

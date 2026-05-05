@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -171,43 +172,41 @@
 <br>
 <h2>ChartJS Half Donut code:</h2>
 <br>
-<p>{{< highlight html >}}</p>
-<p><html></p>
-<p><head></p>
-<p><title>Citrix Licensing Count</title></p>
-<p><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script></p>
-<p></head></p>
-<p><body></p>
-<p><body></p>
-    <div style="width:95%">
-<p><canvas id="doughnut-chart"></canvas></p>
-    </div>
-<p><script></p>
-<p>new Chart(document.getElementById("doughnut-chart"), {</p>
-<p>type: 'doughnut',</p>
-<p>data: {</p>
-<p>labels: ["Used","Total"],</p>
-<p>datasets: [</p>
-<p>{</p>
-<p>label: "Peak Usage",</p>
-<p>backgroundColor: ["#28B463","#808B96"],</p>
-<p>data: [1682,8000]</p>
-<p>}</p>
-<p>]</p>
-<p>},</p>
-<p>options: {</p>
-<p>title: {</p>
-<p>display: true,</p>
-<p>text: 'Citrix License Usage (MPS_PLT_CCU)',</p>
-<p>},</p>
-<p>rotation: 1 * Math.PI,</p>
-<p>circumference: 1 * Math.PI</p>
-<p>}</p>
-<p>});</p>
-<p></script></p>
-<p></body></p>
-<p></html></p>
-<p>{{< /highlight >}}</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Citrix Licensing Count&lt;/title&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;body&gt;
+    &lt;div style=&quot;width:95%&quot;&gt;
+    &lt;canvas id=&quot;doughnut-chart&quot;&gt;&lt;/canvas&gt;
+    &lt;/div&gt;
+	&lt;script&gt;
+		new Chart(document.getElementById(&quot;doughnut-chart&quot;), {
+			type: &#39;doughnut&#39;,
+			data: {
+			labels: [&quot;Used&quot;,&quot;Total&quot;],
+			datasets: [
+				{
+        label: &quot;Peak Usage&quot;,
+				backgroundColor: [&quot;#28B463&quot;,&quot;#808B96&quot;],
+				data: [1682,8000]
+				}
+			]
+			},
+			options: {
+			title: {
+				display: true,
+				text: &#39;Citrix License Usage (MPS_PLT_CCU)&#39;,
+			},
+			rotation: 1 * Math.PI,
+			circumference: 1 * Math.PI
+			}
+		});
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
 <br>
 <br>
 <h2>ChartJS Horizintal Bar Chart.</h2>
@@ -216,41 +215,39 @@
 <br>
 <h2>ChartJS Horizintal Bar Chart code:</h2>
 <br>
-<p>{{< highlight html >}}</p>
-<p><html></p>
-<p><head></p>
-<p><title>Citrix Licensing Count</title></p>
-<p><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script></p>
-<p></head></p>
-<p><body></p>
-    <div style="width:95%">
-<p><canvas id="bar-chart-horizontal"></canvas></p>
-    </div>
-<p><script></p>
-<p>new Chart(document.getElementById("bar-chart-horizontal"), {</p>
-<p>type: "horizontalBar",</p>
-<p>data: {</p>
-<p>labels: ["01/03/2021","01/02/2021","01/01/2021","12/31/2020","12/30/2020","12/29/2020","12/28/2020","12/27/2020","12/26/2020","12/25/2020","Total Licences"],</p>
-<p>datasets: [</p>
-<p>{</p>
-<p>label: "Peak Usage",</p>
-<p>backgroundColor: ["#28B463", "#28B463","#28B463","#28B463","#28B463","#28B463","#28B463","#28B463","#28B463","#28B463","#808B96"],</p>
-<p>data: [249,318,302,1402,1535,1498,1516,271,273,269,8000]</p>
-<p>}</p>
-<p>]</p>
-<p>},</p>
-<p>options: {</p>
-<p>legend: { display: false },</p>
-<p>title: {</p>
-<p>display: true,</p>
-<p>text: "Citrix License Usage (MPS_PLT_CCU)"</p>
-<p>}</p>
-<p>}</p>
-<p>});</p>
-<p></script></p>
-<p></body></p>
-<p></html></p>
-<p>{{< /highlight >}}</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Citrix Licensing Count&lt;/title&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div style=&quot;width:95%&quot;&gt;
+    &lt;canvas id=&quot;bar-chart-horizontal&quot;&gt;&lt;/canvas&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+		new Chart(document.getElementById(&quot;bar-chart-horizontal&quot;), {
+			type: &quot;horizontalBar&quot;,
+			data: {
+			labels: [&quot;01/03/2021&quot;,&quot;01/02/2021&quot;,&quot;01/01/2021&quot;,&quot;12/31/2020&quot;,&quot;12/30/2020&quot;,&quot;12/29/2020&quot;,&quot;12/28/2020&quot;,&quot;12/27/2020&quot;,&quot;12/26/2020&quot;,&quot;12/25/2020&quot;,&quot;Total Licences&quot;],
+			datasets: [
+				{
+				label: &quot;Peak Usage&quot;,
+				backgroundColor: [&quot;#28B463&quot;, &quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#28B463&quot;,&quot;#808B96&quot;],
+				data: [249,318,302,1402,1535,1498,1516,271,273,269,8000]
+				}
+			]
+			},
+			options: {
+			legend: { display: false },
+			title: {
+				display: true,
+				text: &quot;Citrix License Usage (MPS_PLT_CCU)&quot;
+			}
+			}
+		});	
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
 <br>
 <hr>
 <br>

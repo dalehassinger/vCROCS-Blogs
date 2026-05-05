@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -172,267 +173,258 @@
 <br>
 <h2>Salt PowerShell Functions:</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<br>
-<h1>----- [ Start of Functions ] --------------------------------------------------------------------------------------------------------------</h1>
-<h1>The POSH-SSH PS module MUST be installed to use these functions.</h1>
-<br>
-<h1>Function to Connect to SSC Server</h1>
-<p>function Connect-SSCServer</p>
-<p>{</p>
-<p>param(</p>
-<br>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$Server,</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$userName,</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$Password</p>
-<br>
-<p>) # End Parameters</p>
-<br>
-<h1>The next line is how to create the encrypted password</h1>
-<p>$psPassword = ConvertTo-SecureString -String $global:HashiPW -AsPlainText -Force</p>
-<p>$creds = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $psPassword</p>
-<br>
-<p>$Params = @{</p>
-<p>"ComputerName" = $Server</p>
-<p>"Credential"   = $creds</p>
-<p>} # End Params</p>
-<br>
-<h1>SSH Connection to SaltStack Server</h1>
-<p>New-SSHSession @Params</p>
-<br>
-<p>} # End Function</p>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Function to Disconnect from SSC Server</h1>
-<p>function Disconnect-SSCServer</p>
-<p>{</p>
-<p>Remove-SSHSession -SessionId 0</p>
-<p>} # End Function</p>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Sync Minion grains</h1>
-<p>function invoke-SSC.sync.grains</p>
-<p>{</p>
-<p>param(</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$minion</p>
-<p>)</p>
-<br>
-<h1>Sync Grains after adding new grain information</h1>
-<p>$sshCommand = 'salt "' + $minion + '" saltutil.sync_grains --output=json'</p>
-<p>#$sshCommand</p>
-<br>
-<br>
-<p>$Params = @{</p>
-<p>"SessionId" = 0</p>
-<p>"Command"   = $sshCommand</p>
-<p>} # End Params</p>
-<br>
-<p>$results = Invoke-SSHCommand @Params</p>
-<br>
-<p>return $results.Output</p>
-<br>
-<p>} # End Function</p>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Minion Grain Append</h1>
-<p>function set-SSC.grains.append</p>
-<p>{</p>
-<p>param(</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$minion,</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$grainkey,</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$grainval</p>
-<p>) # End Parameters</p>
-<br>
-<h1>Grains Append</h1>
-<p>$sshCommand = 'salt "' + $minion + '" grains.append "' + $grainkey + '" "' + $grainval + '"'</p>
-<p>#$sshCommand</p>
-<br>
-<p>$Params = @{</p>
-<p>"SessionId" = 0</p>
-<p>"Command"   = $sshCommand</p>
-<p>} # End Params</p>
-<br>
-<p>$results = Invoke-SSHCommand @Params</p>
-<br>
-<p>} # End Function</p>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Minion Grain DelKey</h1>
-<p>function set-SSC.grains.delkey</p>
-<p>{</p>
-<p>param(</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$minion,</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$grainkey</p>
-<p>) # End Parameters</p>
-<br>
-<p>$sshCommand = 'salt "' + $minion + '" grains.delkey "' + $grainkey + '" force=True'</p>
-<p>#$sshCommand</p>
-<br>
-<p>$Params = @{</p>
-<p>"SessionId" = 0</p>
-<p>"Command"   = $sshCommand</p>
-<p>} # End Params</p>
-<br>
-<p>$results = Invoke-SSHCommand @Params</p>
-<br>
-<p>} # End Function</p>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Minion Test Ping</h1>
-<p>function invoke-SSC.test.ping</p>
-<p>{</p>
-<p>param(</p>
-<p>[parameter(mandatory = $true)]</p>
-<p>[string]$minion</p>
-<p>) # End Parameters</p>
-<br>
-<p>$sshCommand = 'salt "' + $minion + '" test.ping --output=json'</p>
-<p>#$sshCommand</p>
-<br>
-<p>$results = Invoke-SSHCommand -SessionId 0 -Command $sshCommand</p>
-<p>return $results.Output[1].Trim()</p>
-<br>
-<p>} # End Function</p>
-<br>
-<br>
-<br>
-<br>
-<h1>----- [ End of Functions ] --------------------------------------------------------------------------------------------------------------</h1>
-<br>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- [ Start of Functions ] --------------------------------------------------------------------------------------------------------------
+# The POSH-SSH PS module MUST be installed to use these functions.
+
+# Function to Connect to SSC Server
+function Connect-SSCServer 
+{
+    param(
+
+        [parameter(mandatory = $true)]
+        [string]$Server,
+        [parameter(mandatory = $true)]
+        [string]$userName,
+        [parameter(mandatory = $true)]
+        [string]$Password
+
+    ) # End Parameters
+
+    # The next line is how to create the encrypted password
+    $psPassword = ConvertTo-SecureString -String $global:HashiPW -AsPlainText -Force
+    $creds = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $psPassword
+
+    $Params = @{
+        &quot;ComputerName&quot; = $Server
+        &quot;Credential&quot;   = $creds
+    } # End Params
+      
+    # SSH Connection to SaltStack Server
+    New-SSHSession @Params
+
+} # End Function
+
+
+
+
+
+# Function to Disconnect from SSC Server
+function Disconnect-SSCServer
+{
+    Remove-SSHSession -SessionId 0
+} # End Function
+
+
+
+
+
+# Sync Minion grains
+function invoke-SSC.sync.grains
+{
+    param(
+    [parameter(mandatory = $true)]
+    [string]$minion
+    )
+
+    # Sync Grains after adding new grain information
+    $sshCommand = &#39;salt &quot;&#39; + $minion + &#39;&quot; saltutil.sync_grains --output=json&#39;
+    #$sshCommand
+
+
+    $Params = @{
+        &quot;SessionId&quot; = 0
+        &quot;Command&quot;   = $sshCommand
+    } # End Params
+
+    $results = Invoke-SSHCommand @Params
+
+    return $results.Output
+    
+} # End Function
+
+
+
+
+
+# Minion Grain Append
+function set-SSC.grains.append
+{
+    param(
+        [parameter(mandatory = $true)]
+        [string]$minion,
+        [parameter(mandatory = $true)]
+        [string]$grainkey,
+        [parameter(mandatory = $true)]
+        [string]$grainval
+    ) # End Parameters
+
+    # Grains Append
+    $sshCommand = &#39;salt &quot;&#39; + $minion + &#39;&quot; grains.append &quot;&#39; + $grainkey + &#39;&quot; &quot;&#39; + $grainval + &#39;&quot;&#39;
+    #$sshCommand
+
+    $Params = @{
+        &quot;SessionId&quot; = 0
+        &quot;Command&quot;   = $sshCommand
+    } # End Params
+
+    $results = Invoke-SSHCommand @Params
+
+} # End Function
+
+
+
+
+
+# Minion Grain DelKey
+function set-SSC.grains.delkey
+{
+    param(
+        [parameter(mandatory = $true)]
+        [string]$minion,
+        [parameter(mandatory = $true)]
+        [string]$grainkey
+    ) # End Parameters
+
+    $sshCommand = &#39;salt &quot;&#39; + $minion + &#39;&quot; grains.delkey &quot;&#39; + $grainkey + &#39;&quot; force=True&#39;
+    #$sshCommand
+
+    $Params = @{
+        &quot;SessionId&quot; = 0
+        &quot;Command&quot;   = $sshCommand
+    } # End Params
+
+    $results = Invoke-SSHCommand @Params
+
+} # End Function
+
+
+
+
+
+# Minion Test Ping
+function invoke-SSC.test.ping
+{
+    param(
+        [parameter(mandatory = $true)]
+        [string]$minion
+    ) # End Parameters
+
+    $sshCommand = &#39;salt &quot;&#39; + $minion + &#39;&quot; test.ping --output=json&#39;
+    #$sshCommand
+
+    $results = Invoke-SSHCommand -SessionId 0 -Command $sshCommand
+    return $results.Output[1].Trim()
+
+} # End Function
+
+
+
+
+# ----- [ End of Functions ] --------------------------------------------------------------------------------------------------------------</code></pre>
 <br>
 <h2>Examples to show how to use the Salt PowerShell Functions above:</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<br>
-<h1>----- [ Connect to SSC Server ] --------------------------------------------------</h1>
-<br>
-<h1>DO NOT use plain text PW's in your Code. I am only showing PW to make it easier to understand the code.</h1>
-<br>
-<h1>Set Parameter Values</h1>
-<p>$Server   = 'SaltMaster.vCROCS.local'</p>
-<p>$User     = 'root'</p>
-<p>$Password = 'VMware1!'</p>
-<br>
-<h1>Define Parameters (Splatting)</h1>
-<p>$Params = @{</p>
-<p>"Server"   = $Server</p>
-<p>"User"     = $User</p>
-<p>"Password" = $Password</p>
-<p>}</p>
-<br>
-<h1>Connect to SSC</h1>
-<p>Connect-SSCServer @Params</p>
-<br>
-<br>
-<br>
-<h1>----- [ Disconnect to SSC Server ] -----------------------------------------------</h1>
-<p>Disconnect-SSCServer</p>
-<br>
-<br>
-<br>
-<h1>----- [ Sync Minion grains ] -------------------------------------------------------</h1>
-<h1>Set Parameter Values</h1>
-<p>$minion = 'DBH-211'</p>
-<br>
-<h1>Define Parameters (Splatting)</h1>
-<p>$Params = @{</p>
-<p>"minion" = $minion</p>
-<p>}</p>
-<br>
-<h1>Run Function</h1>
-<p>invoke-SSC.sync.grains @Params</p>
-<br>
-<br>
-<br>
-<h1>----- [ Minion grain append ] ----------------------------------------------------</h1>
-<h1>Set Parameter Values</h1>
-<p>$minion = 'DBH-211'</p>
-<p>$grainkey = 'PS_Module'</p>
-<p>$grainval = 'Works great for Windows Server'</p>
-<br>
-<h1>Define Parameters (Splatting)</h1>
-<p>$Params = @{</p>
-<p>"minion"   = $minion</p>
-<p>"grainkey" = $grainkey</p>
-<p>"grainval" = $grainval</p>
-<p>}</p>
-<br>
-<h1>Run Function</h1>
-<p>set-SSC.grains.append @Params</p>
-<br>
-<h1>Define Parameters (Splatting)</h1>
-<p>$Params = @{</p>
-<p>"minion" = $minion</p>
-<p>}</p>
-<br>
-<h1>Run Function</h1>
-<p>invoke-SSC.sync.grains @Params</p>
-<br>
-<br>
-<br>
-<h1>----- [ Minion grain DelKey ] ----------------------------------------------------</h1>
-<h1>Set Parameter Values</h1>
-<p>$minion = 'DBH-211'</p>
-<p>$grainkey = 'PS_Module'</p>
-<br>
-<h1>Define Parameters (Splatting)</h1>
-<p>$Params = @{</p>
-<p>minion   = $minion</p>
-<p>grainkey = $grainkey</p>
-<p>}</p>
-<br>
-<h1>Run Function</h1>
-<p>set-SSC.grains.delkey @Params</p>
-<br>
-<h1>Define Parameters (Splatting)</h1>
-<p>$Params = @{</p>
-<p>"minion" = $minion</p>
-<p>}</p>
-<br>
-<h1>Run Function</h1>
-<p>invoke-SSC.sync.grains @Params</p>
-<br>
-<br>
-<br>
-<h1>----- [ Minion test.ping ] ----------------------------------------------------</h1>
-<h1>Set Paramter Values</h1>
-<p>$minion = 'DBH-211'</p>
-<br>
-<h1>Define Parameters (Splatting)</h1>
-<p>$Params = @{</p>
-<p>"minion" = $minion</p>
-<p>}</p>
-<br>
-<h1>Run Function</h1>
-<p>invoke-SSC.test.ping @Params</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- [ Connect to SSC Server ] --------------------------------------------------
+
+# DO NOT use plain text PW&#39;s in your Code. I am only showing PW to make it easier to understand the code. 
+
+# Set Parameter Values
+$Server   = &#39;SaltMaster.vCROCS.local&#39;
+$User     = &#39;root&#39;
+$Password = &#39;VMware1!&#39;
+
+# Define Parameters (Splatting)
+$Params = @{
+    &quot;Server&quot;   = $Server
+    &quot;User&quot;     = $User
+    &quot;Password&quot; = $Password
+}
+
+# Connect to SSC
+Connect-SSCServer @Params
+
+
+
+# ----- [ Disconnect to SSC Server ] -----------------------------------------------
+Disconnect-SSCServer
+
+
+
+# ----- [ Sync Minion grains ] -------------------------------------------------------
+# Set Parameter Values
+$minion = &#39;DBH-211&#39;
+
+# Define Parameters (Splatting)
+$Params = @{
+    &quot;minion&quot; = $minion
+}
+
+# Run Function
+invoke-SSC.sync.grains @Params
+
+
+
+# ----- [ Minion grain append ] ----------------------------------------------------
+# Set Parameter Values
+$minion = &#39;DBH-211&#39;
+$grainkey = &#39;PS_Module&#39;
+$grainval = &#39;Works great for Windows Server&#39;
+
+# Define Parameters (Splatting)
+$Params = @{
+    &quot;minion&quot;   = $minion
+    &quot;grainkey&quot; = $grainkey
+    &quot;grainval&quot; = $grainval
+}
+
+# Run Function
+set-SSC.grains.append @Params
+
+# Define Parameters (Splatting)
+$Params = @{
+    &quot;minion&quot; = $minion
+}
+
+# Run Function
+invoke-SSC.sync.grains @Params
+
+
+
+# ----- [ Minion grain DelKey ] ----------------------------------------------------
+# Set Parameter Values
+$minion = &#39;DBH-211&#39;
+$grainkey = &#39;PS_Module&#39;
+
+# Define Parameters (Splatting)
+$Params = @{
+    minion   = $minion
+    grainkey = $grainkey
+}
+
+# Run Function
+set-SSC.grains.delkey @Params
+
+# Define Parameters (Splatting)
+$Params = @{
+    &quot;minion&quot; = $minion
+}
+
+# Run Function
+invoke-SSC.sync.grains @Params
+
+
+
+# ----- [ Minion test.ping ] ----------------------------------------------------
+# Set Paramter Values
+$minion = &#39;DBH-211&#39;
+
+# Define Parameters (Splatting)
+$Params = @{
+    &quot;minion&quot; = $minion
+}
+
+# Run Function
+invoke-SSC.test.ping @Params</code></pre>
 <br>
 <h2>Lessons Learned:</h2>
 <ul>

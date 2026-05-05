@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -170,9 +171,7 @@
 </ul>
 <h2>Example grains file:</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>vCenterTags: TAG-VM-vCROCS|TAG-VM-WebServer|TAG-App-Hugo</p>
-<p>{{< /highlight >}}</p>
+<pre><code>vCenterTags: TAG-VM-vCROCS|TAG-VM-WebServer|TAG-App-Hugo</code></pre>
 <br>
 <ul>
 <li>"Grain Name": "The value of the grain".</li>
@@ -198,50 +197,48 @@
 <h2>Step 1: Get the VM Names and All Assigned vCenter TAGs into a csv file</h2>
 <br>
 <p>Example PowerShell Code to get all vCenter VM Names and all vCenter TAGs assigned to the VMs</p>
-<p>{{< highlight powershell >}}</p>
-<h1>----- [ Start Create CSV File with all VMs/TAGs Assigned ] ----------------------------</h1>
-<br>
-<h1>I did not include code to connect to the vCenter. There are many ways to do this step.</h1>
-<h1>Make sure you are connected to the vCenter BEFORE running this code.</h1>
-<br>
-<p>$allvmstaginfoFile = "C:\Salt\allvmstaginfo.csv"</p>
-<br>
-<h1>Create Array</h1>
-<p>$allVMsTagInfo = @("")</p>
-<br>
-<h1>Add Headers to Array</h1>
-<p>$VMTagInfo = 'VM,TAGs'</p>
-<p>$allVMsTagInfo += $VMTagInfo</p>
-<br>
-<h1>Get All VMs in you vCenter</h1>
-<p>$vmNames = Get-VM</p>
-<p>$vmNames = $vmNames | Sort-Object Name</p>
-<br>
-<p>foreach($vmName in $VMNames){</p>
-<h1>Get VM Tag(s)</h1>
-<p>$VMTags = Get-TagAssignment -Entity $vmName.Name</p>
-<br>
-<h1>If more than (1) TAG I will join them as a string with a '|' separating the values.</h1>
-<p>$VMtags = $VMTags.Tag.Name -join '|'</p>
-<br>
-<h1>Create a string with the VMname and all the vCenter TAGs assigned separated by a comma</h1>
-<p>$VMTagInfo = $vmName.Name + ',' + $VMTags</p>
-<br>
-<h1>Add Info to array</h1>
-<p>$allVMsTagInfo += $VMTagInfo</p>
-<p>} # End Foreach</p>
-<br>
-<h1>Delete existing all VMs Tag csv File</h1>
-<p>Remove-Item -Path $allvmstaginfoFile</p>
-<br>
-<h1>Create new all VMs Tag csv File</h1>
-<p>New-Item $allvmstaginfoFile -ItemType File</p>
-<br>
-<h1>Add array Data to CSV file</h1>
-<p>$allVMsTagInfo | Select-Object -Skip 1 | Set-Content $allvmstaginfoFile</p>
-<br>
-<h1>----- [ End Create CSV File with all VMs/TAGs Assigned ] ----------------------------</h1>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- [ Start Create CSV File with all VMs/TAGs Assigned ] ----------------------------
+
+# I did not include code to connect to the vCenter. There are many ways to do this step.
+# Make sure you are connected to the vCenter BEFORE running this code.
+
+$allvmstaginfoFile = &quot;C:\Salt\allvmstaginfo.csv&quot;
+
+# Create Array
+$allVMsTagInfo = @(&quot;&quot;)
+
+# Add Headers to Array
+$VMTagInfo = &#39;VM,TAGs&#39;
+$allVMsTagInfo += $VMTagInfo
+
+# Get All VMs in you vCenter
+$vmNames = Get-VM
+$vmNames = $vmNames | Sort-Object Name
+
+foreach($vmName in $VMNames){
+  # Get VM Tag(s)
+  $VMTags = Get-TagAssignment -Entity $vmName.Name
+  
+  # If more than (1) TAG I will join them as a string with a &#39;|&#39; separating the values.
+  $VMtags = $VMTags.Tag.Name -join &#39;|&#39;
+  
+  # Create a string with the VMname and all the vCenter TAGs assigned separated by a comma
+  $VMTagInfo = $vmName.Name + &#39;,&#39; + $VMTags
+
+  # Add Info to array  
+  $allVMsTagInfo += $VMTagInfo
+} # End Foreach
+
+# Delete existing all VMs Tag csv File
+Remove-Item -Path $allvmstaginfoFile
+
+# Create new all VMs Tag csv File
+New-Item $allvmstaginfoFile -ItemType File
+
+# Add array Data to CSV file
+$allVMsTagInfo | Select-Object -Skip 1 | Set-Content $allvmstaginfoFile
+
+# ----- [ End Create CSV File with all VMs/TAGs Assigned ] ----------------------------</code></pre>
 <br>
 <h2>Step 2: Copy the csv file to the salt master</h2>
 <br>
@@ -268,58 +265,54 @@
 <img src="images/Salt-44.PNG" alt="">
 <br>
 <p>Example PowerShell Code to create/update grains file on a minion:</p>
-<p>{{< highlight powershell >}}</p>
-<br>
-<h1>----- [ Start Create Grain File with TAGs Assigned ] ----------------------------</h1>
-<br>
-<p>$allvmstaginfoFile = "C:\vCROCS\allvmstaginfo.csv"</p>
-<br>
-<p>$grainTagInfo = Import-Csv $allvmstaginfoFile</p>
-<br>
-<p>$vmName = hostname</p>
-<br>
-<p>$grainsFile = "C:\salt\conf\grains"</p>
-<br>
-<p>if (Test-Path $grainsFile) {</p>
-<br>
-<h1>Remove existing vCenter Tags</h1>
-<p>$grainsContent = Get-Content $grainsFile</p>
-<p>$grainsContent = $grainsContent | Where-Object {$_ -notmatch "vCenterTags:"}</p>
-<br>
-<h1>If Only grain is vCenter Tags then Delete the grains file and re-create</h1>
-<p>if(!$grainsContent){</p>
-<p>Remove-Item -Path $grainsFile</p>
-<p>New-Item $grainsFile -ItemType File</p>
-<p>} # End If</p>
-<p>else{</p>
-<p>$grainsContent | Set-Content $grainsFile -Force</p>
-<p>} # End Else</p>
-<br>
-<p>#Get VM Tag(s)</p>
-<p>$grainfileinfo = $grainTagInfo | Where-Object {$_.VM -eq $vmName}</p>
-<br>
-<p>$VMTagInfo = 'vCenterTags: ' + $grainfileinfo.TAGs</p>
-<br>
-<p>Add-Content $grainsFile $VMTagInfo -Force</p>
-<br>
-<p>} # End If</p>
-<p>else{</p>
-<h1>Create grains file</h1>
-<p>New-Item $grainsFile -ItemType File</p>
-<br>
-<p>#Get VM Tag(s)</p>
-<p>$grainfileinfo = $grainTagInfo | Where-Object {$_.VM -eq $vmName}</p>
-<br>
-<h1>Define Tags String</h1>
-<p>$VMTagInfo = 'vCenterTags: ' + $grainfileinfo.TAGs</p>
-<br>
-<h1>Add Tags to grains file</h1>
-<p>Add-Content $grainsFile $VMTagInfo -Force</p>
-<p>} # End else</p>
-<br>
-<h1>----- [ End Create Grain File with TAGs Assigned ] ----------------------------</h1>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- [ Start Create Grain File with TAGs Assigned ] ----------------------------
+
+$allvmstaginfoFile = &quot;C:\vCROCS\allvmstaginfo.csv&quot;
+
+$grainTagInfo = Import-Csv $allvmstaginfoFile
+
+$vmName = hostname
+
+$grainsFile = &quot;C:\salt\conf\grains&quot;
+
+if (Test-Path $grainsFile) {
+
+    # Remove existing vCenter Tags
+    $grainsContent = Get-Content $grainsFile
+    $grainsContent = $grainsContent | Where-Object {$_ -notmatch &quot;vCenterTags:&quot;}
+
+    # If Only grain is vCenter Tags then Delete the grains file and re-create
+    if(!$grainsContent){
+        Remove-Item -Path $grainsFile
+        New-Item $grainsFile -ItemType File
+    } # End If
+    else{
+        $grainsContent | Set-Content $grainsFile -Force
+    } # End Else
+
+    #Get VM Tag(s)
+    $grainfileinfo = $grainTagInfo | Where-Object {$_.VM -eq $vmName}
+    
+    $VMTagInfo = &#39;vCenterTags: &#39; + $grainfileinfo.TAGs
+
+    Add-Content $grainsFile $VMTagInfo -Force
+
+} # End If
+else{
+    # Create grains file
+    New-Item $grainsFile -ItemType File
+
+    #Get VM Tag(s)
+    $grainfileinfo = $grainTagInfo | Where-Object {$_.VM -eq $vmName}
+    
+    # Define Tags String
+    $VMTagInfo = &#39;vCenterTags: &#39; + $grainfileinfo.TAGs
+
+    # Add Tags to grains file
+    Add-Content $grainsFile $VMTagInfo -Force
+} # End else
+
+# ----- [ End Create Grain File with TAGs Assigned ] ----------------------------</code></pre>
 <br>
 <hr>
 <br>
@@ -346,48 +339,37 @@
 <img src="images/Salt-46.PNG" alt="">
 <br>
 <p>Example Orchestration SLS file:</p>
-<p>{{< highlight powershell >}}</p>
-<p>copy_tags:</p>
-<p>salt.function:</p>
-<ul>
-<li>name: cp.get_file</li>
-<li>tgt: 'os:Windows'</li>
-<li>tgt_type: grain</li>
-<li>arg:</li>
-<li>'salt://allvmstaginfo.csv'</li>
-<li>'C:\vCROCS\allvmstaginfo.csv'</li>
-<br>
-</ul>
-<p>create_grain_file:</p>
-<p>salt.function:</p>
-<ul>
-<li>name: cmd.script</li>
-<li>tgt: 'os:Windows'</li>
-<li>tgt_type: grain</li>
-<li>arg:</li>
-<li>source="salt://SEM/grains-vCenter-tags.ps1"</li>
-<li>shell=powershell</li>
-<br>
-</ul>
-<p>grain_sync:</p>
-<p>salt.function:</p>
-<ul>
-<li>name: saltutil.sync_grains</li>
-<li>tgt: 'os:Windows'</li>
-<li>tgt_type: grain</li>
-<br>
-</ul>
-<p>Cleanup_Tag_File:</p>
-<p>salt.function:</p>
-<ul>
-<li>name: file.remove</li>
-<li>tgt: 'os:Windows'</li>
-<li>tgt_type: grain</li>
-<li>arg:</li>
-<li>'C:\vCROCS\allvmstaginfo.csv'</li>
-<br>
-</ul>
-<p>{{< /highlight >}}</p>
+<pre><code>copy_tags:
+  salt.function:
+    - name: cp.get_file
+    - tgt: &#39;os:Windows&#39;
+    - tgt_type: grain
+    - arg:
+      - &#39;salt://allvmstaginfo.csv&#39;
+      - &#39;C:\vCROCS\allvmstaginfo.csv&#39;
+
+create_grain_file:
+  salt.function:
+    - name: cmd.script
+    - tgt: &#39;os:Windows&#39;
+    - tgt_type: grain
+    - arg:
+      - source=&quot;salt://SEM/grains-vCenter-tags.ps1&quot;
+      - shell=powershell
+      
+grain_sync:
+  salt.function:
+    - name: saltutil.sync_grains
+    - tgt: &#39;os:Windows&#39;
+    - tgt_type: grain
+
+Cleanup_Tag_File:
+  salt.function:
+    - name: file.remove
+    - tgt: &#39;os:Windows&#39;
+    - tgt_type: grain
+    - arg:    
+      - &#39;C:\vCROCS\allvmstaginfo.csv&#39;</code></pre>
 <br>
 <h2>Salt-Run Job to Orchestrate Copy File/Run Script/Run Sync/Delete File:</h2>
 <br>

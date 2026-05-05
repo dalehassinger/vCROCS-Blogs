@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -174,18 +175,12 @@
 </ul>
 <h2>Example grains file:</h2>
 <br>
-<p>{{< highlight powershell >}}</p>
-<p>NSXSecurityTAGs:</p>
-<ul>
-<li>vCROCS.Apps.VMware.SaltStack.Minion</li>
-</ul>
-<p>vCenterTAGs:</p>
-<ul>
-<li>TAG-VM-WebServer</li>
-<li>TAG-VM-vCROCS</li>
-<li>TAG-App-Hugo</li>
-</ul>
-<p>{{< /highlight >}}</p>
+<pre><code>NSXSecurityTAGs:
+- vCROCS.Apps.VMware.SaltStack.Minion
+vCenterTAGs:
+- TAG-VM-WebServer
+- TAG-VM-vCROCS
+- TAG-App-Hugo</code></pre>
 <br>
 <ul>
 <li>"Grain Name": "The value of the grain".</li>
@@ -212,44 +207,41 @@
 <p>Get the VM Names and All Assigned vCenter TAGs</p>
 <br>
 <p>PowerShell Script:</p>
-<p>{{< highlight powershell >}}</p>
-<h1>----- [ SSH SaltStack Config Server - Add vCenter TAGs to Minion Grains ] --------------------------</h1>
-<br>
-<h1>Connect to vCenter before running this code</h1>
-<h1>Define your Credentials</h1>
-<br>
-<h1>SSH to SaltStack Server - MUST HAVE POSH-SSH PowerShell Module Installed</h1>
-<p>New-SSHSession -ComputerName 'SaltServer.vCROCS.info'</p>
-<br>
-<h1>Test SSH Connection</h1>
-<p>$CheckSSHConnection = Get-SSHSession -SessionId 0</p>
-<p>$CheckSSHConnection.Connected</p>
-<br>
-<p>$vmNames = Get-VM -Name vCROCS-VM-*</p>
-<p>$vmNames = $vmNames | Sort-Object Name</p>
-<br>
-<p>foreach($vmName in $VMNames){</p>
-<p>$vmName.Name</p>
-<br>
-<p>#Get VM Tag(s)</p>
-<p>$VMTags = Get-TagAssignment -Entity $vmName.Name</p>
-<p>$VMTags.Tag.Name</p>
-<br>
-<p>foreach($vmTAG in $VMTags.Tag.Name){</p>
-<br>
-<p>$sshCommand = 'salt "' + $vmName.Name + '" grains.append vCenterTAGs "' + $vmTAG + '"'</p>
-<p>$results = Invoke-SSHCommand -SessionId 0 -Command $sshCommand</p>
-<p>} # End Foreach</p>
-<br>
-<h1>Sync Grains after adding new grain information</h1>
-<p>$sshCommand = 'salt "' + $vmName.Name + '" saltutil.sync_grains'</p>
-<p>$results = Invoke-SSHCommand -SessionId 0 -Command $sshCommand</p>
-<p>} # End Foreach</p>
-<br>
-<h1>----- [ Terminate SSH Session ] -----------------------------</h1>
-<p>Remove-SSHSession -SessionId 0</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># ----- [ SSH SaltStack Config Server - Add vCenter TAGs to Minion Grains ] --------------------------
+
+# Connect to vCenter before running this code
+# Define your Credentials
+
+# SSH to SaltStack Server - MUST HAVE POSH-SSH PowerShell Module Installed 
+New-SSHSession -ComputerName &#39;SaltServer.vCROCS.info&#39; 
+
+# Test SSH Connection
+$CheckSSHConnection = Get-SSHSession -SessionId 0
+$CheckSSHConnection.Connected
+
+$vmNames = Get-VM -Name vCROCS-VM-*
+$vmNames = $vmNames | Sort-Object Name
+
+foreach($vmName in $VMNames){
+    $vmName.Name
+
+    #Get VM Tag(s)
+    $VMTags = Get-TagAssignment -Entity $vmName.Name
+    $VMTags.Tag.Name
+
+    foreach($vmTAG in $VMTags.Tag.Name){
+
+        $sshCommand = &#39;salt &quot;&#39; + $vmName.Name + &#39;&quot; grains.append vCenterTAGs &quot;&#39; + $vmTAG + &#39;&quot;&#39;
+        $results = Invoke-SSHCommand -SessionId 0 -Command $sshCommand
+    } # End Foreach
+
+    # Sync Grains after adding new grain information
+    $sshCommand = &#39;salt &quot;&#39; + $vmName.Name + &#39;&quot; saltutil.sync_grains&#39;
+    $results = Invoke-SSHCommand -SessionId 0 -Command $sshCommand
+} # End Foreach
+
+# ----- [ Terminate SSH Session ] -----------------------------
+Remove-SSHSession -SessionId 0</code></pre>
 <br>
 <h2>Lessons Learned:</h2>
 <ul>

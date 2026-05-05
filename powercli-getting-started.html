@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -161,35 +162,31 @@
 <br>
 <hr>
 <br>
-<p>{{< highlight powershell >}}</p>
-<br>
-<p>#Here are some basic commands that you can keep adding additional code</p>
-<p>#and get more precise on what you want to see.</p>
-<br>
-<p>#Connect to a vCenter</p>
-<br>
-<p>Connect-VIServer vcsa.domain.org</p>
-<br>
-<p>#Disconnect from vCenter and not be prompted</p>
-<br>
-<p>Disconnect-VIServer vcsa.domain.org -confirm:$false</p>
-<br>
-<p>#Get VM Listing</p>
-<br>
-<p>#Shows all VMs</p>
-<p>Get-VM</p>
-<br>
-<p>#Shows all VMs sorted by Name</p>
-<p>Get-VM | Sort-Object Name</p>
-<br>
-<p>#Shows all VMs sorted by Name that are Powered On</p>
-<p>Get-VM | Where-Object {$_.Powerstate -eq 'PoweredOn'} | Sort-Object Name</p>
-<br>
-<p>#Shows all VMs sorted by Name, that are Powered On and only shows</p>
-<p>#Name,MemoryGB,NumCpu</p>
-<p>Get-VM | Where-Object {$_.Powerstate -eq 'PoweredOn'} | Sort-Object Name | Select-Object Name,MemoryGB,NumCpu</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>#Here are some basic commands that you can keep adding additional code
+#and get more precise on what you want to see.
+
+#Connect to a vCenter
+
+Connect-VIServer vcsa.domain.org
+
+#Disconnect from vCenter and not be prompted
+
+Disconnect-VIServer vcsa.domain.org -confirm:$false
+
+#Get VM Listing
+
+#Shows all VMs
+Get-VM
+
+#Shows all VMs sorted by Name
+Get-VM | Sort-Object Name
+
+#Shows all VMs sorted by Name that are Powered On
+Get-VM | Where-Object {$_.Powerstate -eq &#39;PoweredOn&#39;} | Sort-Object Name
+
+#Shows all VMs sorted by Name, that are Powered On and only shows
+#Name,MemoryGB,NumCpu
+Get-VM | Where-Object {$_.Powerstate -eq &#39;PoweredOn&#39;} | Sort-Object Name | Select-Object Name,MemoryGB,NumCpu</code></pre>
 <br>
 <hr>
 <br>

@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -165,51 +166,47 @@
 <br>
 <hr>
 <br>
-<p>{{< highlight Bash >}}</p>
-<br>
-<h1>To create the static web pages you just run the hugo command.</h1>
-<br>
-<p>Mac-mini:hugo dalehassinger$ hugo</p>
-<br>
-<p>| EN</p>
-<p>-------------------+-----</p>
-<p>Pages            | 61</p>
-<p>Paginator pages  |  0</p>
-<p>Non-page files   |  0</p>
-<p>Static files     | 25</p>
-<p>Processed images |  0</p>
-<p>Aliases          | 16</p>
-<p>Sitemaps         |  1</p>
-<p>Cleaned          |  0</p>
-<br>
-<h1>To run the Hugo Web Server and see real-time changes you are making</h1>
-<h1>to your web site you just run hugo server and open the web page</h1>
-<h1>http://localhost:1313/</h1>
-<br>
-<p>Mac-mini:hugo dalehassinger$ hugo server</p>
-<p>Building sites …</p>
-<br>
-<p>| EN</p>
-<p>-------------------+-----</p>
-<p>Pages            | 61</p>
-<p>Paginator pages  |  0</p>
-<p>Non-page files   |  0</p>
-<p>Static files     | 25</p>
-<p>Processed images |  0</p>
-<p>Aliases          | 16</p>
-<p>Sitemaps         |  1</p>
-<p>Cleaned          |  0</p>
-<br>
-<p>Built in 43 ms</p>
-<p>Watching for changes in /Users/dalehassinger/hugo/{archetypes,content,data,layouts,static,themes}</p>
-<p>Watching for config changes in /Users/dalehassinger/hugo/config.toml</p>
-<p>Environment: "development"</p>
-<p>Serving pages from memory</p>
-<p>Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender</p>
-<p>Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)</p>
-<p>Press Ctrl+C to stop</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># To create the static web pages you just run the hugo command.
+
+Mac-mini:hugo dalehassinger$ hugo
+
+                    | EN  
+-------------------+-----
+  Pages            | 61  
+  Paginator pages  |  0  
+  Non-page files   |  0  
+  Static files     | 25  
+  Processed images |  0  
+  Aliases          | 16  
+  Sitemaps         |  1  
+  Cleaned          |  0  
+
+# To run the Hugo Web Server and see real-time changes you are making
+# to your web site you just run hugo server and open the web page
+# http://localhost:1313/
+
+Mac-mini:hugo dalehassinger$ hugo server
+Building sites … 
+
+                    | EN  
+-------------------+-----
+  Pages            | 61  
+  Paginator pages  |  0  
+  Non-page files   |  0  
+  Static files     | 25  
+  Processed images |  0  
+  Aliases          | 16  
+  Sitemaps         |  1  
+  Cleaned          |  0  
+
+Built in 43 ms
+Watching for changes in /Users/dalehassinger/hugo/{archetypes,content,data,layouts,static,themes}
+Watching for config changes in /Users/dalehassinger/hugo/config.toml
+Environment: &quot;development&quot;
+Serving pages from memory
+Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
+Press Ctrl+C to stop</code></pre>
 <br>
 <hr>
 <br>

@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -240,69 +241,61 @@
 <br>
 <br>
 <br>
-<p>{{< highlight YAML >}}</p>
-<p>formatVersion: 1</p>
-<p>name: Ubuntu-20-with-minion</p>
-<p>version: 9</p>
-<p>inputs:</p>
-<p>CustomizationSpec:</p>
-<p>type: string</p>
-<p>description: Customization Specification</p>
-<p>default: Customization-Ubuntu-22</p>
-<p>title: 'Customization Spec:'</p>
-<p>VMName:</p>
-<p>type: string</p>
-<p>title: 'VM Name:'</p>
-<p>minLength: 1</p>
-<p>maxLength: 15</p>
-<p>default: LINUX-U-16</p>
-<p>IP:</p>
-<p>type: string</p>
-<p>default: 192.168.69.16</p>
-<p>BuildTime:</p>
-<p>type: string</p>
-<p>title: 'Build Time:'</p>
-<p>format: date-time</p>
-<p>vCenterFolders:</p>
-<p>type: string</p>
-<p>title: 'vCenter Folder:'</p>
-<p>default: Blogs</p>
-<p>$dynamicEnum: /data/vro-actions/TAM/DBH_vCenter_Folders</p>
-<p>resources:</p>
-<p>Cloud_vSphere_Machine_1:</p>
-<p>type: Cloud.vSphere.Machine</p>
-<p>properties:</p>
-<p>image: vCenter-ubuntu-20</p>
-<p>flavor: vCenter-1CPU-2GB</p>
-<p>name: ${input.VMName}</p>
-<p>BuildTime: ${input.BuildTime}</p>
-<p>folderName: ${input.vCenterFolders}</p>
-<p>customizationSpec: ${input.CustomizationSpec}</p>
-<p>vmIP: ${input.IP}</p>
-<p>remoteAccess:</p>
-<p>authentication: usernamePassword</p>
-<p>username: administrator</p>
-<p>password: VMware1!</p>
-<p>constraints:</p>
-<ul>
-<li>tag: Cluster:PROD</li>
-</ul>
-<p>networks:</p>
-<ul>
-<li>network: ${resource.Cloud_vSphere_Network_1.id}</li>
-</ul>
-<p>assignment: static</p>
-<p>address: ${input.IP}</p>
-<p>Cloud_vSphere_Network_1:</p>
-<p>type: Cloud.vSphere.Network</p>
-<p>properties:</p>
-<p>networkType: existing</p>
-<p>constraints:</p>
-<ul>
-<li>tag: Network:vCenter-VMs</li>
-<br>
-</ul>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+formatVersion: 1
+name: Ubuntu-20-with-minion
+version: 9
+inputs:
+  CustomizationSpec:
+    type: string
+    description: Customization Specification
+    default: Customization-Ubuntu-22
+    title: &#39;Customization Spec:&#39;
+  VMName:
+    type: string
+    title: &#39;VM Name:&#39;
+    minLength: 1
+    maxLength: 15
+    default: LINUX-U-16
+  IP:
+    type: string
+    default: 192.168.69.16
+  BuildTime:
+    type: string
+    title: &#39;Build Time:&#39;
+    format: date-time
+  vCenterFolders:
+    type: string
+    title: &#39;vCenter Folder:&#39;
+    default: Blogs
+    $dynamicEnum: /data/vro-actions/TAM/DBH_vCenter_Folders
+resources:
+  Cloud_vSphere_Machine_1:
+    type: Cloud.vSphere.Machine
+    properties:
+      image: vCenter-ubuntu-20
+      flavor: vCenter-1CPU-2GB
+      name: ${input.VMName}
+      BuildTime: ${input.BuildTime}
+      folderName: ${input.vCenterFolders}
+      customizationSpec: ${input.CustomizationSpec}
+      vmIP: ${input.IP}
+      remoteAccess:
+        authentication: usernamePassword
+        username: administrator
+        password: VMware1!
+      constraints:
+        - tag: Cluster:PROD
+      networks:
+        - network: ${resource.Cloud_vSphere_Network_1.id}
+          assignment: static
+          address: ${input.IP}
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: Network:vCenter-VMs</code></pre>
 <br>
 <hr>
 <br>
@@ -342,101 +335,99 @@
 <br>
 <br>
 <br>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<p>function handler($context, $inputs) {</p>
-<br>
-<h1>Build PowerShell variables</h1>
-<p>if(!$inputs.resourceNames){</p>
-<p>$vmName = "NA"</p>
-<p>}else{</p>
-<p>$vmName = $inputs.resourceNames</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.image){</p>
-<p>$image = "NA"</p>
-<p>}else{</p>
-<p>$image = $inputs.customProperties.image</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.flavor){</p>
-<p>$flavor = "NA"</p>
-<p>}else{</p>
-<p>$flavor = $inputs.customProperties.flavor</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.folderName){</p>
-<p>$folder = "NA"</p>
-<p>}else{</p>
-<p>$folder = $inputs.customProperties.folderName</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.vmIP){</p>
-<p>$vmIP = "NA"</p>
-<p>}else{</p>
-<p>$vmIP = $inputs.customProperties.vmIP</p>
-<p>}</p>
-<p>if(!$inputs.__metadata.userName){</p>
-<p>$userName = "NA"</p>
-<p>}else{</p>
-<p>$userName = $inputs.__metadata.userName</p>
-<p>}</p>
-<br>
-<p>Write-Host "--vmName:"$vmName</p>
-<p>Write-Host "---image:"$image</p>
-<p>Write-Host "--flavor:"$flavor</p>
-<p>Write-Host "--folder:"$folder</p>
-<p>Write-Host "userName:"$userName</p>
-<p>Write-Host "----vmIP:"$vmIP</p>
-<br>
-<h1>--- [ Start Add Alert to Teams Channel ] ---</h1>
-<br>
-<h1>Define the webhook URL</h1>
-<p>$webhookUrl = 'https://vcrocs.webhook.office.com/webhookb2/ac73a8c3-bd4572@015568c1-bbe7-hack-me-4050-add6-6f36b7b44adb/IncomingWebhook/b41cd4d2f-hack-you-12/925b-9960-4590-9251-65db25f05419'</p>
-<br>
-<h1>--- Create the message card</h1>
-<p>$messageCard = @{</p>
-<p>"@type"    = "MessageCard"</p>
-<p>"@context" = "http://schema.org/extensions"</p>
-<p>"summary"  = "Issue 176715375"</p>
-<p>"sections" = @(</p>
-<p>@{</p>
-<p>"activityTitle"    = "vRA Automated VM Build:"</p>
-<p>"facts"            = @(</p>
-<p>@{</p>
-<p>"name"  = "VM Name:"</p>
-<p>"value" = "$vmName"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "VM IP:"</p>
-<p>"value" = "$vmIP"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "Created By:"</p>
-<p>"value" = "$userName"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "VM Image:"</p>
-<p>"value" = "$image"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "vCenter Folder:"</p>
-<p>"value" = "$folder"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "VM Flavor:"</p>
-<p>"value" = "$flavor"</p>
-<p>}</p>
-<p>)</p>
-<p>"markdown" = $true</p>
-<p>}</p>
-<p>)</p>
-<p>} | ConvertTo-Json -Depth 10</p>
-<br>
-<h1>Send the message card</h1>
-<p>Invoke-RestMethod -Uri $webhookUrl -Method Post -ContentType 'application/json' -Body $messageCard</p>
-<br>
-<p>$outPut = "Done"</p>
-<p>return $outPut</p>
-<p>}</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+
+function handler($context, $inputs) {
+
+    # Build PowerShell variables
+    if(!$inputs.resourceNames){
+        $vmName = &quot;NA&quot;
+    }else{
+        $vmName = $inputs.resourceNames
+    }
+    if(!$inputs.customProperties.image){
+        $image = &quot;NA&quot;
+    }else{
+        $image = $inputs.customProperties.image
+    }
+    if(!$inputs.customProperties.flavor){
+        $flavor = &quot;NA&quot;
+    }else{
+        $flavor = $inputs.customProperties.flavor
+    }
+    if(!$inputs.customProperties.folderName){
+        $folder = &quot;NA&quot;
+    }else{
+        $folder = $inputs.customProperties.folderName
+    }
+    if(!$inputs.customProperties.vmIP){
+        $vmIP = &quot;NA&quot;
+    }else{
+        $vmIP = $inputs.customProperties.vmIP
+    }
+    if(!$inputs.__metadata.userName){
+        $userName = &quot;NA&quot;
+    }else{
+        $userName = $inputs.__metadata.userName
+    }
+    
+    Write-Host &quot;--vmName:&quot;$vmName
+    Write-Host &quot;---image:&quot;$image
+    Write-Host &quot;--flavor:&quot;$flavor
+    Write-Host &quot;--folder:&quot;$folder
+    Write-Host &quot;userName:&quot;$userName
+    Write-Host &quot;----vmIP:&quot;$vmIP
+
+    # --- [ Start Add Alert to Teams Channel ] ---
+    
+    # Define the webhook URL
+    $webhookUrl = &#39;https://vcrocs.webhook.office.com/webhookb2/ac73a8c3-bd4572@015568c1-bbe7-hack-me-4050-add6-6f36b7b44adb/IncomingWebhook/b41cd4d2f-hack-you-12/925b-9960-4590-9251-65db25f05419&#39;
+
+    # --- Create the message card
+$messageCard = @{
+    &quot;@type&quot;    = &quot;MessageCard&quot;
+    &quot;@context&quot; = &quot;http://schema.org/extensions&quot;
+    &quot;summary&quot;  = &quot;Issue 176715375&quot;
+    &quot;sections&quot; = @(
+        @{
+            &quot;activityTitle&quot;    = &quot;vRA Automated VM Build:&quot;
+            &quot;facts&quot;            = @(
+                @{
+                    &quot;name&quot;  = &quot;VM Name:&quot;
+                    &quot;value&quot; = &quot;$vmName&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;VM IP:&quot;
+                    &quot;value&quot; = &quot;$vmIP&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;Created By:&quot;
+                    &quot;value&quot; = &quot;$userName&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;VM Image:&quot;
+                    &quot;value&quot; = &quot;$image&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;vCenter Folder:&quot;
+                    &quot;value&quot; = &quot;$folder&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;VM Flavor:&quot;
+                    &quot;value&quot; = &quot;$flavor&quot;
+                }
+            )
+            &quot;markdown&quot; = $true
+        }
+    )
+} | ConvertTo-Json -Depth 10
+
+    # Send the message card
+    Invoke-RestMethod -Uri $webhookUrl -Method Post -ContentType &#39;application/json&#39; -Body $messageCard
+
+    $outPut = &quot;Done&quot;
+    return $outPut
+}</code></pre>
 <br>
 <hr>
 <br>
@@ -444,130 +435,128 @@
 <br>
 <br>
 <br>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<p>function handler($context, $inputs) {</p>
-<br>
-<h1>Build PowerShell variables</h1>
-<p>if(!$inputs.resourceNames){</p>
-<p>$vmName = "NA"</p>
-<p>}else{</p>
-<p>$vmName = $inputs.resourceNames</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.image){</p>
-<p>$image = "NA"</p>
-<p>}else{</p>
-<p>$image = $inputs.customProperties.image</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.flavor){</p>
-<p>$flavor = "NA"</p>
-<p>}else{</p>
-<p>$flavor = $inputs.customProperties.flavor</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.folderName){</p>
-<p>$folder = "NA"</p>
-<p>}else{</p>
-<p>$folder = $inputs.customProperties.folderName</p>
-<p>}</p>
-<p>if(!$inputs.customProperties.vmIP){</p>
-<p>$vmIP = "NA"</p>
-<p>}else{</p>
-<p>$vmIP = $inputs.customProperties.vmIP</p>
-<p>}</p>
-<p>if(!$inputs.__metadata.userName){</p>
-<p>$userName = "NA"</p>
-<p>}else{</p>
-<p>$userName = $inputs.__metadata.userName</p>
-<p>}</p>
-<br>
-<p>Write-Host "--vmName:"$vmName</p>
-<p>Write-Host "---image:"$image</p>
-<p>Write-Host "--flavor:"$flavor</p>
-<p>Write-Host "--folder:"$folder</p>
-<p>Write-Host "userName:"$userName</p>
-<p>Write-Host "----vmIP:"$vmIP</p>
-<br>
-<h1>--- [ Start Add Alert to Google Chat ] ---</h1>
-<br>
-<h1>--- Create json body for Google Alert</h1>
-<p>$messageBody = @{</p>
-<p>cards = @(</p>
-<p>@{</p>
-<p>header = @{</p>
-<p>title    = "New VM Build"</p>
-<p>}</p>
-<p>sections = @(</p>
-<p>@{</p>
-<p>widgets = @(</p>
-<p>@{</p>
-<p>keyValue = @{</p>
-<p>topLabel         = "VM Name:"</p>
-<p>content          = "$vmname"</p>
-<p>contentMultiline = $true</p>
-<p>}</p>
-<p>},</p>
-<p>@{</p>
-<p>keyValue = @{</p>
-<p>topLabel         = "VM IP:"</p>
-<p>content          = "$vmIP"</p>
-<p>contentMultiline = $true</p>
-<p>}</p>
-<p>},</p>
-<p>@{</p>
-<p>keyValue = @{</p>
-<p>topLabel         = "Created By:"</p>
-<p>content          = "$username"</p>
-<p>contentMultiline = $true</p>
-<p>}</p>
-<p>},</p>
-<p>@{</p>
-<p>keyValue = @{</p>
-<p>topLabel         = "VM Image:"</p>
-<p>content          = "$image"</p>
-<p>contentMultiline = $true</p>
-<p>}</p>
-<p>},</p>
-<p>@{</p>
-<p>keyValue = @{</p>
-<p>topLabel         = "vCenter Folder:"</p>
-<p>content          = "$folder"</p>
-<p>contentMultiline = $true</p>
-<p>}</p>
-<p>},</p>
-<p>@{</p>
-<p>keyValue = @{</p>
-<p>topLabel         = "VM Flavor:"</p>
-<p>content          = "$flavor"</p>
-<p>contentMultiline = $true</p>
-<p>}</p>
-<p>}</p>
-<p>)</p>
-<p>}</p>
-<p>)</p>
-<p>}</p>
-<p>)</p>
-<p>}</p>
-<br>
-<p>$jsonMessage = $messageBody | ConvertTo-Json -Depth 10</p>
-<br>
-<h1>Output the JSON to verify</h1>
-<p>#$jsonMessage</p>
-<br>
-<h1>Define the webhook URL (replace it with your actual webhook URL)</h1>
-<p>$webhookUrl = 'https://chat.googleapis.com/v1/spaces/AAAAvSYSmfg/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=Vj-NoThfrmjLnkIW_iQRQw71qcE2CGxG1tkjs2ArM7o'</p>
-<br>
-<h1>Send the message</h1>
-<p>$results = Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $jsonMessage -ContentType "application/json"</p>
-<br>
-<p>#$outPut = "WebHook Date/Time: " + $results.createTime</p>
-<p>#Write-Host $outPut</p>
-<br>
-<p>$outPut = "Done"</p>
-<br>
-<p>return $outPut</p>
-<p>}</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+
+function handler($context, $inputs) {
+
+    # Build PowerShell variables
+    if(!$inputs.resourceNames){
+        $vmName = &quot;NA&quot;
+    }else{
+        $vmName = $inputs.resourceNames
+    }
+    if(!$inputs.customProperties.image){
+        $image = &quot;NA&quot;
+    }else{
+        $image = $inputs.customProperties.image
+    }
+    if(!$inputs.customProperties.flavor){
+        $flavor = &quot;NA&quot;
+    }else{
+        $flavor = $inputs.customProperties.flavor
+    }
+    if(!$inputs.customProperties.folderName){
+        $folder = &quot;NA&quot;
+    }else{
+        $folder = $inputs.customProperties.folderName
+    }
+    if(!$inputs.customProperties.vmIP){
+        $vmIP = &quot;NA&quot;
+    }else{
+        $vmIP = $inputs.customProperties.vmIP
+    }
+    if(!$inputs.__metadata.userName){
+        $userName = &quot;NA&quot;
+    }else{
+        $userName = $inputs.__metadata.userName
+    }
+    
+    Write-Host &quot;--vmName:&quot;$vmName
+    Write-Host &quot;---image:&quot;$image
+    Write-Host &quot;--flavor:&quot;$flavor
+    Write-Host &quot;--folder:&quot;$folder
+    Write-Host &quot;userName:&quot;$userName
+    Write-Host &quot;----vmIP:&quot;$vmIP
+
+    # --- [ Start Add Alert to Google Chat ] ---
+    
+    # --- Create json body for Google Alert   
+$messageBody = @{
+    cards = @(
+        @{
+            header = @{
+                title    = &quot;New VM Build&quot;
+            }
+            sections = @(
+                @{
+                    widgets = @(
+                        @{
+                            keyValue = @{
+                                topLabel         = &quot;VM Name:&quot;
+                                content          = &quot;$vmname&quot;
+                                contentMultiline = $true
+                            }
+                        },
+                        @{
+                            keyValue = @{
+                                topLabel         = &quot;VM IP:&quot;
+                                content          = &quot;$vmIP&quot;
+                                contentMultiline = $true
+                            }
+                        },
+                        @{
+                            keyValue = @{
+                                topLabel         = &quot;Created By:&quot;
+                                content          = &quot;$username&quot;
+                                contentMultiline = $true
+                            }
+                        },
+                        @{
+                            keyValue = @{
+                                topLabel         = &quot;VM Image:&quot;
+                                content          = &quot;$image&quot;
+                                contentMultiline = $true
+                            }
+                        },
+                        @{
+                            keyValue = @{
+                                topLabel         = &quot;vCenter Folder:&quot;
+                                content          = &quot;$folder&quot;
+                                contentMultiline = $true
+                            }
+                        },
+                        @{
+                            keyValue = @{
+                                topLabel         = &quot;VM Flavor:&quot;
+                                content          = &quot;$flavor&quot;
+                                contentMultiline = $true
+                            }
+                        }
+                    )
+                }
+            )
+        }
+    )
+}
+    
+    $jsonMessage = $messageBody | ConvertTo-Json -Depth 10
+    
+    # Output the JSON to verify
+    #$jsonMessage
+
+    # Define the webhook URL (replace it with your actual webhook URL)
+    $webhookUrl = &#39;https://chat.googleapis.com/v1/spaces/AAAAvSYSmfg/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&amp;token=Vj-NoThfrmjLnkIW_iQRQw71qcE2CGxG1tkjs2ArM7o&#39;
+
+    # Send the message
+    $results = Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $jsonMessage -ContentType &quot;application/json&quot;
+
+    #$outPut = &quot;WebHook Date/Time: &quot; + $results.createTime
+    #Write-Host $outPut
+    
+    $outPut = &quot;Done&quot;
+
+  return $outPut
+}</code></pre>
 <br>
 <hr>
 <br>
@@ -631,104 +620,102 @@
 <br>
 <br>
 <br>
-</ul>
-<p>{{< highlight PowerShell >}}</p>
-<p>function Handler($context, $inputs) {</p>
-<br>
-<h1>Build PowerShell variables</h1>
-<p>if(!$inputs.inputProperties.resourceNames){</p>
-<p>$vmName = "NA"</p>
-<p>}else{</p>
-<p>$vmName = $inputs.inputProperties.resourceNames</p>
-<p>}</p>
-<p>if(!$inputs.inputProperties.customProperties.image){</p>
-<p>$image = "NA"</p>
-<p>}else{</p>
-<p>$image = $inputs.inputProperties.customProperties.image</p>
-<p>}</p>
-<p>if(!$inputs.inputProperties.customProperties.flavor){</p>
-<p>$flavor = "NA"</p>
-<p>}else{</p>
-<p>$flavor = $inputs.inputProperties.customProperties.flavor</p>
-<p>}</p>
-<p>if(!$inputs.inputProperties.customProperties.folderName){</p>
-<p>$folder = "NA"</p>
-<p>}else{</p>
-<p>$folder = $inputs.inputProperties.customProperties.folderName</p>
-<p>}</p>
-<p>if(!$inputs.inputProperties.customProperties.vmIP){</p>
-<p>$vmIP = "NA"</p>
-<p>}else{</p>
-<p>$vmIP = $inputs.inputProperties.customProperties.vmIP</p>
-<p>}</p>
-<p>if(!$inputs.__metadata_userName){</p>
-<p>$userName = "NA"</p>
-<p>}else{</p>
-<p>$userName = $inputs.__metadata_userName</p>
-<p>}</p>
-<br>
-<p>Write-Host "--vmName:"$vmName</p>
-<p>Write-Host "---image:"$image</p>
-<p>Write-Host "--flavor:"$flavor</p>
-<p>Write-Host "--folder:"$folder</p>
-<p>Write-Host "userName:"$userName</p>
-<p>Write-Host "----vmIP:"$vmIP</p>
-<br>
-<br>
-<h1>Define the webhook URL</h1>
-<p>$webhookUrl = 'https://vcrocs.webhook.office.com/webhookb2/ac73a8c3-59a2-hack-me-bd4572@015568c1-bbe7-4050-add6-6f36b7b44adb/IncomingWebhook/b41cd4d2fcbd-hack-you-0212/925be554-9960-4590-9251-65db25f05419'</p>
-<br>
-<h1>Create the message card</h1>
-<p>$messageCard = @{</p>
-<p>"@type"    = "MessageCard"</p>
-<p>"@context" = "http://schema.org/extensions"</p>
-<p>"summary"  = "Issue 176715375"</p>
-<p>"sections" = @(</p>
-<p>@{</p>
-<p>"activityTitle"    = "vRA Automated VM Build:"</p>
-<p>"facts"            = @(</p>
-<p>@{</p>
-<p>"name"  = "VM Name:"</p>
-<p>"value" = "$vmName"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "VM IP:"</p>
-<p>"value" = "$vmIP"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "Created By:"</p>
-<p>"value" = "$userName"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "VM Image:"</p>
-<p>"value" = "$image"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "vCenter Folder:"</p>
-<p>"value" = "$folder"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "VM Flavor:"</p>
-<p>"value" = "$flavor"</p>
-<p>}</p>
-<p>)</p>
-<p>"markdown" = $true</p>
-<p>}</p>
-<p>)</p>
-<p>} | ConvertTo-Json -Depth 10</p>
-<br>
-<h1>Send the message card</h1>
-<p>Invoke-RestMethod -Uri $webhookUrl -Method Post -ContentType 'application/json' -Body $messageCard</p>
-<br>
-<p>$output=@{status = 'done'}</p>
-<br>
-<p>return $output</p>
-<p>}</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+function Handler($context, $inputs) {
+
+    # Build PowerShell variables
+    if(!$inputs.inputProperties.resourceNames){
+        $vmName = &quot;NA&quot;
+    }else{
+        $vmName = $inputs.inputProperties.resourceNames
+    }
+    if(!$inputs.inputProperties.customProperties.image){
+        $image = &quot;NA&quot;
+    }else{
+        $image = $inputs.inputProperties.customProperties.image
+    }
+    if(!$inputs.inputProperties.customProperties.flavor){
+        $flavor = &quot;NA&quot;
+    }else{
+        $flavor = $inputs.inputProperties.customProperties.flavor
+    }
+    if(!$inputs.inputProperties.customProperties.folderName){
+        $folder = &quot;NA&quot;
+    }else{
+        $folder = $inputs.inputProperties.customProperties.folderName
+    }
+    if(!$inputs.inputProperties.customProperties.vmIP){
+        $vmIP = &quot;NA&quot;
+    }else{
+        $vmIP = $inputs.inputProperties.customProperties.vmIP
+    }
+    if(!$inputs.__metadata_userName){
+        $userName = &quot;NA&quot;
+    }else{
+        $userName = $inputs.__metadata_userName
+    }
+    
+    Write-Host &quot;--vmName:&quot;$vmName
+    Write-Host &quot;---image:&quot;$image
+    Write-Host &quot;--flavor:&quot;$flavor
+    Write-Host &quot;--folder:&quot;$folder
+    Write-Host &quot;userName:&quot;$userName
+    Write-Host &quot;----vmIP:&quot;$vmIP
+
+
+    # Define the webhook URL
+    $webhookUrl = &#39;https://vcrocs.webhook.office.com/webhookb2/ac73a8c3-59a2-hack-me-bd4572@015568c1-bbe7-4050-add6-6f36b7b44adb/IncomingWebhook/b41cd4d2fcbd-hack-you-0212/925be554-9960-4590-9251-65db25f05419&#39;
+
+# Create the message card
+$messageCard = @{
+    &quot;@type&quot;    = &quot;MessageCard&quot;
+    &quot;@context&quot; = &quot;http://schema.org/extensions&quot;
+    &quot;summary&quot;  = &quot;Issue 176715375&quot;
+    &quot;sections&quot; = @(
+        @{
+            &quot;activityTitle&quot;    = &quot;vRA Automated VM Build:&quot;
+            &quot;facts&quot;            = @(
+                @{
+                    &quot;name&quot;  = &quot;VM Name:&quot;
+                    &quot;value&quot; = &quot;$vmName&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;VM IP:&quot;
+                    &quot;value&quot; = &quot;$vmIP&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;Created By:&quot;
+                    &quot;value&quot; = &quot;$userName&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;VM Image:&quot;
+                    &quot;value&quot; = &quot;$image&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;vCenter Folder:&quot;
+                    &quot;value&quot; = &quot;$folder&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;VM Flavor:&quot;
+                    &quot;value&quot; = &quot;$flavor&quot;
+                }
+            )
+            &quot;markdown&quot; = $true
+        }
+    )
+} | ConvertTo-Json -Depth 10
+
+    # Send the message card
+    Invoke-RestMethod -Uri $webhookUrl -Method Post -ContentType &#39;application/json&#39; -Body $messageCard
+
+    $output=@{status = &#39;done&#39;}
+
+    return $output
+}</code></pre>
 <br>
 <hr>
 <br>
+</ul>
 <h2>Screen Shot 11:</h2>
 <br>
 <p>Code difference between a Orchestrator Workflow and a ABX Action.</p>
@@ -794,80 +781,78 @@
 <br>
 <br>
 <br>
-</ul>
-<p>{{< highlight PowerShell >}}</p>
-<br>
-<p>function Handler($context, $inputs) {</p>
-<br>
-<h1>Build PowerShell variables</h1>
-<p>if(!$inputs.vmName){</p>
-<p>$vmName = "NA"</p>
-<p>}else{</p>
-<p>$vmName = $inputs.vmName</p>
-<p>}</p>
-<p>if(!$inputs.snapName){</p>
-<p>$snapName = "NA"</p>
-<p>}else{</p>
-<p>$snapName = $inputs.snapName</p>
-<p>}</p>
-<p>if(!$inputs.snapDescription){</p>
-<p>$snapDescription = "NA"</p>
-<p>}else{</p>
-<p>$snapDescription = $inputs.snapDescription</p>
-<p>}</p>
-<br>
-<p>Write-Host "---------vmName:"$vmName</p>
-<p>Write-Host "-------snapName:"$snapName</p>
-<p>Write-Host "snapDescription:"$snapDescription</p>
-<br>
-<h1>Define the webhook URL</h1>
-<p>$webhookUrl = 'https://vcrocs.webhook.office.com/webhookb2/ac73a8c3-hack-me-e2fbd4572@015568c1-bbe7-4050-add6-6f36b7b44adb/IncomingWebhook/b41cd4d2fcb-hack-you-2/925be554-9960-4590-9251-65db25f05419'</p>
-<br>
-<h1>Create the message card</h1>
-<p>$messageCard = @{</p>
-<p>"@type"    = "MessageCard"</p>
-<p>"@context" = "http://schema.org/extensions"</p>
-<p>"summary"  = "Issue 176715375"</p>
-<p>"sections" = @(</p>
-<p>@{</p>
-<p>"activityTitle"    = "VM SNAP Shot:"</p>
-<p>"facts"            = @(</p>
-<p>@{</p>
-<p>"name"  = "VM Name:"</p>
-<p>"value" = "$vmName"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "Snap Name:"</p>
-<p>"value" = "$snapName"</p>
-<p>},</p>
-<p>@{</p>
-<p>"name"  = "Snap Description:"</p>
-<p>"value" = "$snapDescription"</p>
-<p>}</p>
-<p>)</p>
-<p>"markdown" = $true</p>
-<p>}</p>
-<p>)</p>
-<p>} | ConvertTo-Json -Depth 10</p>
-<br>
-<h1>Send the message card</h1>
-<p>Invoke-RestMethod -Uri $webhookUrl -Method Post -ContentType 'application/json' -Body $messageCard</p>
-<br>
-<h1>Use this section to add the code to do whatever day 2 process you want to run</h1>
-<h1>--- Start the Code</h1>
-<br>
-<br>
-<h1>--- end the Code</h1>
-<br>
-<p>$output=@{status = 'done'}</p>
-<br>
-<p>return $output</p>
-<p>}</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>  
+
+function Handler($context, $inputs) {
+
+    # Build PowerShell variables
+    if(!$inputs.vmName){
+        $vmName = &quot;NA&quot;
+    }else{
+        $vmName = $inputs.vmName
+    }
+    if(!$inputs.snapName){
+        $snapName = &quot;NA&quot;
+    }else{
+        $snapName = $inputs.snapName
+    }
+    if(!$inputs.snapDescription){
+        $snapDescription = &quot;NA&quot;
+    }else{
+        $snapDescription = $inputs.snapDescription
+    }
+
+    Write-Host &quot;---------vmName:&quot;$vmName
+    Write-Host &quot;-------snapName:&quot;$snapName
+    Write-Host &quot;snapDescription:&quot;$snapDescription
+
+    # Define the webhook URL
+    $webhookUrl = &#39;https://vcrocs.webhook.office.com/webhookb2/ac73a8c3-hack-me-e2fbd4572@015568c1-bbe7-4050-add6-6f36b7b44adb/IncomingWebhook/b41cd4d2fcb-hack-you-2/925be554-9960-4590-9251-65db25f05419&#39;
+
+# Create the message card
+$messageCard = @{
+    &quot;@type&quot;    = &quot;MessageCard&quot;
+    &quot;@context&quot; = &quot;http://schema.org/extensions&quot;
+    &quot;summary&quot;  = &quot;Issue 176715375&quot;
+    &quot;sections&quot; = @(
+        @{
+            &quot;activityTitle&quot;    = &quot;VM SNAP Shot:&quot;
+            &quot;facts&quot;            = @(
+                @{
+                    &quot;name&quot;  = &quot;VM Name:&quot;
+                    &quot;value&quot; = &quot;$vmName&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;Snap Name:&quot;
+                    &quot;value&quot; = &quot;$snapName&quot;
+                },
+                @{
+                    &quot;name&quot;  = &quot;Snap Description:&quot;
+                    &quot;value&quot; = &quot;$snapDescription&quot;
+                }
+            )
+            &quot;markdown&quot; = $true
+        }
+    )
+} | ConvertTo-Json -Depth 10
+
+    # Send the message card
+    Invoke-RestMethod -Uri $webhookUrl -Method Post -ContentType &#39;application/json&#39; -Body $messageCard
+
+    # Use this section to add the code to do whatever day 2 process you want to run
+    # --- Start the Code
+
+
+    # --- end the Code
+
+    $output=@{status = &#39;done&#39;}
+
+    return $output
+}</code></pre>
 <br>
 <hr>
 <br>
+</ul>
 <h2>Screen Shot 17:</h2>
 <br>
 <p>Microsoft Teams Message with Day 2 Automation Details. Awesome!</p>

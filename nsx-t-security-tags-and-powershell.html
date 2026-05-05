@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -173,120 +174,115 @@
 <hr>
 <br>
 <p>Click to expand code:</p>
-<p>{{< highlight powershell >}}</p>
-<br>
-<h1>Connect to vCenter</h1>
-<p>$vCenterName = 'vCenter.vCrocs.info'</p>
-<p>Connect-VIServer $vCenterName -Credential $cred</p>
-<br>
-<p>Disconnect-VIServer * -Force -Confirm:$false</p>
-<br>
-<p>Start NSX-T</p>
-<br>
-<h1>----- [ Start Add a Single NSX-T TAG to VM ] --------------------------------------------------</h1>
-<br>
-<h1>Add code to allow untrusted SSL certs</h1>
-<h1>Use when connecting to NSX-T Server and running from a Windows Computer</h1>
-<p>Add-Type @"</p>
-<p>using System;</p>
-<p>using System.Net;</p>
-<p>using System.Net.Security;</p>
-<p>using System.Security.Cryptography.X509Certificates;</p>
-<p>public class ServerCertificateValidationCallback</p>
-<p>{</p>
-<p>public static void Ignore()</p>
-<p>{</p>
-<p>ServicePointManager.ServerCertificateValidationCallback +=</p>
-<p>delegate</p>
-<p>(</p>
-<p>Object obj,</p>
-<p>X509Certificate certificate,</p>
-<p>X509Chain chain,</p>
-<p>SslPolicyErrors errors</p>
-<p>)</p>
-<p>{</p>
-<p>return true;</p>
-<p>};</p>
-<p>}</p>
-<p>}</p>
-<p>"@</p>
-<p>[ServerCertificateValidationCallback]::Ignore();</p>
-<br>
-<br>
-<h1>----- [ This section connects you to vCenter ] ------------------------------------------------------------------</h1>
-<p>$vCenterName = 'vCenter.vCROCS.info'</p>
-<p>Connect-VIServer $vCenterName -Credential $cred</p>
-<br>
-<h1>Connect to vCenter and fetch virtual machine info.</h1>
-<p>$vmInfo = Get-VM -Name DBH-213 | Get-View</p>
-<br>
-<br>
-<h1>----- [ This section defines the API header ] ------------------------------------------------------------------</h1>
-<h1>Set Username/Password info for API</h1>
-<p>$user = 'srv_vRA_NSXT@vCROCS.info'</p>
-<p>$nsxpassword = 'VMware!1'</p>
-<p>$pair = "$($user):$($nsxpassword)"</p>
-<p>$encodedCredentials = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($Pair))</p>
-<p>$headers = @{ Authorization = "Basic $encodedCredentials" }</p>
-<br>
-<p>$vmid = $vm.Config.InstanceUuid</p>
-<p>$newtag = 'UST.SM.UBUNTU_SERVER'</p>
-<p>$JSON = @"</p>
-<p>{</p>
-<p>"external_id": "$vmid",</p>
-<p>"tags": [</p>
-<p>{"scope": "", "tag": "$newtag"}</p>
-<p>]</p>
-<p>}</p>
-<p>"@</p>
-<br>
-<p>$posturl = "https://$nsxmanager/api/v1/fabric/virtual-machines?action=add_tags"</p>
-<p>Invoke-RestMethod -Uri $posturl -Headers $headers -Method Post -Body $JSON -ContentType "application/json"</p>
-<br>
-<h1>----- [ End Add a Single TAG ] --------------------------------------------------</h1>
-<br>
-<br>
-<h1>----- [ Start Get NSX-T TAGs assigned to VM ] --------------------------------------------------</h1>
-<br>
-<p>$vmid = $vm.Config.InstanceUuid</p>
-<p>$geturl = "https://$nsxmanager/api/v1/fabric/virtual-machines?external_id=$vmid&included_fields=tags"</p>
-<p>$getrequest = Invoke-RestMethod -Uri $geturl -Headers $headers -Method Get -ContentType "application/json"</p>
-<p>$currenttags = $getrequest.results.tags.Tag</p>
-<p>$currenttags</p>
-<br>
-<h1>----- [ End Get NSX-T TAGs assigned to VM ] --------------------------------------------------</h1>
-<br>
-<br>
-<h1>----- [ Start remove NSX-T TAG from VM ] --------------------------------------------------</h1>
-<br>
-<p>$vmid = $vm.Config.InstanceUuid</p>
-<p>$newtag = 'UST.SM.UBUNTU_SERVER'</p>
-<p>$JSON = @"</p>
-<p>{</p>
-<p>"external_id": "$vmid",</p>
-<p>"tags": [</p>
-<p>{"scope": "", "tag": "$newtag"}</p>
-<p>]</p>
-<p>}</p>
-<p>"@</p>
-<br>
-<p>$posturl = "https://$nsxmanager/api/v1/fabric/virtual-machines?action=remove_tags"</p>
-<p>Invoke-RestMethod -Uri $posturl -Headers $headers -Method Post -Body $JSON -ContentType "application/json"</p>
-<br>
-<h1>----- [ End remove NSX-T TAG from VM ] --------------------------------------------------</h1>
-<br>
-<br>
-<h1>----- [ Start Get VMs assigned to a TAG NSX-T ] --------------------------------------------------</h1>
-<br>
-<p>$geturl = "https://$nsxmanager/policy/api/v1/infra/tags/effective-resources?scope=&tag=UST.SM.UBUNTU_SERVER"</p>
-<p>$result = Invoke-RestMethod -Uri $geturl -Headers $headers -Method Get -Body $JSON -ContentType "application/json"</p>
-<br>
-<p>Write-Host $result.results.target_display_name</p>
-<br>
-<h1>----- [ End Get VMs assigned to a TAG NSX-T ] --------------------------------------------------</h1>
-<br>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># Connect to vCenter
+$vCenterName = &#39;vCenter.vCrocs.info&#39;
+Connect-VIServer $vCenterName -Credential $cred
+
+Disconnect-VIServer * -Force -Confirm:$false
+
+Start NSX-T
+
+# ----- [ Start Add a Single NSX-T TAG to VM ] --------------------------------------------------
+
+# Add code to allow untrusted SSL certs
+# Use when connecting to NSX-T Server and running from a Windows Computer
+Add-Type @&quot; 
+    using System; 
+    using System.Net; 
+    using System.Net.Security; 
+    using System.Security.Cryptography.X509Certificates; 
+    public class ServerCertificateValidationCallback 
+    { 
+        public static void Ignore() 
+        { 
+            ServicePointManager.ServerCertificateValidationCallback +=  
+                delegate 
+                ( 
+                    Object obj,  
+                    X509Certificate certificate,  
+                    X509Chain chain,  
+                    SslPolicyErrors errors 
+                ) 
+                { 
+                    return true; 
+                }; 
+        } 
+    } 
+&quot;@  
+[ServerCertificateValidationCallback]::Ignore(); 
+
+
+# ----- [ This section connects you to vCenter ] ------------------------------------------------------------------
+$vCenterName = &#39;vCenter.vCROCS.info&#39;
+Connect-VIServer $vCenterName -Credential $cred
+
+# Connect to vCenter and fetch virtual machine info.
+$vmInfo = Get-VM -Name DBH-213 | Get-View
+
+
+# ----- [ This section defines the API header ] ------------------------------------------------------------------
+# Set Username/Password info for API
+$user = &#39;srv_vRA_NSXT@vCROCS.info&#39;
+$nsxpassword = &#39;VMware!1&#39;
+$pair = &quot;$($user):$($nsxpassword)&quot;
+$encodedCredentials = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($Pair))
+$headers = @{ Authorization = &quot;Basic $encodedCredentials&quot; }
+
+$vmid = $vm.Config.InstanceUuid
+$newtag = &#39;UST.SM.UBUNTU_SERVER&#39;
+$JSON = @&quot;
+{
+    &quot;external_id&quot;: &quot;$vmid&quot;,
+    &quot;tags&quot;: [
+        {&quot;scope&quot;: &quot;&quot;, &quot;tag&quot;: &quot;$newtag&quot;}
+    ]
+}
+&quot;@
+
+$posturl = &quot;https://$nsxmanager/api/v1/fabric/virtual-machines?action=add_tags&quot;
+Invoke-RestMethod -Uri $posturl -Headers $headers -Method Post -Body $JSON -ContentType &quot;application/json&quot;
+
+# ----- [ End Add a Single TAG ] --------------------------------------------------
+
+
+# ----- [ Start Get NSX-T TAGs assigned to VM ] --------------------------------------------------
+
+$vmid = $vm.Config.InstanceUuid
+$geturl = &quot;https://$nsxmanager/api/v1/fabric/virtual-machines?external_id=$vmid&amp;included_fields=tags&quot;
+$getrequest = Invoke-RestMethod -Uri $geturl -Headers $headers -Method Get -ContentType &quot;application/json&quot;
+$currenttags = $getrequest.results.tags.Tag
+$currenttags
+
+# ----- [ End Get NSX-T TAGs assigned to VM ] --------------------------------------------------
+
+
+# ----- [ Start remove NSX-T TAG from VM ] --------------------------------------------------
+
+$vmid = $vm.Config.InstanceUuid
+$newtag = &#39;UST.SM.UBUNTU_SERVER&#39;
+$JSON = @&quot;
+{
+    &quot;external_id&quot;: &quot;$vmid&quot;,
+    &quot;tags&quot;: [
+        {&quot;scope&quot;: &quot;&quot;, &quot;tag&quot;: &quot;$newtag&quot;}
+    ]
+}
+&quot;@
+
+$posturl = &quot;https://$nsxmanager/api/v1/fabric/virtual-machines?action=remove_tags&quot;
+Invoke-RestMethod -Uri $posturl -Headers $headers -Method Post -Body $JSON -ContentType &quot;application/json&quot;
+
+# ----- [ End remove NSX-T TAG from VM ] --------------------------------------------------
+
+
+# ----- [ Start Get VMs assigned to a TAG NSX-T ] --------------------------------------------------
+
+$geturl = &quot;https://$nsxmanager/policy/api/v1/infra/tags/effective-resources?scope=&amp;tag=UST.SM.UBUNTU_SERVER&quot;
+$result = Invoke-RestMethod -Uri $geturl -Headers $headers -Method Get -Body $JSON -ContentType &quot;application/json&quot;
+
+Write-Host $result.results.target_display_name
+
+# ----- [ End Get VMs assigned to a TAG NSX-T ] --------------------------------------------------</code></pre>
 <br>
 <hr>
 <br>

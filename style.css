@@ -798,6 +798,10 @@ footer a:hover {
         position: relative;
         top: 0;
     }
+
+    .tags-widget {
+        display: none;
+    }
     
     main, article {
         padding: 1.5rem 1rem;
@@ -810,8 +814,8 @@ footer a:hover {
     .back-to-top {
         right: 1rem;
         bottom: 1rem;
-        width: 48px;
-        height: 48px;
+        width: 58px;
+        height: 64px;
     }
 }
 

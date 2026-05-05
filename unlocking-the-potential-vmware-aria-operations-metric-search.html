@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -177,91 +178,77 @@
 <br>
 <p>In this example the metric search found all VMs with CPU|Ready ms > 750 ms. When search is complete you can define the search further by selecting the parent host.</p>
 <br>
-<p>{{< highlight SQL >}}</p>
-<h1>--- Find All VMs with CPU|Ready ms > 750 ms</h1>
-<p>Metric: Virtual Machine where CPU|Ready ms > 750 ms</p>
-<p>{{< /highlight >}}</p>
+<pre><code># --- Find All VMs with CPU|Ready ms &gt; 750 ms
+Metric: Virtual Machine where CPU|Ready ms &gt; 750 ms</code></pre>
 <br>
 <img src="images/metric-search-02.gif" alt="">
 <br>
 <p>Now lets take the search used above and define the results further by specifying host or cluster.</p>
-<p>{{< highlight SQL >}}</p>
-<h1>--- Find All VMs with CPU|Ready ms > 750 ms WHERE the host is esx-02a.corp.local</h1>
-<p>Metric: Virtual Machine where CPU|Ready ms > 750 ms childOf esx-02a.corp.local</p>
-<br>
-<h1>--- Find All VMs with CPU|Ready ms > 750 ms WHERE the cluster is Cluster-01</h1>
-<p>Metric: Virtual Machine where CPU|Ready ms > 750 ms childOf Cluster-01</p>
-<p>{{< /highlight >}}</p>
+<pre><code># --- Find All VMs with CPU|Ready ms &gt; 750 ms WHERE the host is esx-02a.corp.local
+Metric: Virtual Machine where CPU|Ready ms &gt; 750 ms childOf esx-02a.corp.local
+
+# --- Find All VMs with CPU|Ready ms &gt; 750 ms WHERE the cluster is Cluster-01
+Metric: Virtual Machine where CPU|Ready ms &gt; 750 ms childOf Cluster-01</code></pre>
 <br>
 <hr>
 <br>
 <h2>Example Metric Searches for VMs:</h2>
-<p>{{< highlight SQL >}}</p>
-<h1>--- Find All VMs with CPU usage % greater than 90</h1>
-<p>Metric: Virtual Machine where CPU|Usage % > 90</p>
-<br>
-<h1>--- Find All VMs with Memory usage % greater than 90</h1>
-<p>Metric: Virtual Machine where Memory|Usage % > 90</p>
-<br>
-<h1>--- Find All VMs with Snap Shots older than 2 days</h1>
-<p>Metric: Virtual Machine where {Disk Space|Snapshot|Age (Days)} > 2</p>
-<br>
-<h1>--- Find All VMs running longer than 30 days. Shows VMs not patched if you do monthly patching.</h1>
-<p>Metric: Virtual Machine where {System|OS Uptime Second(s)} > 30 {Day(s)}</p>
-<br>
-<h1>--- Show CPU and Memory usage for all VMs with a specific string in the name</h1>
-<p>Metric: Virtual Machine where CPU|Usage % > 0 and Memory|Usage % > 0 and Configuration|Name contains 'rocky'</p>
-<br>
-<h1>--- Show CPU and Memory usage for a specific VM</h1>
-<p>Metric: Virtual Machine where CPU|Usage % > 0 and Memory|Usage % > 0 and Configuration|Name equals 'DBH-196'</p>
-<br>
-<h1>--- Show CPU and Memory usage for all VMs in a specific Cluster</h1>
-<p>Metric: Virtual Machine where CPU|Usage % > 0 and Memory|Usage % > 0 and Summary|Parent Cluster equals 'Cluster-02'</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># --- Find All VMs with CPU usage % greater than 90
+Metric: Virtual Machine where CPU|Usage % &gt; 90
+
+# --- Find All VMs with Memory usage % greater than 90
+Metric: Virtual Machine where Memory|Usage % &gt; 90
+
+# --- Find All VMs with Snap Shots older than 2 days
+Metric: Virtual Machine where {Disk Space|Snapshot|Age (Days)} &gt; 2
+
+# --- Find All VMs running longer than 30 days. Shows VMs not patched if you do monthly patching.
+Metric: Virtual Machine where {System|OS Uptime Second(s)} &gt; 30 {Day(s)}
+
+# --- Show CPU and Memory usage for all VMs with a specific string in the name
+Metric: Virtual Machine where CPU|Usage % &gt; 0 and Memory|Usage % &gt; 0 and Configuration|Name contains &#39;rocky&#39;
+
+# --- Show CPU and Memory usage for a specific VM
+Metric: Virtual Machine where CPU|Usage % &gt; 0 and Memory|Usage % &gt; 0 and Configuration|Name equals &#39;DBH-196&#39;
+
+# --- Show CPU and Memory usage for all VMs in a specific Cluster
+Metric: Virtual Machine where CPU|Usage % &gt; 0 and Memory|Usage % &gt; 0 and Summary|Parent Cluster equals &#39;Cluster-02&#39;</code></pre>
 <br>
 <hr>
 <br>
 <h2>Example Metric Searches for Hosts:</h2>
-<p>{{< highlight SQL >}}</p>
-<h1>--- Show Hosts with High CPU Usage</h1>
-<p>Metric: Host System where CPU|Usage % > 80</p>
-<br>
-<h1>--- Show Hosts with High Memory Usage</h1>
-<p>Metric: Host System where Memory|Usage % > 80</p>
-<br>
-<h1>--- Show Hosts In Maintenance Mode</h1>
-<p>Metric: Host System where Runtime|Maintenance State equals 'inMaintenance'</p>
-<br>
-<h1>--- Show Hosts where Health is less than 100%</h1>
-<p>Metric: Host System where Badge|Health % < 100</p>
-<br>
-<h1>--- Show Hosts where Workload is greater than 75%</h1>
-<p>Metric: Host System where Badge|Workload % > 75</p>
-<br>
-<h1>--- Show CPU Usage and Memory Usage for all Hosts In a Specific Cluster</h1>
-<p>Metric: Host System where CPU|Usage % > 0 and Memory|Usage % > 0 and Summary|Parent Cluster equals 'Cluster-01'</p>
-<p>{{< /highlight >}}</p>
+<pre><code># --- Show Hosts with High CPU Usage
+Metric: Host System where CPU|Usage % &gt; 80
+
+# --- Show Hosts with High Memory Usage
+Metric: Host System where Memory|Usage % &gt; 80
+
+# --- Show Hosts In Maintenance Mode
+Metric: Host System where Runtime|Maintenance State equals &#39;inMaintenance&#39;
+
+# --- Show Hosts where Health is less than 100%
+Metric: Host System where Badge|Health % &lt; 100
+
+# --- Show Hosts where Workload is greater than 75%
+Metric: Host System where Badge|Workload % &gt; 75
+
+# --- Show CPU Usage and Memory Usage for all Hosts In a Specific Cluster
+Metric: Host System where CPU|Usage % &gt; 0 and Memory|Usage % &gt; 0 and Summary|Parent Cluster equals &#39;Cluster-01&#39;</code></pre>
 <br>
 <hr>
 <br>
 <h2>Example Metric Searches for Clusters:</h2>
-<p>{{< highlight SQL >}}</p>
-<h1>--- Show Clusters where DRS was turned off</h1>
-<p>Metric: Cluster Configuration|DRS Configuration|Enabled of Cluster Compute Resource where Cluster Configuration|DRS Configuration|Enabled equals 'false'</p>
-<p>{{< /highlight >}}</p>
+<pre><code># --- Show Clusters where DRS was turned off
+Metric: Cluster Configuration|DRS Configuration|Enabled of Cluster Compute Resource where Cluster Configuration|DRS Configuration|Enabled equals &#39;false&#39;</code></pre>
 <br>
 <hr>
 <br>
 <h2>Example Metric Searches for Datastores:</h2>
-<p>{{< highlight SQL >}}</p>
-<h1>--- Show Datastores where Capacity used is greater than 75%</h1>
-<p>Metric: Datastore where Capacity|Used Space % > 75</p>
-<br>
-<h1>--- Show Datastores where Health is less than 100%</h1>
-<p>Metric: Datastore where Badge|Health % < 100</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># --- Show Datastores where Capacity used is greater than 75%
+Metric: Datastore where Capacity|Used Space % &gt; 75
+
+# --- Show Datastores where Health is less than 100%
+Metric: Datastore where Badge|Health % &lt; 100</code></pre>
 <br>
 <hr>
 <br>

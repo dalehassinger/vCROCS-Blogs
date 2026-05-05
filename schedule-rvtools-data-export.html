@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -163,74 +164,70 @@
 <br>
 <br>
 <p>PowerShell Code:</p>
-<p>{{< highlight powershell >}}</p>
-<br>
-<h1>Script to create RVTools files and delete files older than 7 Days.</h1>
-<h1>Also creates an Archive RVTools file on the first of every Month.</h1>
-<br>
-<h1>----- [ Set parameters for RVTools export ] -----</h1>
-<p>$vCenter      = "vcsa8x.corp.local"</p>
-<p>$User         = "administrator@corp.local"</p>
-<p>$Password     = "_RVToolsV2PWDe9yqxNV-HACKME-w5gkyxsCh5R1Kbg+hVYiKo="</p>
-<p>$fileLocation = "C:\RVTools"</p>
-<p>$fileArchive  = "C:\RVTools\Archive"</p>
-<p>$fileName     =  (Get-Date -Format "MM-dd-yyyy-hh-mm") + '-' + $vCenter + '.xlsx'</p>
-<p>$filePath     = "C:\Program Files (x86)\Robware\RVTools\RVtools.exe"</p>
-<br>
-<p>$outPut = 'Starting Process to create an RVTools xlsx file...'</p>
-<p>Write-Output $outPut</p>
-<br>
-<p>$outPut = 'Creating xlsx file for vCenter ' + $vCenter + '...'</p>
-<p>Write-Output $outPut</p>
-<br>
-<p>$Arguments = "-u $User -p $Password -s $vCenter -c ExportAll2xlsx -d $fileLocation -f $fileName"</p>
-<br>
-<p>$Process = Start-Process -FilePath $filePath -ArgumentList $Arguments -Wait</p>
-<br>
-<p>if($Process.ExitCode -eq -1){</p>
-<p>Write-Host "Error: Export failed! RVTools returned exitcode -1, probably a connection error! Script is stopped" -ForegroundColor Red</p>
-<p>exit 1</p>
-<p>} # End If</p>
-<br>
-<h1>----- [Create a RVTools file that will not be deleted for history on the 1st of every month ] -----</h1>
-<p>$DayofMonth = Get-Date -Format "dd"</p>
-<br>
-<p>if($DayofMonth -eq '01'){</p>
-<p>$outPut = "Day of the Month: " + $DayofMonth</p>
-<p>Write-Output $outPut</p>
-<br>
-<p>$outPut = 'Starting Process to create an RVTools xlsx file for Archive that will not be deleted...'</p>
-<p>Write-Output $outPut</p>
-<br>
-<p>$Arguments = "-u $User -p $Password -s $vCenter -c ExportAll2xlsx -d $fileArchive -f $fileName"</p>
-<p>$Process = Start-Process -FilePath $filePath -ArgumentList $Arguments -Wait</p>
-<p>} # End If</p>
-<br>
-<br>
-<h1>----- [ Clean up old RVTools Files ] -----</h1>
-<p>$outPut = 'Removing all XLSX files older than 7 days...'</p>
-<p>Write-Output $outPut</p>
-<br>
-<h1>----- [ Delete all RVTools Files in older than 7 day(s) ] -----</h1>
-<p>$Daysback = "-7"</p>
-<p>$CurrentDate = Get-Date</p>
-<p>$DatetoDelete = $CurrentDate.AddDays($Daysback)</p>
-<br>
-<p>Get-ChildItem $fileLocation | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Confirm:$false -Force</p>
-<br>
-<br>
-<br>
-<br>
-<br>
-<p><#</p>
-<h1>----- [ Sample code to change a file last write date/time to test code for deleting files older than 7 days ] -----</h1>
-<p>$fileToChange = $fileLocation + '\' + $fileName</p>
-<p>$fileToChange</p>
-<br>
-<p>(Get-Item $fileToChange).LastWriteTime = Get-Date "02/01/2024 01:00"</p>
-<p>#></p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># Script to create RVTools files and delete files older than 7 Days.
+# Also creates an Archive RVTools file on the first of every Month.
+
+# ----- [ Set parameters for RVTools export ] -----
+$vCenter      = &quot;vcsa8x.corp.local&quot;
+$User         = &quot;administrator@corp.local&quot;
+$Password     = &quot;_RVToolsV2PWDe9yqxNV-HACKME-w5gkyxsCh5R1Kbg+hVYiKo=&quot;
+$fileLocation = &quot;C:\RVTools&quot;
+$fileArchive  = &quot;C:\RVTools\Archive&quot;
+$fileName     =  (Get-Date -Format &quot;MM-dd-yyyy-hh-mm&quot;) + &#39;-&#39; + $vCenter + &#39;.xlsx&#39;
+$filePath     = &quot;C:\Program Files (x86)\Robware\RVTools\RVtools.exe&quot;
+
+$outPut = &#39;Starting Process to create an RVTools xlsx file...&#39;
+Write-Output $outPut
+
+$outPut = &#39;Creating xlsx file for vCenter &#39; + $vCenter + &#39;...&#39;
+Write-Output $outPut
+
+$Arguments = &quot;-u $User -p $Password -s $vCenter -c ExportAll2xlsx -d $fileLocation -f $fileName&quot;
+
+$Process = Start-Process -FilePath $filePath -ArgumentList $Arguments -Wait
+
+if($Process.ExitCode -eq -1){
+    Write-Host &quot;Error: Export failed! RVTools returned exitcode -1, probably a connection error! Script is stopped&quot; -ForegroundColor Red
+    exit 1
+} # End If
+
+# ----- [Create a RVTools file that will not be deleted for history on the 1st of every month ] -----
+$DayofMonth = Get-Date -Format &quot;dd&quot;
+
+if($DayofMonth -eq &#39;01&#39;){
+    $outPut = &quot;Day of the Month: &quot; + $DayofMonth
+    Write-Output $outPut
+
+    $outPut = &#39;Starting Process to create an RVTools xlsx file for Archive that will not be deleted...&#39;
+    Write-Output $outPut
+    
+    $Arguments = &quot;-u $User -p $Password -s $vCenter -c ExportAll2xlsx -d $fileArchive -f $fileName&quot;
+    $Process = Start-Process -FilePath $filePath -ArgumentList $Arguments -Wait
+} # End If
+
+
+# ----- [ Clean up old RVTools Files ] -----
+$outPut = &#39;Removing all XLSX files older than 7 days...&#39;
+Write-Output $outPut
+
+# ----- [ Delete all RVTools Files in older than 7 day(s) ] -----
+$Daysback = &quot;-7&quot;
+$CurrentDate = Get-Date
+$DatetoDelete = $CurrentDate.AddDays($Daysback)
+
+Get-ChildItem $fileLocation | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -Confirm:$false -Force
+
+
+
+
+
+&lt;#
+# ----- [ Sample code to change a file last write date/time to test code for deleting files older than 7 days ] -----
+$fileToChange = $fileLocation + &#39;\&#39; + $fileName
+$fileToChange
+
+(Get-Item $fileToChange).LastWriteTime = Get-Date &quot;02/01/2024 01:00&quot;
+#&gt;</code></pre>
 <br>
 <hr>
 <br>

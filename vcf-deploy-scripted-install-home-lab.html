@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -499,682 +500,679 @@ New-LogEvent &quot;Duration: $duration minutes to Deploy Nested ESXi Hosts&quot;
 <hr>
 <br>
 <br>
-</ul>
-<p>{{< highlight powershell >}}</p>
-<h1>Script to create Cloud Builder VM and json file</h1>
-<h1>Author: Dale Hassinger</h1>
-<h1>Based on Script by: William Lam and some other examples I saw on vCommunity sites</h1>
-<br>
-<br>
-<h1>vCenter Server used to deploy VMware Cloud Foundation Lab</h1>
-<p>$VIServer   = "192.168.6.100"</p>
-<p>$VIUsername = "administrator@vcrocs.local"</p>
-<p>$VIPassword = "VMware1!"</p>
-<br>
-<br>
-<h1>Full Path to Cloud Builder OVA</h1>
-<p>#$CloudBuilderOVA = "/Users/dalehassinger/Downloads/VMware-Cloud-Builder-5.2.0.0-24108943_OVF10.ova"</p>
-<p>$CloudBuilderOVA = "/Users/dalehassinger/Downloads/VMware-Cloud-Builder-5.2.1.0-24307856_OVF10.ova"</p>
-<br>
-<br>
-<h1>VCF Licenses or leave blank for evaluation mode (requires VCF 5.1.1 or later)</h1>
-<p>$VCSALicense = ""</p>
-<p>$ESXILicense = ""</p>
-<p>$VSANLicense = ""</p>
-<p>$NSXLicense  = ""</p>
-<br>
-<br>
-<h1>VCF Configurations</h1>
-<p>$VCFManagementDomainPoolName  = "vcf-m01-rp01"</p>
-<p>$VCFManagementDomainJSONFile  = "vcf-mgmt.json"</p>
-<br>
-<br>
-<h1>Cloud Builder Configurations</h1>
-<p>$CloudbuilderVMHostname    = "vcf-m01-cb01"</p>
-<p>$CloudbuilderFQDN          = "vcf-m01-cb01.vcrocs.local"</p>
-<p>$CloudbuilderIP            = "192.168.4.180"</p>
-<p>$CloudbuilderAdminUsername = "admin"</p>
-<p>$CloudbuilderAdminPassword = "VMw@re123!VMw@re123!"</p>
-<p>$CloudbuilderRootPassword  = "VMw@re123!VMw@re123!"</p>
-<br>
-<br>
-<h1>SDDC Manager Configuration</h1>
-<p>$SddcManagerHostname      = "vcf-m01-sddcm01"</p>
-<p>$SddcManagerIP            = "192.168.4.181"</p>
-<p>$SddcManagerVcfPassword   = "VMware1!VMware1!"</p>
-<p>$SddcManagerRootPassword  = "VMware1!VMware1!"</p>
-<p>$SddcManagerRestPassword  = "VMware1!VMware1!"</p>
-<p>$SddcManagerLocalPassword = "VMware1!VMware1!"</p>
-<br>
-<br>
-<p>$NestedESXiHostnameToIPsForManagementDomain = @{</p>
-<p>"VCF-DDC-ESX179" = "192.168.4.179"</p>
-<p>}</p>
-<br>
-<br>
-<h1>Nested ESXi VM Resources for Management Domain</h1>
-<p>$NestedESXiMGMTvCPU          = "12"</p>
-<p>$NestedESXiMGMTvMEM          = "78" #GB</p>
-<p>$NestedESXiMGMTCachingvDisk  = "4" #GB</p>
-<p>$NestedESXiMGMTCapacityvDisk = "500" #GB</p>
-<br>
-<br>
-<h1>Nested ESXi VM Resources for Workload Domain</h1>
-<p>$NestedESXiWLDvCPU          = "8"</p>
-<p>$NestedESXiWLDvMEM          = "36" #GB</p>
-<p>$NestedESXiWLDCachingvDisk  = "4" #GB</p>
-<p>$NestedESXiWLDCapacityvDisk = "200" #GB</p>
-<br>
-<br>
-<h1>ESXi Network Configuration</h1>
-<p>$NestedESXiManagementNetworkCidr = "192.168.4.0/22" # should match $VMNetwork configuration</p>
-<p>$NestedESXivMotionNetworkCidr    = "192.168.8.0/24"</p>
-<p>$NestedESXivSANNetworkCidr       = "192.168.9.0/24"</p>
-<p>$NestedESXiNSXTepNetworkCidr     = "192.168.10.0/24"</p>
-<br>
-<br>
-<h1>vCenter Configuration</h1>
-<p>$VCSAName         = "vcf-m01-vc01"</p>
-<p>$VCSAIP           = "192.168.4.182"</p>
-<p>$VCSARootPassword = "VMware1!"</p>
-<p>$VCSASSOPassword  = "VMware1!"</p>
-<p>$EnableVCLM       = $true</p>
-<br>
-<br>
-<h1>NSX Configuration</h1>
-<p>$NSXManagerSize          = "medium"</p>
-<p>$NSXManagerVIPHostname   = "vcf-m01-nsx01"</p>
-<p>$NSXManagerVIPIP         = "192.168.4.183"</p>
-<p>$NSXManagerNode1Hostname = "vcf-m01-nsx01a"</p>
-<p>$NSXManagerNode1IP       = "192.168.4.184"</p>
-<p>$NSXRootPassword         = "VMware1!VMware1!"</p>
-<p>$NSXAdminPassword        = "VMware1!VMware1!"</p>
-<p>$NSXAuditPassword        = "VMware1!VMware1!"</p>
-<br>
-<br>
-<h1>General Deployment Configuration for Nested ESXi & Cloud Builder VM</h1>
-<h1>This is information from you current vCenter lab environment</h1>
-<p>$VMDatacenter = "Datacenter-DB-01"</p>
-<p>$VMCluster    = "VCF_LAB"</p>
-<p>$VMNetwork    = "VMs"</p>
-<p>$VMDatastore  = "ESX-04-2TB"</p>
-<p>$VMNetmask    = "255.255.252.0"</p>
-<p>$VMGateway    = "192.168.4.1"</p>
-<p>$VMDNS        = "192.168.6.1"</p>
-<p>$VMNTP        = "time.google.com"</p>
-<p>$VMPassword   = "VMware1!"</p>
-<p>$VMDomain     = "vcrocs.local"</p>
-<p>$VMSyslog     = "192.168.6.94"</p>
-<p>$VMFolder     = "VCF-VMs"</p>
-<br>
-<br>
-<h4>DO NOT EDIT BEYOND HERE ####</h4>
-<br>
-<p>$verboseLogFile    = "vcf-lab-deployment.log"</p>
-<p>$random_string     = -join ((65..90) + (97..122) | Get-Random -Count 8 | % {[char]$_})</p>
-<p>$VAppName          = "Nested-VCF-Lab-$random_string"</p>
-<p>$SeparateNSXSwitch = $false</p>
-<p>$VCFVersion        = ""</p>
-<br>
-<p>$preCheck                   = 1</p>
-<p>$confirmDeployment          = 1</p>
-<p>$deployNestedESXiVMsForMgmt = 1</p>
-<br>
-<h1>WLD Setup</h1>
-<p>$deployNestedESXiVMsForWLD     = 0</p>
-<p>$deployCloudBuilder            = 1</p>
-<p>$moveVMsIntovApp               = 1</p>
-<p>$generateMgmJson               = 1</p>
-<br>
-<br>
-<br>
-<p>$StartTime = Get-Date</p>
-<br>
-<p>Function New-LogEvent {</p>
-<p>param(</p>
-<p>[Parameter(Mandatory=$true)][String]$message,</p>
-<p>[Parameter(Mandatory=$false)][String]$color="green"</p>
-<p>)</p>
-<br>
-<p>$timeStamp = Get-Date -Format "MM-dd-yyyy_hh:mm:ss"</p>
-<br>
-<p>Write-Host -NoNewline -ForegroundColor White "[$timestamp]"</p>
-<p>Write-Host -ForegroundColor $color " $message"</p>
-<p>$logMessage = "[$timeStamp] $message"</p>
-<p>$logMessage | Out-File -Append -LiteralPath $verboseLogFile</p>
-<p>} # End Function</p>
-<br>
-<br>
-<br>
-<p>if($preCheck -eq 1) {</p>
-<h1>Detect VCF version based on Cloud Builder OVA (support is 5.1.0+)</h1>
-<p>if($CloudBuilderOVA -match "5.2.0" -or $CloudBuilderOVA -match "5.2.1") {</p>
-<p>$VCFVersion = "5.2.0"</p>
-<p>} elseif($CloudBuilderOVA -match "5.1.1") {</p>
-<p>$VCFVersion = "5.1.1"</p>
-<p>} elseif($CloudBuilderOVA -match "5.1.0") {</p>
-<p>$VCFVersion = "5.1.0"</p>
-<p>} else {</p>
-<p>$VCFVersion = $null</p>
-<p>}</p>
-<br>
-<p>if($VCFVersion -eq $null) {</p>
-<p>Write-Host -ForegroundColor Red "<code>nOnly VCF 5.1.0+ is currently supported ...</code>n"</p>
-<p>exit</p>
-<p>}</p>
-<br>
-<p>if($VCFVersion -ge "5.2.0") {</p>
-<p>write-host "here"</p>
-<p>if( $CloudbuilderAdminPassword.ToCharArray().count -lt 15 -or $CloudbuilderRootPassword.ToCharArray().count -lt 15) {</p>
-<p>Write-Host -ForegroundColor Red "<code>nCloud Builder passwords must be 15 characters or longer ...</code>n"</p>
-<p>exit</p>
-<p>}</p>
-<p>}</p>
-<br>
-<p>if(!(Test-Path $NestedESXiApplianceOVA)) {</p>
-<p>Write-Host -ForegroundColor Red "<code>nUnable to find $NestedESXiApplianceOVA ...</code>n"</p>
-<p>exit</p>
-<p>}</p>
-<br>
-<p>if(!(Test-Path $CloudBuilderOVA)) {</p>
-<p>Write-Host -ForegroundColor Red "<code>nUnable to find $CloudBuilderOVA ...</code>n"</p>
-<p>exit</p>
-<p>}</p>
-<br>
-<p>if($PSVersionTable.PSEdition -ne "Core") {</p>
-<p>Write-Host -ForegroundColor Red "<code>tPowerShell Core was not detected, please install that before continuing ... </code>n"</p>
-<p>exit</p>
-<p>}</p>
-<p>}</p>
-<br>
-<p>if($confirmDeployment -eq 1) {</p>
-<p>Write-Host -ForegroundColor Magenta "<code>nPlease confirm the following configuration will be deployed:</code>n"</p>
-<br>
-<p>Write-Host -ForegroundColor Yellow "---- VCF Automated Lab Deployment Configuration ---- "</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "VMware Cloud Foundation Version: "</p>
-<p>Write-Host -ForegroundColor White $VCFVersion</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Nested ESXi Image Path: "</p>
-<p>Write-Host -ForegroundColor White $NestedESXiApplianceOVA</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Cloud Builder Image Path: "</p>
-<p>Write-Host -ForegroundColor White $CloudBuilderOVA</p>
-<br>
-<p>Write-Host -ForegroundColor Yellow "`n---- vCenter Server Deployment Target Configuration ----"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "vCenter Server Address: "</p>
-<p>Write-Host -ForegroundColor White $VIServer</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "VM Network: "</p>
-<p>Write-Host -ForegroundColor White $VMNetwork</p>
-<br>
-<p>Write-Host -NoNewline -ForegroundColor Green "VM Storage: "</p>
-<p>Write-Host -ForegroundColor White $VMDatastore</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "VM Cluster: "</p>
-<p>Write-Host -ForegroundColor White $VMCluster</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "VM vApp: "</p>
-<p>Write-Host -ForegroundColor White $VAppName</p>
-<br>
-<p>Write-Host -ForegroundColor Yellow "`n---- Cloud Builder Configuration ----"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Hostname: "</p>
-<p>Write-Host -ForegroundColor White $CloudbuilderVMHostname</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "IP Address: "</p>
-<p>Write-Host -ForegroundColor White $CloudbuilderIP</p>
-<br>
-<p>if($deployNestedESXiVMsForMgmt -eq 1) {</p>
-<p>Write-Host -ForegroundColor Yellow "`n---- vESXi Configuration for VCF Management Domain ----"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "# of Nested ESXi VMs: "</p>
-<p>Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForManagementDomain.count</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "IP Address(s): "</p>
-<p>Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForManagementDomain.Values</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "vCPU: "</p>
-<p>Write-Host -ForegroundColor White $NestedESXiMGMTvCPU</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "vMEM: "</p>
-<p>Write-Host -ForegroundColor White "$NestedESXiMGMTvMEM GB"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Caching VMDK: "</p>
-<p>Write-Host -ForegroundColor White "$NestedESXiMGMTCachingvDisk GB"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Capacity VMDK: "</p>
-<p>Write-Host -ForegroundColor White "$NestedESXiMGMTCapacityvDisk GB"</p>
-<p>} # End If</p>
-<br>
-<p>if($deployNestedESXiVMsForWLD -eq 1) {</p>
-<p>Write-Host -ForegroundColor Yellow "`n---- vESXi Configuration for VCF Workload Domain ----"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "# of Nested ESXi VMs: "</p>
-<p>Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForWorkloadDomain.count</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "IP Address(s): "</p>
-<p>Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForWorkloadDomain.Values</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "vCPU: "</p>
-<p>Write-Host -ForegroundColor White $NestedESXiWLDvCPU</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "vMEM: "</p>
-<p>Write-Host -ForegroundColor White "$NestedESXiWLDvMEM GB"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Caching VMDK: "</p>
-<p>Write-Host -ForegroundColor White "$NestedESXiWLDCachingvDisk GB"</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Capacity VMDK: "</p>
-<p>Write-Host -ForegroundColor White "$NestedESXiWLDCapacityvDisk GB"</p>
-<p>} # End If</p>
-<br>
-<p>Write-Host -NoNewline -ForegroundColor Green "`nNetmask "</p>
-<p>Write-Host -ForegroundColor White $VMNetmask</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Gateway: "</p>
-<p>Write-Host -ForegroundColor White $VMGateway</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "DNS: "</p>
-<p>Write-Host -ForegroundColor White $VMDNS</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "NTP: "</p>
-<p>Write-Host -ForegroundColor White $VMNTP</p>
-<p>Write-Host -NoNewline -ForegroundColor Green "Syslog: "</p>
-<p>Write-Host -ForegroundColor White $VMSyslog</p>
-<br>
-<p>} # End If</p>
-<br>
-<br>
-<p>if($deployNestedESXiVMsForMgmt -eq 1 -or $deployNestedESXiVMsForWLD -eq 1 -or $deployCloudBuilder -eq 1 -or $moveVMsIntovApp -eq 1) {</p>
-<p>New-LogEvent "Connecting to Management vCenter Server $VIServer ..."</p>
-<p>$viConnection = Connect-VIServer $VIServer -User $VIUsername -Password $VIPassword -WarningAction SilentlyContinue -Protocol https -Force</p>
-<br>
-<p>$datastore = Get-Datastore -Server $viConnection -Name $VMDatastore | Select -First 1</p>
-<p>$cluster = Get-Cluster -Server $viConnection -Name $VMCluster</p>
-<p>$vmhost = $cluster | Get-VMHost | Get-Random -Count 1</p>
-<p>} # End if</p>
-<br>
-<br>
-<h1>Start Create Cloud Builder VM</h1>
-<p>if($deployCloudBuilder -eq 1) {</p>
-<p>$ovfconfig = Get-OvfConfiguration $CloudBuilderOVA</p>
-<br>
-<p>$networkMapLabel = ($ovfconfig.ToHashTable().keys | where {$_ -Match "NetworkMapping"}).replace("NetworkMapping.","").replace("-","_").replace(" ","_")</p>
-<p>$ovfconfig.NetworkMapping.$networkMapLabel.value = $VMNetwork</p>
-<p>$ovfconfig.common.guestinfo.hostname.value = $CloudbuilderFQDN</p>
-<p>$ovfconfig.common.guestinfo.ip0.value = $CloudbuilderIP</p>
-<p>$ovfconfig.common.guestinfo.netmask0.value = $VMNetmask</p>
-<p>$ovfconfig.common.guestinfo.gateway.value = $VMGateway</p>
-<p>$ovfconfig.common.guestinfo.DNS.value = $VMDNS</p>
-<p>$ovfconfig.common.guestinfo.domain.value = $VMDomain</p>
-<p>$ovfconfig.common.guestinfo.searchpath.value = $VMDomain</p>
-<p>$ovfconfig.common.guestinfo.ntp.value = $VMNTP</p>
-<p>$ovfconfig.common.guestinfo.ADMIN_USERNAME.value = $CloudbuilderAdminUsername</p>
-<p>$ovfconfig.common.guestinfo.ADMIN_PASSWORD.value = $CloudbuilderAdminPassword</p>
-<p>$ovfconfig.common.guestinfo.ROOT_PASSWORD.value = $CloudbuilderRootPassword</p>
-<br>
-<p>New-LogEvent "Deploying Cloud Builder VM $CloudbuilderVMHostname ..."</p>
-<p>$vm = Import-VApp -Source $CloudBuilderOVA -OvfConfiguration $ovfconfig -Name $CloudbuilderVMHostname -Location $VMCluster -VMHost $vmhost -Datastore $datastore -DiskStorageFormat thin -Force</p>
-<br>
-<p>New-LogEvent "Powering On $CloudbuilderVMHostname ..."</p>
-<p>$vm | Start-Vm -RunAsync | Out-Null</p>
-<p>}</p>
-<br>
-<br>
-<h1>Move VMs into vApp. Keeps all the VCF VMs together.</h1>
-<p>if($moveVMsIntovApp -eq 1) {</p>
-<h1>Check whether DRS is enabled as that is required to create vApp</h1>
-<p>if((Get-Cluster -Server $viConnection $cluster).DrsEnabled) {</p>
-<p>New-LogEvent "Creating vApp $VAppName ..."</p>
-<p>$rp = Get-ResourcePool -Name Resources -Location $cluster</p>
-<p>$VApp = New-VApp -Name $VAppName -Server $viConnection -Location $cluster</p>
-<br>
-<p>if(-Not (Get-Folder $VMFolder -ErrorAction Ignore)) {</p>
-<p>New-LogEvent "Creating VM Folder $VMFolder ..."</p>
-<p>$folder = New-Folder -Name $VMFolder -Server $viConnection -Location (Get-Datacenter $VMDatacenter | Get-Folder vm)</p>
-<p>}</p>
-<br>
-<p>if($deployNestedESXiVMsForMgmt -eq 1) {</p>
-<p>New-LogEvent "Moving Nested ESXi VMs into $VAppName vApp ..."</p>
-<p>$NestedESXiHostnameToIPsForManagementDomain.GetEnumerator() | Sort-Object -Property Value | Foreach-Object {</p>
-<p>$vm = Get-VM -Name $_.Key -Server $viConnection -Location $cluster | where{$_.ResourcePool.Id -eq $rp.Id}</p>
-<p>Move-VM -VM $vm -Server $viConnection -Destination $VApp -Confirm:$false | Out-File -Append -LiteralPath $verboseLogFile</p>
-<p>}</p>
-<p>}</p>
-<br>
-<p>if($deployNestedESXiVMsForWLD -eq 1) {</p>
-<p>New-LogEvent "Moving Nested ESXi VMs into $VAppName vApp ..."</p>
-<p>$NestedESXiHostnameToIPsForWorkloadDomain.GetEnumerator() | Sort-Object -Property Value | Foreach-Object {</p>
-<p>$vm = Get-VM -Name $_.Key -Server $viConnection -Location $cluster | where{$_.ResourcePool.Id -eq $rp.Id}</p>
-<p>Move-VM -VM $vm -Server $viConnection -Destination $VApp -Confirm:$false | Out-File -Append -LiteralPath $verboseLogFile</p>
-<p>}</p>
-<p>}</p>
-<br>
-<p>if($deployCloudBuilder -eq 1) {</p>
-<p>$cloudBuilderVM = Get-VM -Name $CloudbuilderVMHostname -Server $viConnection -Location $cluster | where{$_.ResourcePool.Id -eq $rp.Id}</p>
-<p>New-LogEvent "Moving $CloudbuilderVMHostname into $VAppName vApp ..."</p>
-<p>Move-VM -VM $cloudBuilderVM -Server $viConnection -Destination $VApp -Confirm:$false | Out-File -Append -LiteralPath $verboseLogFile</p>
-<p>}</p>
-<br>
-<p>New-LogEvent "Moving $VAppName to VM Folder $VMFolder ..."</p>
-<p>Move-VApp -Server $viConnection $VAppName -Destination (Get-Folder -Server $viConnection $VMFolder) | Out-File -Append -LiteralPath $verboseLogFile</p>
-<p>} else {</p>
-<p>New-LogEvent "vApp $VAppName will NOT be created as DRS is NOT enabled on vSphere Cluster ${cluster} ..."</p>
-<p>}</p>
-<p>}</p>
-<br>
-<br>
-<br>
-<br>
-<h1>Create Cloud Builder json file used to deploy VCF</h1>
-<br>
-<p>if($generateMgmJson -eq 1) {</p>
-<p>if($SeparateNSXSwitch) { $useNSX = "false" } else { $useNSX = "true" }</p>
-<br>
-<p>$esxivMotionNetwork = $NestedESXivMotionNetworkCidr.split("/")[0]</p>
-<p>$esxivMotionNetworkOctects = $esxivMotionNetwork.split(".")</p>
-<p>$esxivMotionGateway = ($esxivMotionNetworkOctects[0..2] -join '.') + ".1"</p>
-<p>$esxivMotionStart = ($esxivMotionNetworkOctects[0..2] -join '.') + ".101"</p>
-<p>$esxivMotionEnd = ($esxivMotionNetworkOctects[0..2] -join '.') + ".118"</p>
-<br>
-<p>$esxivSANNetwork = $NestedESXivSANNetworkCidr.split("/")[0]</p>
-<p>$esxivSANNetworkOctects = $esxivSANNetwork.split(".")</p>
-<p>$esxivSANGateway = ($esxivSANNetworkOctects[0..2] -join '.') + ".1"</p>
-<p>$esxivSANStart = ($esxivSANNetworkOctects[0..2] -join '.') + ".101"</p>
-<p>$esxivSANEnd = ($esxivSANNetworkOctects[0..2] -join '.') + ".118"</p>
-<br>
-<p>$esxiNSXTepNetwork = $NestedESXiNSXTepNetworkCidr.split("/")[0]</p>
-<p>$esxiNSXTepNetworkOctects = $esxiNSXTepNetwork.split(".")</p>
-<p>$esxiNSXTepGateway = ($esxiNSXTepNetworkOctects[0..2] -join '.') + ".1"</p>
-<p>$esxiNSXTepStart = ($esxiNSXTepNetworkOctects[0..2] -join '.') + ".101"</p>
-<p>$esxiNSXTepEnd = ($esxiNSXTepNetworkOctects[0..2] -join '.') + ".118"</p>
-<br>
-<p>$hostSpecs = @()</p>
-<p>$count = 1</p>
-<p>$NestedESXiHostnameToIPsForManagementDomain.GetEnumerator() | Sort-Object -Property Value | Foreach-Object {</p>
-<p>$VMName = $_.Key</p>
-<p>$VMIPAddress = $_.Value</p>
-<br>
-<p>$hostSpec = [ordered]@{</p>
-<p>"association" = "vcf-m01-dc01"</p>
-<p>"ipAddressPrivate" = [ordered]@{</p>
-<p>"ipAddress" = $VMIPAddress</p>
-<p>"cidr" = $NestedESXiManagementNetworkCidr</p>
-<p>"gateway" = $VMGateway</p>
-<p>}</p>
-<p>"hostname" = $VMName</p>
-<p>"credentials" = [ordered]@{</p>
-<p>"username" = "root"</p>
-<p>"password" = $VMPassword</p>
-<p>}</p>
-<p>"sshThumbprint" = "SHA256:DUMMY_VALUE"</p>
-<p>"sslThumbprint" = "SHA25_DUMMY_VALUE"</p>
-<p>"vSwitch" = "vSwitch0"</p>
-<p>"serverId" = "host-$count"</p>
-<p>}</p>
-<p>$hostSpecs+=$hostSpec</p>
-<p>$count++</p>
-<p>}</p>
-<br>
-<p>$vcfConfig = [ordered]@{</p>
-<p>"subscriptionLicensing" = $false</p>
-<p>"skipEsxThumbprintValidation" = $true</p>
-<p>"managementPoolName" = $VCFManagementDomainPoolName</p>
-<p>"sddcId" = "vcf-m01"</p>
-<p>"taskName" = "workflowconfig/workflowspec-ems.json"</p>
-<p>"esxLicense" = "$ESXILicense"</p>
-<p>"ceipEnabled" = $true</p>
-<p>"ntpServers" = @($VMNTP)</p>
-<p>"dnsSpec" = [ordered]@{</p>
-<p>"subdomain" = $VMDomain</p>
-<p>"domain" = $VMDomain</p>
-<p>"nameserver" = $VMDNS</p>
-<p>}</p>
-<p>"sddcManagerSpec" = [ordered]@{</p>
-<p>"ipAddress" = $SddcManagerIP</p>
-<p>"netmask" = $VMNetmask</p>
-<p>"hostname" = $SddcManagerHostname</p>
-<p>"localUserPassword" = "$SddcManagerLocalPassword"</p>
-<p>"vcenterId" = "vcenter-1"</p>
-<p>"secondUserCredentials" = [ordered]@{</p>
-<p>"username" = "vcf"</p>
-<p>"password" = $SddcManagerVcfPassword</p>
-<p>}</p>
-<p>"rootUserCredentials" = [ordered]@{</p>
-<p>"username" = "root"</p>
-<p>"password" = $SddcManagerRootPassword</p>
-<p>}</p>
-<p>"restApiCredentials" = [ordered]@{</p>
-<p>"username" = "admin"</p>
-<p>"password" = $SddcManagerRestPassword</p>
-<p>}</p>
-<p>}</p>
-<p>"networkSpecs" = @(</p>
-<p>[ordered]@{</p>
-<p>"networkType" = "MANAGEMENT"</p>
-<p>"subnet" = $NestedESXiManagementNetworkCidr</p>
-<p>"gateway" = $VMGateway</p>
-<p>"vlanId" = "0"</p>
-<p>"mtu" = "1500"</p>
-<p>"portGroupKey" = "vcf-m01-cl01-vds01-pg-mgmt"</p>
-<p>"standbyUplinks" = @()</p>
-<p>"activeUplinks" = @("uplink1","uplink2")</p>
-<p>}</p>
-<p>[ordered]@{</p>
-<p>"networkType" = "VMOTION"</p>
-<p>"subnet" = $NestedESXivMotionNetworkCidr</p>
-<p>"gateway" = $esxivMotionGateway</p>
-<p>"vlanId" = "0"</p>
-<p>"mtu" = "9000"</p>
-<p>"portGroupKey" = "vcf-m01-cl01-vds01-pg-vmotion"</p>
-<p>"association" = "vcf-m01-dc01"</p>
-<p>"includeIpAddressRanges" = @(@{"startIpAddress" = $esxivMotionStart;"endIpAddress" = $esxivMotionEnd})</p>
-<p>"standbyUplinks" = @()</p>
-<p>"activeUplinks" = @("uplink1","uplink2")</p>
-<p>}</p>
-<p>[ordered]@{</p>
-<p>"networkType" = "VSAN"</p>
-<p>"subnet" = $NestedESXivSANNetworkCidr</p>
-<p>"gateway"= $esxivSANGateway</p>
-<p>"vlanId" = "0"</p>
-<p>"mtu" = "9000"</p>
-<p>"portGroupKey" = "vcf-m01-cl01-vds01-pg-vsan"</p>
-<p>"includeIpAddressRanges" = @(@{"startIpAddress" = $esxivSANStart;"endIpAddress" = $esxivSANEnd})</p>
-<p>"standbyUplinks" = @()</p>
-<p>"activeUplinks" = @("uplink1","uplink2")</p>
-<p>}</p>
-<p>)</p>
-<p>"nsxtSpec" = [ordered]@{</p>
-<p>"nsxtManagerSize" = $NSXManagerSize</p>
-<p>"nsxtManagers" = @(@{"hostname" = $NSXManagerNode1Hostname;"ip" = $NSXManagerNode1IP})</p>
-<p>"rootNsxtManagerPassword" = $NSXRootPassword</p>
-<p>"nsxtAdminPassword" = $NSXAdminPassword</p>
-<p>"nsxtAuditPassword" = $NSXAuditPassword</p>
-<p>"rootLoginEnabledForNsxtManager" = $true</p>
-<p>"sshEnabledForNsxtManager" = $true</p>
-<p>"overLayTransportZone" = [ordered]@{</p>
-<p>"zoneName" = "vcf-m01-tz-overlay01"</p>
-<p>"networkName" = "netName-overlay"</p>
-<p>}</p>
-<p>"vlanTransportZone" = [ordered]@{</p>
-<p>"zoneName" = "vcf-m01-tz-vlan01"</p>
-<p>"networkName" = "netName-vlan"</p>
-<p>}</p>
-<p>"vip" = $NSXManagerVIPIP</p>
-<p>"vipFqdn" = $NSXManagerVIPHostname</p>
-<p>"nsxtLicense" = $NSXLicense</p>
-<p>"transportVlanId" = "2005"</p>
-<p>"ipAddressPoolSpec" = [ordered]@{</p>
-<p>"name" = "vcf-m01-c101-tep01"</p>
-<p>"description" = "ESXi Host Overlay TEP IP Pool"</p>
-<p>"subnets" = @(</p>
-<p>@{</p>
-<p>"ipAddressPoolRanges" = @(@{"start" = $esxiNSXTepStart;"end" = $esxiNSXTepEnd})</p>
-<p>"cidr" = $NestedESXiNSXTepNetworkCidr</p>
-<p>"gateway" = $esxiNSXTepGateway</p>
-<p>}</p>
-<p>)</p>
-<p>}</p>
-<p>}</p>
-<p>"vsanSpec" = [ordered]@{</p>
-<p>"vsanName" = "vsan-1"</p>
-<p>"vsanDedup" = "false"</p>
-<p>"licenseFile" = $VSANLicense</p>
-<p>"datastoreName" = "vcf-m01-cl01-ds-vsan01"</p>
-<p>}</p>
-<p>"dvSwitchVersion" = "7.0.0"</p>
-<p>"dvsSpecs" = @(</p>
-<p>[ordered]@{</p>
-<p>"dvsName" = "vcf-m01-cl01-vds01"</p>
-<p>"vcenterId" = "vcenter-1"</p>
-<p>"vmnics" = @("vmnic0","vmnic1")</p>
-<p>"mtu" = "9000"</p>
-<p>"networks" = @(</p>
-<p>"MANAGEMENT",</p>
-<p>"VMOTION",</p>
-<p>"VSAN"</p>
-<p>)</p>
-<p>"niocSpecs" = @(</p>
-<p>@{"trafficType"="VSAN";"value"="HIGH"}</p>
-<p>@{"trafficType"="VMOTION";"value"="LOW"}</p>
-<p>@{"trafficType"="VDP";"value"="LOW"}</p>
-<p>@{"trafficType"="VIRTUALMACHINE";"value"="HIGH"}</p>
-<p>@{"trafficType"="MANAGEMENT";"value"="NORMAL"}</p>
-<p>@{"trafficType"="NFS";"value"="LOW"}</p>
-<p>@{"trafficType"="HBR";"value"="LOW"}</p>
-<p>@{"trafficType"="FAULTTOLERANCE";"value"="LOW"}</p>
-<p>@{"trafficType"="ISCSI";"value"="LOW"}</p>
-<p>)</p>
-<p>"isUsedByNsxt" = $useNSX</p>
-<p>}</p>
-<p>)</p>
-<p>"clusterSpec" = [ordered]@{</p>
-<p>"clusterName" = "vcf-m01-cl01"</p>
-<p>"vcenterName" = "vcenter-1"</p>
-<p>"clusterEvcMode" = ""</p>
-<p>"hostFailuresToTolerate" = 0</p>
-<p>"vmFolders" = [ordered] @{</p>
-<p>"MANAGEMENT" = "vcf-m01-fd-mgmt"</p>
-<p>"NETWORKING" = "vcf-m01-fd-nsx"</p>
-<p>"EDGENODES" = "vcf-m01-fd-edge"</p>
-<p>}</p>
-<p>"clusterImageEnabled" = $EnableVCLM</p>
-<p>}</p>
-<p>"resourcePoolSpecs" =@(</p>
-<p>[ordered]@{</p>
-<p>"name" = "vcf-m01-cl01-rp-sddc-mgmt"</p>
-<p>"type" = "management"</p>
-<p>"cpuReservationPercentage" = 0</p>
-<p>"cpuLimit" = -1</p>
-<p>"cpuReservationExpandable" = $true</p>
-<p>"cpuSharesLevel" = "normal"</p>
-<p>"cpuSharesValue" = 0</p>
-<p>"memoryReservationMb" = 0</p>
-<p>"memoryLimit" = -1</p>
-<p>"memoryReservationExpandable" = $true</p>
-<p>"memorySharesLevel" = "normal"</p>
-<p>"memorySharesValue" = 0</p>
-<p>}</p>
-<p>[ordered]@{</p>
-<p>"name" = "vcf-m01-cl01-rp-sddc-edge"</p>
-<p>"type" = "network"</p>
-<p>"cpuReservationPercentage" = 0</p>
-<p>"cpuLimit" = -1</p>
-<p>"cpuReservationExpandable" = $true</p>
-<p>"cpuSharesLevel" = "normal"</p>
-<p>"cpuSharesValue" = 0</p>
-<p>"memoryReservationPercentage" = 0</p>
-<p>"memoryLimit" = -1</p>
-<p>"memoryReservationExpandable" = $true</p>
-<p>"memorySharesLevel" = "normal"</p>
-<p>"memorySharesValue" = 0</p>
-<p>}</p>
-<p>[ordered]@{</p>
-<p>"name" = "vcf-m01-cl01-rp-user-edge"</p>
-<p>"type" = "compute"</p>
-<p>"cpuReservationPercentage" = 0</p>
-<p>"cpuLimit" = -1</p>
-<p>"cpuReservationExpandable" = $true</p>
-<p>"cpuSharesLevel" = "normal"</p>
-<p>"cpuSharesValue" = 0</p>
-<p>"memoryReservationPercentage" = 0</p>
-<p>"memoryLimit" = -1</p>
-<p>"memoryReservationExpandable" = $true</p>
-<p>"memorySharesLevel" = "normal"</p>
-<p>"memorySharesValue" = 0</p>
-<p>}</p>
-<p>[ordered]@{</p>
-<p>"name" = "vcf-m01-cl01-rp-user-vm"</p>
-<p>"type" = "compute"</p>
-<p>"cpuReservationPercentage" = 0</p>
-<p>"cpuLimit" = -1</p>
-<p>"cpuReservationExpandable" = $true</p>
-<p>"cpuSharesLevel" = "normal"</p>
-<p>"cpuSharesValue" = 0</p>
-<p>"memoryReservationPercentage" = 0</p>
-<p>"memoryLimit" = -1</p>
-<p>"memoryReservationExpandable" = $true</p>
-<p>"memorySharesLevel" = "normal"</p>
-<p>"memorySharesValue" = 0</p>
-<p>}</p>
-<p>)</p>
-<p>"pscSpecs" = @(</p>
-<p>[ordered]@{</p>
-<p>"pscId" = "psc-1"</p>
-<p>"vcenterId" = "vcenter-1"</p>
-<p>"adminUserSsoPassword" = $VCSASSOPassword</p>
-<p>"pscSsoSpec" = @{"ssoDomain"="vsphere.local"}</p>
-<p>}</p>
-<p>)</p>
-<p>"vcenterSpec" = [ordered]@{</p>
-<p>"vcenterIp" = $VCSAIP</p>
-<p>"vcenterHostname" = $VCSAName</p>
-<p>"vcenterId" = "vcenter-1"</p>
-<p>"licenseFile" = $VCSALicense</p>
-<p>"vmSize" = "tiny"</p>
-<p>"storageSize" = ""</p>
-<p>"rootVcenterPassword" = $VCSARootPassword</p>
-<p>}</p>
-<p>"hostSpecs" = $hostSpecs</p>
-<p>"excludedComponents" = @("NSX-V", "AVN", "EBGP")</p>
-<p>}</p>
-<br>
-<p>if($SeparateNSXSwitch) {</p>
-<p>$sepNsxSwitchSpec = [ordered]@{</p>
-<p>"dvsName" = "vcf-m01-nsx-vds01"</p>
-<p>"vcenterId" = "vcenter-1"</p>
-<p>"vmnics" = @("vmnic2","vmnic3")</p>
-<p>"mtu" = 9000</p>
-<p>"networks" = @()</p>
-<p>"isUsedByNsxt" = $true</p>
-<br>
-<p>}</p>
-<p>$vcfConfig.dvsSpecs+=$sepNsxSwitchSpec</p>
-<p>}</p>
-<br>
-<h1>License Later feature only applicable for VCF 5.1.1 and later</h1>
-<p>if($VCFVersion -ge "5.1.1") {</p>
-<p>if($VCSALicense -eq "" -and $ESXILicense -eq "" -and $VSANLicense -eq "" -and $NSXLicense -eq "") {</p>
-<p>$EvaluationMode = $true</p>
-<p>} else {</p>
-<p>$EvaluationMode = $false</p>
-<p>}</p>
-<p>$vcfConfig.add("deployWithoutLicenseKeys",$EvaluationMode)</p>
-<p>}</p>
-<br>
-<p>New-LogEvent "Generating Cloud Builder VCF Management Domain configuration deployment file $VCFManagementDomainJSONFile"</p>
-<p>$vcfConfig | ConvertTo-Json -Depth 20 | Out-File -LiteralPath $VCFManagementDomainJSONFile</p>
-<p>}</p>
-<br>
-<h1>Make Config Change to Cloud Builder to work with only one Host</h1>
-<p>$vm = Get-VM -Name $CloudbuilderVMHostname</p>
-<p>$o = Invoke-VMScript -VM $vm -ScriptText 'echo "bringup.mgmt.cluster.minimum.size=1" >> /etc/vmware/vcf/bringup/application.properties' -GuestUser "root" -GuestPassword $CloudbuilderRootPassword -ScriptType Bash</p>
-<p>$o = Invoke-VMScript -VM $vm -ScriptText 'cat /etc/vmware/vcf/bringup/application.properties' -GuestUser "root" -GuestPassword $CloudbuilderRootPassword -ScriptType Bash</p>
-<p>$o = Invoke-VMScript -VM $vm -ScriptText 'systemctl restart vcf-bringup.service' -GuestUser "root" -GuestPassword $CloudbuilderRootPassword -ScriptType Bash</p>
-<br>
-<p>$o = Invoke-VMScript -VM $VM -ScriptText "systemctl status vcf-bringup.service" -GuestUser "root" -GuestPassword $CloudbuilderRootPassword -ScriptType Bash</p>
-<h1>Extract the service Status</h1>
-<p>$outPut = ($o.ScriptOutput -split "`n")[2] -replace 'since.*', '' -replace '^\s+', ''</p>
-<p>Write-Host "VCF Bringup Service:"$outPut</p>
-<br>
-<br>
-<h1>Disconnect from vCenter</h1>
-<p>if($deployNestedESXiVMsForMgmt -eq 1 -or $deployNestedESXiVMsForWLD -eq 1 -or $deployCloudBuilder -eq 1) {</p>
-<p>New-LogEvent "Disconnecting from $VIServer ..."</p>
-<p>Disconnect-VIServer -Server $viConnection -Confirm:$false</p>
-<p>}</p>
-<br>
-<br>
-<p>$EndTime = Get-Date</p>
-<p>$duration = [math]::Round((New-TimeSpan -Start $StartTime -End $EndTime).TotalMinutes,2)</p>
-<br>
-<p>New-LogEvent "VCF Lab Deployment Complete!"</p>
-<p>New-LogEvent "StartTime: $StartTime"</p>
-<p>New-LogEvent "EndTime: $EndTime"</p>
-<p>New-LogEvent "Duration: $duration minutes to Deploy CloudBuilder"</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code># Script to create Cloud Builder VM and json file
+# Author: Dale Hassinger
+# Based on Script by: William Lam and some other examples I saw on vCommunity sites
+
+
+# vCenter Server used to deploy VMware Cloud Foundation Lab
+$VIServer   = &quot;192.168.6.100&quot;
+$VIUsername = &quot;administrator@vcrocs.local&quot;
+$VIPassword = &quot;VMware1!&quot;
+
+
+# Full Path to Cloud Builder OVA
+#$CloudBuilderOVA = &quot;/Users/dalehassinger/Downloads/VMware-Cloud-Builder-5.2.0.0-24108943_OVF10.ova&quot;
+$CloudBuilderOVA = &quot;/Users/dalehassinger/Downloads/VMware-Cloud-Builder-5.2.1.0-24307856_OVF10.ova&quot;
+
+
+# VCF Licenses or leave blank for evaluation mode (requires VCF 5.1.1 or later)
+$VCSALicense = &quot;&quot;
+$ESXILicense = &quot;&quot;
+$VSANLicense = &quot;&quot;
+$NSXLicense  = &quot;&quot;
+
+
+# VCF Configurations
+$VCFManagementDomainPoolName  = &quot;vcf-m01-rp01&quot;
+$VCFManagementDomainJSONFile  = &quot;vcf-mgmt.json&quot;
+
+
+# Cloud Builder Configurations
+$CloudbuilderVMHostname    = &quot;vcf-m01-cb01&quot;
+$CloudbuilderFQDN          = &quot;vcf-m01-cb01.vcrocs.local&quot;
+$CloudbuilderIP            = &quot;192.168.4.180&quot;
+$CloudbuilderAdminUsername = &quot;admin&quot;
+$CloudbuilderAdminPassword = &quot;VMw@re123!VMw@re123!&quot;
+$CloudbuilderRootPassword  = &quot;VMw@re123!VMw@re123!&quot;
+
+
+# SDDC Manager Configuration
+$SddcManagerHostname      = &quot;vcf-m01-sddcm01&quot;
+$SddcManagerIP            = &quot;192.168.4.181&quot;
+$SddcManagerVcfPassword   = &quot;VMware1!VMware1!&quot;
+$SddcManagerRootPassword  = &quot;VMware1!VMware1!&quot;
+$SddcManagerRestPassword  = &quot;VMware1!VMware1!&quot;
+$SddcManagerLocalPassword = &quot;VMware1!VMware1!&quot;
+
+
+$NestedESXiHostnameToIPsForManagementDomain = @{
+    &quot;VCF-DDC-ESX179&quot; = &quot;192.168.4.179&quot;
+}
+
+
+# Nested ESXi VM Resources for Management Domain
+$NestedESXiMGMTvCPU          = &quot;12&quot;
+$NestedESXiMGMTvMEM          = &quot;78&quot; #GB
+$NestedESXiMGMTCachingvDisk  = &quot;4&quot; #GB
+$NestedESXiMGMTCapacityvDisk = &quot;500&quot; #GB
+
+
+# Nested ESXi VM Resources for Workload Domain
+$NestedESXiWLDvCPU          = &quot;8&quot;
+$NestedESXiWLDvMEM          = &quot;36&quot; #GB
+$NestedESXiWLDCachingvDisk  = &quot;4&quot; #GB
+$NestedESXiWLDCapacityvDisk = &quot;200&quot; #GB
+
+
+# ESXi Network Configuration
+$NestedESXiManagementNetworkCidr = &quot;192.168.4.0/22&quot; # should match $VMNetwork configuration
+$NestedESXivMotionNetworkCidr    = &quot;192.168.8.0/24&quot;
+$NestedESXivSANNetworkCidr       = &quot;192.168.9.0/24&quot;
+$NestedESXiNSXTepNetworkCidr     = &quot;192.168.10.0/24&quot;
+
+
+# vCenter Configuration
+$VCSAName         = &quot;vcf-m01-vc01&quot;
+$VCSAIP           = &quot;192.168.4.182&quot;
+$VCSARootPassword = &quot;VMware1!&quot;
+$VCSASSOPassword  = &quot;VMware1!&quot;
+$EnableVCLM       = $true
+
+
+# NSX Configuration
+$NSXManagerSize          = &quot;medium&quot;
+$NSXManagerVIPHostname   = &quot;vcf-m01-nsx01&quot;
+$NSXManagerVIPIP         = &quot;192.168.4.183&quot;
+$NSXManagerNode1Hostname = &quot;vcf-m01-nsx01a&quot;
+$NSXManagerNode1IP       = &quot;192.168.4.184&quot;
+$NSXRootPassword         = &quot;VMware1!VMware1!&quot;
+$NSXAdminPassword        = &quot;VMware1!VMware1!&quot;
+$NSXAuditPassword        = &quot;VMware1!VMware1!&quot;
+
+
+# General Deployment Configuration for Nested ESXi &amp; Cloud Builder VM
+# This is information from you current vCenter lab environment
+$VMDatacenter = &quot;Datacenter-DB-01&quot;
+$VMCluster    = &quot;VCF_LAB&quot;
+$VMNetwork    = &quot;VMs&quot;
+$VMDatastore  = &quot;ESX-04-2TB&quot;
+$VMNetmask    = &quot;255.255.252.0&quot;
+$VMGateway    = &quot;192.168.4.1&quot;
+$VMDNS        = &quot;192.168.6.1&quot;
+$VMNTP        = &quot;time.google.com&quot;
+$VMPassword   = &quot;VMware1!&quot;
+$VMDomain     = &quot;vcrocs.local&quot;
+$VMSyslog     = &quot;192.168.6.94&quot;
+$VMFolder     = &quot;VCF-VMs&quot;
+
+
+#### DO NOT EDIT BEYOND HERE ####
+
+$verboseLogFile    = &quot;vcf-lab-deployment.log&quot;
+$random_string     = -join ((65..90) + (97..122) | Get-Random -Count 8 | % {[char]$_})
+$VAppName          = &quot;Nested-VCF-Lab-$random_string&quot;
+$SeparateNSXSwitch = $false
+$VCFVersion        = &quot;&quot;
+
+$preCheck                   = 1
+$confirmDeployment          = 1
+$deployNestedESXiVMsForMgmt = 1
+
+# WLD Setup
+$deployNestedESXiVMsForWLD     = 0
+$deployCloudBuilder            = 1
+$moveVMsIntovApp               = 1
+$generateMgmJson               = 1
+
+
+
+$StartTime = Get-Date
+
+Function New-LogEvent {
+    param(
+    [Parameter(Mandatory=$true)][String]$message,
+    [Parameter(Mandatory=$false)][String]$color=&quot;green&quot;
+    )
+
+    $timeStamp = Get-Date -Format &quot;MM-dd-yyyy_hh:mm:ss&quot;
+
+    Write-Host -NoNewline -ForegroundColor White &quot;[$timestamp]&quot;
+    Write-Host -ForegroundColor $color &quot; $message&quot;
+    $logMessage = &quot;[$timeStamp] $message&quot;
+    $logMessage | Out-File -Append -LiteralPath $verboseLogFile
+} # End Function
+
+
+
+if($preCheck -eq 1) {
+    # Detect VCF version based on Cloud Builder OVA (support is 5.1.0+)
+    if($CloudBuilderOVA -match &quot;5.2.0&quot; -or $CloudBuilderOVA -match &quot;5.2.1&quot;) {
+        $VCFVersion = &quot;5.2.0&quot;
+    } elseif($CloudBuilderOVA -match &quot;5.1.1&quot;) {
+        $VCFVersion = &quot;5.1.1&quot;
+    } elseif($CloudBuilderOVA -match &quot;5.1.0&quot;) {
+        $VCFVersion = &quot;5.1.0&quot;
+    } else {
+        $VCFVersion = $null
+    }
+
+    if($VCFVersion -eq $null) {
+        Write-Host -ForegroundColor Red &quot;`nOnly VCF 5.1.0+ is currently supported ...`n&quot;
+        exit
+    }
+
+    if($VCFVersion -ge &quot;5.2.0&quot;) {
+        write-host &quot;here&quot;
+        if( $CloudbuilderAdminPassword.ToCharArray().count -lt 15 -or $CloudbuilderRootPassword.ToCharArray().count -lt 15) {
+            Write-Host -ForegroundColor Red &quot;`nCloud Builder passwords must be 15 characters or longer ...`n&quot;
+            exit
+        }
+    }
+
+    if(!(Test-Path $NestedESXiApplianceOVA)) {
+        Write-Host -ForegroundColor Red &quot;`nUnable to find $NestedESXiApplianceOVA ...`n&quot;
+        exit
+    }
+
+    if(!(Test-Path $CloudBuilderOVA)) {
+        Write-Host -ForegroundColor Red &quot;`nUnable to find $CloudBuilderOVA ...`n&quot;
+        exit
+    }
+
+    if($PSVersionTable.PSEdition -ne &quot;Core&quot;) {
+        Write-Host -ForegroundColor Red &quot;`tPowerShell Core was not detected, please install that before continuing ... `n&quot;
+        exit
+    }
+}
+
+if($confirmDeployment -eq 1) {
+    Write-Host -ForegroundColor Magenta &quot;`nPlease confirm the following configuration will be deployed:`n&quot;
+
+    Write-Host -ForegroundColor Yellow &quot;---- VCF Automated Lab Deployment Configuration ---- &quot;
+    Write-Host -NoNewline -ForegroundColor Green &quot;VMware Cloud Foundation Version: &quot;
+    Write-Host -ForegroundColor White $VCFVersion
+    Write-Host -NoNewline -ForegroundColor Green &quot;Nested ESXi Image Path: &quot;
+    Write-Host -ForegroundColor White $NestedESXiApplianceOVA
+    Write-Host -NoNewline -ForegroundColor Green &quot;Cloud Builder Image Path: &quot;
+    Write-Host -ForegroundColor White $CloudBuilderOVA
+
+    Write-Host -ForegroundColor Yellow &quot;`n---- vCenter Server Deployment Target Configuration ----&quot;
+    Write-Host -NoNewline -ForegroundColor Green &quot;vCenter Server Address: &quot;
+    Write-Host -ForegroundColor White $VIServer
+    Write-Host -NoNewline -ForegroundColor Green &quot;VM Network: &quot;
+    Write-Host -ForegroundColor White $VMNetwork
+
+    Write-Host -NoNewline -ForegroundColor Green &quot;VM Storage: &quot;
+    Write-Host -ForegroundColor White $VMDatastore
+    Write-Host -NoNewline -ForegroundColor Green &quot;VM Cluster: &quot;
+    Write-Host -ForegroundColor White $VMCluster
+    Write-Host -NoNewline -ForegroundColor Green &quot;VM vApp: &quot;
+    Write-Host -ForegroundColor White $VAppName
+
+    Write-Host -ForegroundColor Yellow &quot;`n---- Cloud Builder Configuration ----&quot;
+    Write-Host -NoNewline -ForegroundColor Green &quot;Hostname: &quot;
+    Write-Host -ForegroundColor White $CloudbuilderVMHostname
+    Write-Host -NoNewline -ForegroundColor Green &quot;IP Address: &quot;
+    Write-Host -ForegroundColor White $CloudbuilderIP
+
+    if($deployNestedESXiVMsForMgmt -eq 1) {
+        Write-Host -ForegroundColor Yellow &quot;`n---- vESXi Configuration for VCF Management Domain ----&quot;
+        Write-Host -NoNewline -ForegroundColor Green &quot;# of Nested ESXi VMs: &quot;
+        Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForManagementDomain.count
+        Write-Host -NoNewline -ForegroundColor Green &quot;IP Address(s): &quot;
+        Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForManagementDomain.Values
+        Write-Host -NoNewline -ForegroundColor Green &quot;vCPU: &quot;
+        Write-Host -ForegroundColor White $NestedESXiMGMTvCPU
+        Write-Host -NoNewline -ForegroundColor Green &quot;vMEM: &quot;
+        Write-Host -ForegroundColor White &quot;$NestedESXiMGMTvMEM GB&quot;
+        Write-Host -NoNewline -ForegroundColor Green &quot;Caching VMDK: &quot;
+        Write-Host -ForegroundColor White &quot;$NestedESXiMGMTCachingvDisk GB&quot;
+        Write-Host -NoNewline -ForegroundColor Green &quot;Capacity VMDK: &quot;
+        Write-Host -ForegroundColor White &quot;$NestedESXiMGMTCapacityvDisk GB&quot;
+    } # End If
+
+    if($deployNestedESXiVMsForWLD -eq 1) {
+        Write-Host -ForegroundColor Yellow &quot;`n---- vESXi Configuration for VCF Workload Domain ----&quot;
+        Write-Host -NoNewline -ForegroundColor Green &quot;# of Nested ESXi VMs: &quot;
+        Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForWorkloadDomain.count
+        Write-Host -NoNewline -ForegroundColor Green &quot;IP Address(s): &quot;
+        Write-Host -ForegroundColor White $NestedESXiHostnameToIPsForWorkloadDomain.Values
+        Write-Host -NoNewline -ForegroundColor Green &quot;vCPU: &quot;
+        Write-Host -ForegroundColor White $NestedESXiWLDvCPU
+        Write-Host -NoNewline -ForegroundColor Green &quot;vMEM: &quot;
+        Write-Host -ForegroundColor White &quot;$NestedESXiWLDvMEM GB&quot;
+        Write-Host -NoNewline -ForegroundColor Green &quot;Caching VMDK: &quot;
+        Write-Host -ForegroundColor White &quot;$NestedESXiWLDCachingvDisk GB&quot;
+        Write-Host -NoNewline -ForegroundColor Green &quot;Capacity VMDK: &quot;
+        Write-Host -ForegroundColor White &quot;$NestedESXiWLDCapacityvDisk GB&quot;
+    } # End If
+
+    Write-Host -NoNewline -ForegroundColor Green &quot;`nNetmask &quot;
+    Write-Host -ForegroundColor White $VMNetmask
+    Write-Host -NoNewline -ForegroundColor Green &quot;Gateway: &quot;
+    Write-Host -ForegroundColor White $VMGateway
+    Write-Host -NoNewline -ForegroundColor Green &quot;DNS: &quot;
+    Write-Host -ForegroundColor White $VMDNS
+    Write-Host -NoNewline -ForegroundColor Green &quot;NTP: &quot;
+    Write-Host -ForegroundColor White $VMNTP
+    Write-Host -NoNewline -ForegroundColor Green &quot;Syslog: &quot;
+    Write-Host -ForegroundColor White $VMSyslog
+
+} # End If
+
+
+if($deployNestedESXiVMsForMgmt -eq 1 -or $deployNestedESXiVMsForWLD -eq 1 -or $deployCloudBuilder -eq 1 -or $moveVMsIntovApp -eq 1) {
+    New-LogEvent &quot;Connecting to Management vCenter Server $VIServer ...&quot;
+    $viConnection = Connect-VIServer $VIServer -User $VIUsername -Password $VIPassword -WarningAction SilentlyContinue -Protocol https -Force
+
+    $datastore = Get-Datastore -Server $viConnection -Name $VMDatastore | Select -First 1
+    $cluster = Get-Cluster -Server $viConnection -Name $VMCluster
+    $vmhost = $cluster | Get-VMHost | Get-Random -Count 1
+} # End if
+
+
+# Start Create Cloud Builder VM
+if($deployCloudBuilder -eq 1) {
+    $ovfconfig = Get-OvfConfiguration $CloudBuilderOVA
+
+    $networkMapLabel = ($ovfconfig.ToHashTable().keys | where {$_ -Match &quot;NetworkMapping&quot;}).replace(&quot;NetworkMapping.&quot;,&quot;&quot;).replace(&quot;-&quot;,&quot;_&quot;).replace(&quot; &quot;,&quot;_&quot;)
+    $ovfconfig.NetworkMapping.$networkMapLabel.value = $VMNetwork
+    $ovfconfig.common.guestinfo.hostname.value = $CloudbuilderFQDN
+    $ovfconfig.common.guestinfo.ip0.value = $CloudbuilderIP
+    $ovfconfig.common.guestinfo.netmask0.value = $VMNetmask
+    $ovfconfig.common.guestinfo.gateway.value = $VMGateway
+    $ovfconfig.common.guestinfo.DNS.value = $VMDNS
+    $ovfconfig.common.guestinfo.domain.value = $VMDomain
+    $ovfconfig.common.guestinfo.searchpath.value = $VMDomain
+    $ovfconfig.common.guestinfo.ntp.value = $VMNTP
+    $ovfconfig.common.guestinfo.ADMIN_USERNAME.value = $CloudbuilderAdminUsername
+    $ovfconfig.common.guestinfo.ADMIN_PASSWORD.value = $CloudbuilderAdminPassword
+    $ovfconfig.common.guestinfo.ROOT_PASSWORD.value = $CloudbuilderRootPassword
+
+    New-LogEvent &quot;Deploying Cloud Builder VM $CloudbuilderVMHostname ...&quot;
+    $vm = Import-VApp -Source $CloudBuilderOVA -OvfConfiguration $ovfconfig -Name $CloudbuilderVMHostname -Location $VMCluster -VMHost $vmhost -Datastore $datastore -DiskStorageFormat thin -Force
+
+    New-LogEvent &quot;Powering On $CloudbuilderVMHostname ...&quot;
+    $vm | Start-Vm -RunAsync | Out-Null
+}
+
+
+# Move VMs into vApp. Keeps all the VCF VMs together.
+if($moveVMsIntovApp -eq 1) {
+    # Check whether DRS is enabled as that is required to create vApp
+    if((Get-Cluster -Server $viConnection $cluster).DrsEnabled) {
+        New-LogEvent &quot;Creating vApp $VAppName ...&quot;
+        $rp = Get-ResourcePool -Name Resources -Location $cluster
+        $VApp = New-VApp -Name $VAppName -Server $viConnection -Location $cluster
+
+        if(-Not (Get-Folder $VMFolder -ErrorAction Ignore)) {
+            New-LogEvent &quot;Creating VM Folder $VMFolder ...&quot;
+            $folder = New-Folder -Name $VMFolder -Server $viConnection -Location (Get-Datacenter $VMDatacenter | Get-Folder vm)
+        }
+
+        if($deployNestedESXiVMsForMgmt -eq 1) {
+            New-LogEvent &quot;Moving Nested ESXi VMs into $VAppName vApp ...&quot;
+            $NestedESXiHostnameToIPsForManagementDomain.GetEnumerator() | Sort-Object -Property Value | Foreach-Object {
+                $vm = Get-VM -Name $_.Key -Server $viConnection -Location $cluster | where{$_.ResourcePool.Id -eq $rp.Id}
+                Move-VM -VM $vm -Server $viConnection -Destination $VApp -Confirm:$false | Out-File -Append -LiteralPath $verboseLogFile
+            }
+        }
+
+        if($deployNestedESXiVMsForWLD -eq 1) {
+            New-LogEvent &quot;Moving Nested ESXi VMs into $VAppName vApp ...&quot;
+            $NestedESXiHostnameToIPsForWorkloadDomain.GetEnumerator() | Sort-Object -Property Value | Foreach-Object {
+                $vm = Get-VM -Name $_.Key -Server $viConnection -Location $cluster | where{$_.ResourcePool.Id -eq $rp.Id}
+                Move-VM -VM $vm -Server $viConnection -Destination $VApp -Confirm:$false | Out-File -Append -LiteralPath $verboseLogFile
+            }
+        }
+
+        if($deployCloudBuilder -eq 1) {
+            $cloudBuilderVM = Get-VM -Name $CloudbuilderVMHostname -Server $viConnection -Location $cluster | where{$_.ResourcePool.Id -eq $rp.Id}
+            New-LogEvent &quot;Moving $CloudbuilderVMHostname into $VAppName vApp ...&quot;
+            Move-VM -VM $cloudBuilderVM -Server $viConnection -Destination $VApp -Confirm:$false | Out-File -Append -LiteralPath $verboseLogFile
+        }
+
+        New-LogEvent &quot;Moving $VAppName to VM Folder $VMFolder ...&quot;
+        Move-VApp -Server $viConnection $VAppName -Destination (Get-Folder -Server $viConnection $VMFolder) | Out-File -Append -LiteralPath $verboseLogFile
+    } else {
+        New-LogEvent &quot;vApp $VAppName will NOT be created as DRS is NOT enabled on vSphere Cluster ${cluster} ...&quot;
+    }
+}
+
+
+
+
+# Create Cloud Builder json file used to deploy VCF
+
+if($generateMgmJson -eq 1) {
+    if($SeparateNSXSwitch) { $useNSX = &quot;false&quot; } else { $useNSX = &quot;true&quot; }
+
+    $esxivMotionNetwork = $NestedESXivMotionNetworkCidr.split(&quot;/&quot;)[0]
+    $esxivMotionNetworkOctects = $esxivMotionNetwork.split(&quot;.&quot;)
+    $esxivMotionGateway = ($esxivMotionNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.1&quot;
+    $esxivMotionStart = ($esxivMotionNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.101&quot;
+    $esxivMotionEnd = ($esxivMotionNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.118&quot;
+
+    $esxivSANNetwork = $NestedESXivSANNetworkCidr.split(&quot;/&quot;)[0]
+    $esxivSANNetworkOctects = $esxivSANNetwork.split(&quot;.&quot;)
+    $esxivSANGateway = ($esxivSANNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.1&quot;
+    $esxivSANStart = ($esxivSANNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.101&quot;
+    $esxivSANEnd = ($esxivSANNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.118&quot;
+
+    $esxiNSXTepNetwork = $NestedESXiNSXTepNetworkCidr.split(&quot;/&quot;)[0]
+    $esxiNSXTepNetworkOctects = $esxiNSXTepNetwork.split(&quot;.&quot;)
+    $esxiNSXTepGateway = ($esxiNSXTepNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.1&quot;
+    $esxiNSXTepStart = ($esxiNSXTepNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.101&quot;
+    $esxiNSXTepEnd = ($esxiNSXTepNetworkOctects[0..2] -join &#39;.&#39;) + &quot;.118&quot;
+
+    $hostSpecs = @()
+    $count = 1
+    $NestedESXiHostnameToIPsForManagementDomain.GetEnumerator() | Sort-Object -Property Value | Foreach-Object {
+        $VMName = $_.Key
+        $VMIPAddress = $_.Value
+
+        $hostSpec = [ordered]@{
+            &quot;association&quot; = &quot;vcf-m01-dc01&quot;
+            &quot;ipAddressPrivate&quot; = [ordered]@{
+                &quot;ipAddress&quot; = $VMIPAddress
+                &quot;cidr&quot; = $NestedESXiManagementNetworkCidr
+                &quot;gateway&quot; = $VMGateway
+            }
+            &quot;hostname&quot; = $VMName
+            &quot;credentials&quot; = [ordered]@{
+                &quot;username&quot; = &quot;root&quot;
+                &quot;password&quot; = $VMPassword
+            }
+            &quot;sshThumbprint&quot; = &quot;SHA256:DUMMY_VALUE&quot;
+            &quot;sslThumbprint&quot; = &quot;SHA25_DUMMY_VALUE&quot;
+            &quot;vSwitch&quot; = &quot;vSwitch0&quot;
+            &quot;serverId&quot; = &quot;host-$count&quot;
+        }
+        $hostSpecs+=$hostSpec
+        $count++
+    }
+
+    $vcfConfig = [ordered]@{
+        &quot;subscriptionLicensing&quot; = $false
+        &quot;skipEsxThumbprintValidation&quot; = $true
+        &quot;managementPoolName&quot; = $VCFManagementDomainPoolName
+        &quot;sddcId&quot; = &quot;vcf-m01&quot;
+        &quot;taskName&quot; = &quot;workflowconfig/workflowspec-ems.json&quot;
+        &quot;esxLicense&quot; = &quot;$ESXILicense&quot;
+        &quot;ceipEnabled&quot; = $true
+        &quot;ntpServers&quot; = @($VMNTP)
+        &quot;dnsSpec&quot; = [ordered]@{
+            &quot;subdomain&quot; = $VMDomain
+            &quot;domain&quot; = $VMDomain
+            &quot;nameserver&quot; = $VMDNS
+        }
+        &quot;sddcManagerSpec&quot; = [ordered]@{
+            &quot;ipAddress&quot; = $SddcManagerIP
+            &quot;netmask&quot; = $VMNetmask
+            &quot;hostname&quot; = $SddcManagerHostname
+            &quot;localUserPassword&quot; = &quot;$SddcManagerLocalPassword&quot;
+            &quot;vcenterId&quot; = &quot;vcenter-1&quot;
+            &quot;secondUserCredentials&quot; = [ordered]@{
+                &quot;username&quot; = &quot;vcf&quot;
+                &quot;password&quot; = $SddcManagerVcfPassword
+            }
+            &quot;rootUserCredentials&quot; = [ordered]@{
+                &quot;username&quot; = &quot;root&quot;
+                &quot;password&quot; = $SddcManagerRootPassword
+            }
+            &quot;restApiCredentials&quot; = [ordered]@{
+                &quot;username&quot; = &quot;admin&quot;
+                &quot;password&quot; = $SddcManagerRestPassword
+            }
+        }
+        &quot;networkSpecs&quot; = @(
+            [ordered]@{
+                &quot;networkType&quot; = &quot;MANAGEMENT&quot;
+                &quot;subnet&quot; = $NestedESXiManagementNetworkCidr
+                &quot;gateway&quot; = $VMGateway
+                &quot;vlanId&quot; = &quot;0&quot;
+                &quot;mtu&quot; = &quot;1500&quot;
+                &quot;portGroupKey&quot; = &quot;vcf-m01-cl01-vds01-pg-mgmt&quot;
+                &quot;standbyUplinks&quot; = @()
+                &quot;activeUplinks&quot; = @(&quot;uplink1&quot;,&quot;uplink2&quot;)
+            }
+            [ordered]@{
+                &quot;networkType&quot; = &quot;VMOTION&quot;
+                &quot;subnet&quot; = $NestedESXivMotionNetworkCidr
+                &quot;gateway&quot; = $esxivMotionGateway
+                &quot;vlanId&quot; = &quot;0&quot;
+                &quot;mtu&quot; = &quot;9000&quot;
+                &quot;portGroupKey&quot; = &quot;vcf-m01-cl01-vds01-pg-vmotion&quot;
+                &quot;association&quot; = &quot;vcf-m01-dc01&quot;
+                &quot;includeIpAddressRanges&quot; = @(@{&quot;startIpAddress&quot; = $esxivMotionStart;&quot;endIpAddress&quot; = $esxivMotionEnd})
+                &quot;standbyUplinks&quot; = @()
+                &quot;activeUplinks&quot; = @(&quot;uplink1&quot;,&quot;uplink2&quot;)
+            }
+            [ordered]@{
+                &quot;networkType&quot; = &quot;VSAN&quot;
+                &quot;subnet&quot; = $NestedESXivSANNetworkCidr
+                &quot;gateway&quot;= $esxivSANGateway
+                &quot;vlanId&quot; = &quot;0&quot;
+                &quot;mtu&quot; = &quot;9000&quot;
+                &quot;portGroupKey&quot; = &quot;vcf-m01-cl01-vds01-pg-vsan&quot;
+                &quot;includeIpAddressRanges&quot; = @(@{&quot;startIpAddress&quot; = $esxivSANStart;&quot;endIpAddress&quot; = $esxivSANEnd})
+                &quot;standbyUplinks&quot; = @()
+                &quot;activeUplinks&quot; = @(&quot;uplink1&quot;,&quot;uplink2&quot;)
+            }
+        )
+        &quot;nsxtSpec&quot; = [ordered]@{
+            &quot;nsxtManagerSize&quot; = $NSXManagerSize
+            &quot;nsxtManagers&quot; = @(@{&quot;hostname&quot; = $NSXManagerNode1Hostname;&quot;ip&quot; = $NSXManagerNode1IP})
+            &quot;rootNsxtManagerPassword&quot; = $NSXRootPassword
+            &quot;nsxtAdminPassword&quot; = $NSXAdminPassword
+            &quot;nsxtAuditPassword&quot; = $NSXAuditPassword
+            &quot;rootLoginEnabledForNsxtManager&quot; = $true
+            &quot;sshEnabledForNsxtManager&quot; = $true
+            &quot;overLayTransportZone&quot; = [ordered]@{
+                &quot;zoneName&quot; = &quot;vcf-m01-tz-overlay01&quot;
+                &quot;networkName&quot; = &quot;netName-overlay&quot;
+            }
+            &quot;vlanTransportZone&quot; = [ordered]@{
+                &quot;zoneName&quot; = &quot;vcf-m01-tz-vlan01&quot;
+                &quot;networkName&quot; = &quot;netName-vlan&quot;
+            }
+            &quot;vip&quot; = $NSXManagerVIPIP
+            &quot;vipFqdn&quot; = $NSXManagerVIPHostname
+            &quot;nsxtLicense&quot; = $NSXLicense
+            &quot;transportVlanId&quot; = &quot;2005&quot;
+            &quot;ipAddressPoolSpec&quot; = [ordered]@{
+                &quot;name&quot; = &quot;vcf-m01-c101-tep01&quot;
+                &quot;description&quot; = &quot;ESXi Host Overlay TEP IP Pool&quot;
+                &quot;subnets&quot; = @(
+                    @{
+                        &quot;ipAddressPoolRanges&quot; = @(@{&quot;start&quot; = $esxiNSXTepStart;&quot;end&quot; = $esxiNSXTepEnd})
+                        &quot;cidr&quot; = $NestedESXiNSXTepNetworkCidr
+                        &quot;gateway&quot; = $esxiNSXTepGateway
+                    }
+                )
+            }
+        }
+        &quot;vsanSpec&quot; = [ordered]@{
+            &quot;vsanName&quot; = &quot;vsan-1&quot;
+            &quot;vsanDedup&quot; = &quot;false&quot;
+            &quot;licenseFile&quot; = $VSANLicense
+            &quot;datastoreName&quot; = &quot;vcf-m01-cl01-ds-vsan01&quot;
+        }
+        &quot;dvSwitchVersion&quot; = &quot;7.0.0&quot;
+        &quot;dvsSpecs&quot; = @(
+            [ordered]@{
+                &quot;dvsName&quot; = &quot;vcf-m01-cl01-vds01&quot;
+                &quot;vcenterId&quot; = &quot;vcenter-1&quot;
+                &quot;vmnics&quot; = @(&quot;vmnic0&quot;,&quot;vmnic1&quot;)
+                &quot;mtu&quot; = &quot;9000&quot;
+                &quot;networks&quot; = @(
+                    &quot;MANAGEMENT&quot;,
+                    &quot;VMOTION&quot;,
+                    &quot;VSAN&quot;
+                )
+                &quot;niocSpecs&quot; = @(
+                    @{&quot;trafficType&quot;=&quot;VSAN&quot;;&quot;value&quot;=&quot;HIGH&quot;}
+                    @{&quot;trafficType&quot;=&quot;VMOTION&quot;;&quot;value&quot;=&quot;LOW&quot;}
+                    @{&quot;trafficType&quot;=&quot;VDP&quot;;&quot;value&quot;=&quot;LOW&quot;}
+                    @{&quot;trafficType&quot;=&quot;VIRTUALMACHINE&quot;;&quot;value&quot;=&quot;HIGH&quot;}
+                    @{&quot;trafficType&quot;=&quot;MANAGEMENT&quot;;&quot;value&quot;=&quot;NORMAL&quot;}
+                    @{&quot;trafficType&quot;=&quot;NFS&quot;;&quot;value&quot;=&quot;LOW&quot;}
+                    @{&quot;trafficType&quot;=&quot;HBR&quot;;&quot;value&quot;=&quot;LOW&quot;}
+                    @{&quot;trafficType&quot;=&quot;FAULTTOLERANCE&quot;;&quot;value&quot;=&quot;LOW&quot;}
+                    @{&quot;trafficType&quot;=&quot;ISCSI&quot;;&quot;value&quot;=&quot;LOW&quot;}
+                )
+                &quot;isUsedByNsxt&quot; = $useNSX
+            }
+        )
+        &quot;clusterSpec&quot; = [ordered]@{
+            &quot;clusterName&quot; = &quot;vcf-m01-cl01&quot;
+            &quot;vcenterName&quot; = &quot;vcenter-1&quot;
+            &quot;clusterEvcMode&quot; = &quot;&quot;
+            &quot;hostFailuresToTolerate&quot; = 0
+            &quot;vmFolders&quot; = [ordered] @{
+                &quot;MANAGEMENT&quot; = &quot;vcf-m01-fd-mgmt&quot;
+                &quot;NETWORKING&quot; = &quot;vcf-m01-fd-nsx&quot;
+                &quot;EDGENODES&quot; = &quot;vcf-m01-fd-edge&quot;
+            }
+            &quot;clusterImageEnabled&quot; = $EnableVCLM
+        }
+        &quot;resourcePoolSpecs&quot; =@(
+            [ordered]@{
+                &quot;name&quot; = &quot;vcf-m01-cl01-rp-sddc-mgmt&quot;
+                &quot;type&quot; = &quot;management&quot;
+                &quot;cpuReservationPercentage&quot; = 0
+                &quot;cpuLimit&quot; = -1
+                &quot;cpuReservationExpandable&quot; = $true
+                &quot;cpuSharesLevel&quot; = &quot;normal&quot;
+                &quot;cpuSharesValue&quot; = 0
+                &quot;memoryReservationMb&quot; = 0
+                &quot;memoryLimit&quot; = -1
+                &quot;memoryReservationExpandable&quot; = $true
+                &quot;memorySharesLevel&quot; = &quot;normal&quot;
+                &quot;memorySharesValue&quot; = 0
+            }
+            [ordered]@{
+                &quot;name&quot; = &quot;vcf-m01-cl01-rp-sddc-edge&quot;
+                &quot;type&quot; = &quot;network&quot;
+                &quot;cpuReservationPercentage&quot; = 0
+                &quot;cpuLimit&quot; = -1
+                &quot;cpuReservationExpandable&quot; = $true
+                &quot;cpuSharesLevel&quot; = &quot;normal&quot;
+                &quot;cpuSharesValue&quot; = 0
+                &quot;memoryReservationPercentage&quot; = 0
+                &quot;memoryLimit&quot; = -1
+                &quot;memoryReservationExpandable&quot; = $true
+                &quot;memorySharesLevel&quot; = &quot;normal&quot;
+                &quot;memorySharesValue&quot; = 0
+            }
+            [ordered]@{
+                &quot;name&quot; = &quot;vcf-m01-cl01-rp-user-edge&quot;
+                &quot;type&quot; = &quot;compute&quot;
+                &quot;cpuReservationPercentage&quot; = 0
+                &quot;cpuLimit&quot; = -1
+                &quot;cpuReservationExpandable&quot; = $true
+                &quot;cpuSharesLevel&quot; = &quot;normal&quot;
+                &quot;cpuSharesValue&quot; = 0
+                &quot;memoryReservationPercentage&quot; = 0
+                &quot;memoryLimit&quot; = -1
+                &quot;memoryReservationExpandable&quot; = $true
+                &quot;memorySharesLevel&quot; = &quot;normal&quot;
+                &quot;memorySharesValue&quot; = 0
+            }
+            [ordered]@{
+                &quot;name&quot; = &quot;vcf-m01-cl01-rp-user-vm&quot;
+                &quot;type&quot; = &quot;compute&quot;
+                &quot;cpuReservationPercentage&quot; = 0
+                &quot;cpuLimit&quot; = -1
+                &quot;cpuReservationExpandable&quot; = $true
+                &quot;cpuSharesLevel&quot; = &quot;normal&quot;
+                &quot;cpuSharesValue&quot; = 0
+                &quot;memoryReservationPercentage&quot; = 0
+                &quot;memoryLimit&quot; = -1
+                &quot;memoryReservationExpandable&quot; = $true
+                &quot;memorySharesLevel&quot; = &quot;normal&quot;
+                &quot;memorySharesValue&quot; = 0
+            }
+        )
+        &quot;pscSpecs&quot; = @(
+            [ordered]@{
+                &quot;pscId&quot; = &quot;psc-1&quot;
+                &quot;vcenterId&quot; = &quot;vcenter-1&quot;
+                &quot;adminUserSsoPassword&quot; = $VCSASSOPassword
+                &quot;pscSsoSpec&quot; = @{&quot;ssoDomain&quot;=&quot;vsphere.local&quot;}
+            }
+        )
+        &quot;vcenterSpec&quot; = [ordered]@{
+            &quot;vcenterIp&quot; = $VCSAIP
+            &quot;vcenterHostname&quot; = $VCSAName
+            &quot;vcenterId&quot; = &quot;vcenter-1&quot;
+            &quot;licenseFile&quot; = $VCSALicense
+            &quot;vmSize&quot; = &quot;tiny&quot;
+            &quot;storageSize&quot; = &quot;&quot;
+            &quot;rootVcenterPassword&quot; = $VCSARootPassword
+        }
+        &quot;hostSpecs&quot; = $hostSpecs
+        &quot;excludedComponents&quot; = @(&quot;NSX-V&quot;, &quot;AVN&quot;, &quot;EBGP&quot;)
+    }
+
+    if($SeparateNSXSwitch) {
+        $sepNsxSwitchSpec = [ordered]@{
+            &quot;dvsName&quot; = &quot;vcf-m01-nsx-vds01&quot;
+            &quot;vcenterId&quot; = &quot;vcenter-1&quot;
+            &quot;vmnics&quot; = @(&quot;vmnic2&quot;,&quot;vmnic3&quot;)
+            &quot;mtu&quot; = 9000
+            &quot;networks&quot; = @()
+            &quot;isUsedByNsxt&quot; = $true
+
+        }
+        $vcfConfig.dvsSpecs+=$sepNsxSwitchSpec
+    }
+
+    # License Later feature only applicable for VCF 5.1.1 and later
+    if($VCFVersion -ge &quot;5.1.1&quot;) {
+        if($VCSALicense -eq &quot;&quot; -and $ESXILicense -eq &quot;&quot; -and $VSANLicense -eq &quot;&quot; -and $NSXLicense -eq &quot;&quot;) {
+            $EvaluationMode = $true
+        } else {
+            $EvaluationMode = $false
+        }
+        $vcfConfig.add(&quot;deployWithoutLicenseKeys&quot;,$EvaluationMode)
+    }
+
+    New-LogEvent &quot;Generating Cloud Builder VCF Management Domain configuration deployment file $VCFManagementDomainJSONFile&quot;
+    $vcfConfig | ConvertTo-Json -Depth 20 | Out-File -LiteralPath $VCFManagementDomainJSONFile
+}
+
+# Make Config Change to Cloud Builder to work with only one Host
+$vm = Get-VM -Name $CloudbuilderVMHostname
+$o = Invoke-VMScript -VM $vm -ScriptText &#39;echo &quot;bringup.mgmt.cluster.minimum.size=1&quot; &gt;&gt; /etc/vmware/vcf/bringup/application.properties&#39; -GuestUser &quot;root&quot; -GuestPassword $CloudbuilderRootPassword -ScriptType Bash
+$o = Invoke-VMScript -VM $vm -ScriptText &#39;cat /etc/vmware/vcf/bringup/application.properties&#39; -GuestUser &quot;root&quot; -GuestPassword $CloudbuilderRootPassword -ScriptType Bash
+$o = Invoke-VMScript -VM $vm -ScriptText &#39;systemctl restart vcf-bringup.service&#39; -GuestUser &quot;root&quot; -GuestPassword $CloudbuilderRootPassword -ScriptType Bash
+
+$o = Invoke-VMScript -VM $VM -ScriptText &quot;systemctl status vcf-bringup.service&quot; -GuestUser &quot;root&quot; -GuestPassword $CloudbuilderRootPassword -ScriptType Bash
+# Extract the service Status
+$outPut = ($o.ScriptOutput -split &quot;`n&quot;)[2] -replace &#39;since.*&#39;, &#39;&#39; -replace &#39;^\s+&#39;, &#39;&#39;
+Write-Host &quot;VCF Bringup Service:&quot;$outPut
+
+
+# Disconnect from vCenter
+if($deployNestedESXiVMsForMgmt -eq 1 -or $deployNestedESXiVMsForWLD -eq 1 -or $deployCloudBuilder -eq 1) {
+    New-LogEvent &quot;Disconnecting from $VIServer ...&quot;
+    Disconnect-VIServer -Server $viConnection -Confirm:$false
+}
+
+
+$EndTime = Get-Date
+$duration = [math]::Round((New-TimeSpan -Start $StartTime -End $EndTime).TotalMinutes,2)
+
+New-LogEvent &quot;VCF Lab Deployment Complete!&quot;
+New-LogEvent &quot;StartTime: $StartTime&quot;
+New-LogEvent &quot;EndTime: $EndTime&quot;
+New-LogEvent &quot;Duration: $duration minutes to Deploy CloudBuilder&quot;</code></pre>
 <br>
 <hr>
 <br>
+</ul>
 <p>##### Screen Shots:</p>
 <br>
 <p><small>Screen Shot of the Physical Host (MS-01), Capacity and Usage, before any installs:</p>

@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dale Hassinger">
     <link rel="stylesheet" href="style.css">
+    <script src="search-index.js" defer></script>
     <script src="lightbox.js" defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSLC6FHF36"></script>
 <script>
@@ -161,38 +162,34 @@
 <br>
 <hr>
 <br>
-<p>{{< highlight powershell >}}</p>
-<br>
-<p>#The Following code shows how to add a New Drive, bring drive online, initialize and format:</p>
-<br>
-<p>#Connect to vCenter</p>
-<p>Connect-VIServer vCenter.vCROCS.info</p>
-<br>
-<p>#Add new drive to VM</p>
-<p>New-HardDisk -VM $VMNAME -CapacityGB $DISKSIZEGB -StorageFormat Thin -Controller ‘SCSI Controller 1’</p>
-<br>
-<p>#Make disk online</p>
-<p>invoke-command -computername $VMNAME -scriptblock {Set-Disk 2 -isOffline $false}</p>
-<br>
-<p>#Initialize disk</p>
-<p>invoke-command -computername $VMNAME -scriptblock {Initialize-Disk 2 -PartitionStyle GPT}</p>
-<br>
-<p>#Create Partition</p>
-<p>invoke-command -computername $VMNAME -scriptblock {New-Partition -DiskNumber 2 -UseMaximumSize -DriveLetter E}</p>
-<br>
-<p>#Format drive</p>
-<p>invoke-command -computername $VMNAME -scriptblock {Format-Volume -DriveLetter E -FileSystem NTFS -NewFileSystemLabel ‘Data’ -AllocationUnitSize 16384 -Confirm:$false}</p>
-<br>
-<p>#-------------------------------------------------------------------------</p>
-<br>
-<p>#The Following Code will show disk “Allocation Unit Size” on a remote Windows Server:</p>
-<br>
-<p>$C = Invoke-Command -ComputerName $VMname {Get-WmiObject -Class Win32_Volume -Filter “DriveLetter = ‘C:'” | Select-Object BLOCKSIZE}</p>
-<p>$C_AllocationUnitSize = ($C.BLOCKSIZE/1024)</p>
-<p>$C_AllocationUnitSize = ‘Disk Allocation Unit Size: ‘ + $C_AllocationUnitSize + ‘k’</p>
-<p>$C_AllocationUnitSize</p>
-<br>
-<p>{{< /highlight >}}</p>
+<pre><code>#The Following code shows how to add a New Drive, bring drive online, initialize and format:
+
+#Connect to vCenter
+Connect-VIServer vCenter.vCROCS.info 
+
+#Add new drive to VM
+New-HardDisk -VM $VMNAME -CapacityGB $DISKSIZEGB -StorageFormat Thin -Controller ‘SCSI Controller 1’
+
+#Make disk online
+invoke-command -computername $VMNAME -scriptblock {Set-Disk 2 -isOffline $false}
+
+#Initialize disk
+invoke-command -computername $VMNAME -scriptblock {Initialize-Disk 2 -PartitionStyle GPT}
+
+#Create Partition
+invoke-command -computername $VMNAME -scriptblock {New-Partition -DiskNumber 2 -UseMaximumSize -DriveLetter E}
+
+#Format drive
+invoke-command -computername $VMNAME -scriptblock {Format-Volume -DriveLetter E -FileSystem NTFS -NewFileSystemLabel ‘Data’ -AllocationUnitSize 16384 -Confirm:$false}
+
+#-------------------------------------------------------------------------
+
+#The Following Code will show disk “Allocation Unit Size” on a remote Windows Server:
+
+$C = Invoke-Command -ComputerName $VMname {Get-WmiObject -Class Win32_Volume -Filter “DriveLetter = ‘C:&#39;” | Select-Object BLOCKSIZE}
+$C_AllocationUnitSize = ($C.BLOCKSIZE/1024)
+$C_AllocationUnitSize = ‘Disk Allocation Unit Size: ‘ + $C_AllocationUnitSize + ‘k’
+$C_AllocationUnitSize</code></pre>
 <br>
 <hr>
 <br>

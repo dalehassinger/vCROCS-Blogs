@@ -154,72 +154,337 @@ if (document.readyState === 'loading') {
 }
 
 // Blog Search Functionality
+window.vcrocsSearchUtils = {
+    searchIndexPromise: null,
+
+    escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    },
+
+    normalizeText(text) {
+        return (text || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    },
+
+    tokenize(text) {
+        const normalized = this.normalizeText(text);
+        return normalized ? normalized.split(' ').filter(Boolean) : [];
+    },
+
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    },
+
+    sitePath(relativePath) {
+        const searchInput = document.getElementById('searchInput');
+        const rootPath = searchInput ? (searchInput.dataset.siteRoot || '') : '';
+        return rootPath + relativePath.replace(/^\//, '');
+    },
+
+    highlightMatch(text, query) {
+        if (!text) return '';
+
+        const terms = Array.from(new Set(this.tokenize(query))).sort((a, b) => b.length - a.length);
+        if (terms.length === 0) {
+            return text;
+        }
+
+        const pattern = terms.map(term => this.escapeRegex(term)).join('|');
+        const regex = new RegExp('(' + pattern + ')', 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    },
+
+    extractContextSnippet(text, query, contextLength = 120) {
+        if (!text) return '';
+
+        const terms = this.tokenize(query);
+        const lowerText = text.toLowerCase();
+        let bestIndex = -1;
+        let bestTermLength = 0;
+
+        for (const term of terms) {
+            const index = lowerText.indexOf(term.toLowerCase());
+            if (index !== -1 && (bestIndex === -1 || index < bestIndex)) {
+                bestIndex = index;
+                bestTermLength = term.length;
+            }
+        }
+
+        if (bestIndex === -1) {
+            return text.length > contextLength ? text.substring(0, contextLength) + '...' : text;
+        }
+
+        const start = Math.max(0, bestIndex - Math.floor(contextLength / 2));
+        const end = Math.min(text.length, bestIndex + bestTermLength + Math.floor(contextLength / 2));
+        let snippet = text.substring(start, end).trim();
+
+        if (start > 0) snippet = '...' + snippet;
+        if (end < text.length) snippet += '...';
+        return snippet;
+    },
+
+    levenshteinDistance(a, b, maxDistance = 2) {
+        if (a === b) return 0;
+        if (Math.abs(a.length - b.length) > maxDistance) return maxDistance + 1;
+
+        const previous = new Array(b.length + 1);
+        const current = new Array(b.length + 1);
+
+        for (let j = 0; j <= b.length; j++) {
+            previous[j] = j;
+        }
+
+        for (let i = 1; i <= a.length; i++) {
+            current[0] = i;
+            let rowMin = current[0];
+
+            for (let j = 1; j <= b.length; j++) {
+                const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                current[j] = Math.min(
+                    previous[j] + 1,
+                    current[j - 1] + 1,
+                    previous[j - 1] + cost
+                );
+                rowMin = Math.min(rowMin, current[j]);
+            }
+
+            if (rowMin > maxDistance) {
+                return maxDistance + 1;
+            }
+
+            for (let j = 0; j <= b.length; j++) {
+                previous[j] = current[j];
+            }
+        }
+
+        return previous[b.length];
+    },
+
+    tokenMatchScore(tokens, term, exactScore, prefixScore, fuzzyScore) {
+        if (!tokens || tokens.length === 0 || !term) {
+            return 0;
+        }
+
+        if (tokens.includes(term)) {
+            return exactScore;
+        }
+
+        if (tokens.some(token => token.startsWith(term) || term.startsWith(token))) {
+            return prefixScore;
+        }
+
+        if (term.length >= 4) {
+            const fuzzyMatch = tokens.some(token => {
+                const maxDistance = term.length >= 7 ? 2 : 1;
+                return this.levenshteinDistance(token, term, maxDistance) <= maxDistance;
+            });
+            if (fuzzyMatch) {
+                return fuzzyScore;
+            }
+        }
+
+        return 0;
+    },
+
+    scorePost(post, rawQuery) {
+        const normalizedQuery = this.normalizeText(rawQuery);
+        const queryTerms = Array.from(new Set(this.tokenize(rawQuery)));
+        if (!normalizedQuery || queryTerms.length === 0) {
+            return null;
+        }
+
+        const title = post.title || '';
+        const excerpt = post.excerpt || '';
+        const content = post.content || '';
+        const tags = Array.isArray(post.tags) ? post.tags : [];
+        const categories = Array.isArray(post.categories) ? post.categories : [];
+
+        const normalizedTitle = this.normalizeText(title);
+        const normalizedExcerpt = this.normalizeText(excerpt);
+        const normalizedContent = this.normalizeText(content);
+        const normalizedTags = tags.map(tag => this.normalizeText(tag));
+        const normalizedCategories = categories.map(category => this.normalizeText(category));
+
+        const titleTokens = this.tokenize(title);
+        const excerptTokens = this.tokenize(excerpt);
+        const contentTokens = this.tokenize(content);
+        const tagTokens = normalizedTags.flatMap(tag => tag.split(' ').filter(Boolean));
+        const categoryTokens = normalizedCategories.flatMap(category => category.split(' ').filter(Boolean));
+
+        let score = 0;
+        let matchedTerms = 0;
+        let hasPhraseMatch = false;
+
+        if (normalizedTitle === normalizedQuery) {
+            score += 220;
+            hasPhraseMatch = true;
+        } else if (normalizedTitle.startsWith(normalizedQuery)) {
+            score += 160;
+            hasPhraseMatch = true;
+        } else if (normalizedTitle.includes(normalizedQuery)) {
+            score += 120;
+            hasPhraseMatch = true;
+        }
+
+        if (normalizedTags.some(tag => tag === normalizedQuery)) {
+            score += 140;
+            hasPhraseMatch = true;
+        } else if (normalizedTags.some(tag => tag.includes(normalizedQuery))) {
+            score += 100;
+            hasPhraseMatch = true;
+        }
+
+        if (normalizedCategories.some(category => category === normalizedQuery)) {
+            score += 120;
+            hasPhraseMatch = true;
+        } else if (normalizedCategories.some(category => category.includes(normalizedQuery))) {
+            score += 90;
+            hasPhraseMatch = true;
+        }
+
+        if (normalizedExcerpt.includes(normalizedQuery)) {
+            score += 55;
+            hasPhraseMatch = true;
+        }
+
+        if (normalizedContent.includes(normalizedQuery)) {
+            score += 35;
+            hasPhraseMatch = true;
+        }
+
+        for (const term of queryTerms) {
+            let termScore = 0;
+
+            termScore = Math.max(termScore, this.tokenMatchScore(titleTokens, term, 42, 30, 18));
+            termScore = Math.max(termScore, this.tokenMatchScore(tagTokens, term, 34, 24, 14));
+            termScore = Math.max(termScore, this.tokenMatchScore(categoryTokens, term, 30, 22, 12));
+            termScore = Math.max(termScore, this.tokenMatchScore(excerptTokens, term, 18, 12, 8));
+            termScore = Math.max(termScore, this.tokenMatchScore(contentTokens, term, 12, 8, 5));
+
+            if (termScore > 0) {
+                matchedTerms += 1;
+                score += termScore;
+            }
+        }
+
+        if (!hasPhraseMatch && matchedTerms === 0) {
+            return null;
+        }
+
+        const coverage = matchedTerms / queryTerms.length;
+        if (queryTerms.length > 1) {
+            score *= 0.45 + (coverage * 0.75);
+            if (coverage === 1) {
+                score += 24;
+            }
+        }
+
+        if (normalizedTitle.includes(normalizedQuery) && coverage > 0.5) {
+            score += 20;
+        }
+
+        return {
+            ...post,
+            score: score,
+            coverage: coverage
+        };
+    },
+
+    searchPosts(posts, query, limit = 50) {
+        return (posts || [])
+            .map(post => this.scorePost(post, query))
+            .filter(Boolean)
+            .sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+
+                const dateA = Date.parse(a.date || '') || 0;
+                const dateB = Date.parse(b.date || '') || 0;
+                return dateB - dateA;
+            })
+            .slice(0, limit);
+    },
+
+    async loadSearchIndex(url = 'search-index.json') {
+        if (window.vcrocsSearchIndex && Array.isArray(window.vcrocsSearchIndex.posts)) {
+            this.searchIndexPromise = Promise.resolve(window.vcrocsSearchIndex.posts);
+            return this.searchIndexPromise;
+        }
+
+        if (!this.searchIndexPromise) {
+            const candidates = Array.from(new Set([url, this.sitePath(url)]));
+            this.searchIndexPromise = (async () => {
+                for (const candidate of candidates) {
+                    try {
+                        const response = await fetch(candidate);
+                        if (response.ok) {
+                            const data = await response.json();
+                            return data.posts || [];
+                        }
+                    } catch (error) {
+                        console.warn('Search index load attempt failed for', candidate, error);
+                    }
+                }
+
+                throw new Error('Unable to load search index');
+            })();
+        }
+
+        return this.searchIndexPromise;
+    }
+};
+
 class BlogSearch {
     constructor() {
         this.searchInput = document.getElementById('searchInput');
         this.posts = [];
         this.initialize();
     }
-    
+
     initialize() {
         if (!this.searchInput) return;
-        
-        // Load search index
+
         this.loadSearchIndex();
-        
-        // Setup event listeners
+
         this.searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 this.performSearch();
             }
         });
-        
-        // Optional: Search as you type (with debounce)
+
         let debounceTimer;
-        this.searchInput.addEventListener('input', (e) => {
+        this.searchInput.addEventListener('input', () => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 if (this.searchInput.value.trim().length >= 2) {
                     this.showSuggestions();
                 } else {
-                    // Remove suggestions if query is too short
-                    const existingSuggestions = document.querySelector('.search-suggestions');
-                    if (existingSuggestions) {
-                        existingSuggestions.remove();
-                    }
+                    this.removeSuggestions();
                 }
-            }, 300);
+            }, 250);
         });
     }
-    
+
     async loadSearchIndex() {
         try {
-            const response = await fetch('search-index.json');
-            const data = await response.json();
-            this.posts = data.posts || [];
-            console.log('✅ Loaded ' + this.posts.length + ' posts for search');
-            
-            // Debug: Show sample of what was loaded
-            if (this.posts.length > 0) {
-                console.log('📋 Sample post data:');
-                const sample = this.posts[0];
-                console.log('   Title:', sample.title);
-                console.log('   Has content:', !!sample.content);
-                console.log('   Content length:', sample.content ? sample.content.length : 0);
-                if (sample.content) {
-                    console.log('   Content preview:', sample.content.substring(0, 100));
-                }
-            }
+            this.posts = await window.vcrocsSearchUtils.loadSearchIndex('search-index.json');
         } catch (error) {
             console.error('Failed to load search index:', error);
-            // Fallback: extract from current page if on index
             this.extractFromPage();
         }
     }
-    
+
     extractFromPage() {
-        // Fallback: extract post data from the current page
         const postItems = document.querySelectorAll('.post-item');
         this.posts = Array.from(postItems).map(item => {
             const titleEl = item.querySelector('h2 a') || item.querySelector('h3 a');
@@ -229,96 +494,53 @@ class BlogSearch {
             const date = metaEl ? metaEl.getAttribute('datetime') : '';
             const excerptEl = item.querySelector('.post-excerpt');
             const excerpt = excerptEl ? excerptEl.textContent : '';
-            
+
             return { title: title, url: url, date: date, excerpt: excerpt, content: excerpt, tags: [], categories: [] };
         });
-        console.log('ℹ️ Extracted ' + this.posts.length + ' posts from page');
     }
-    
+
     performSearch() {
-        const query = this.searchInput.value.trim().toLowerCase();
+        const query = this.searchInput.value.trim();
         if (!query) return;
-        
-        console.log('🔍 Searching for:', query);
-        
-        const results = this.search(query);
-        console.log('   Found ' + results.length + ' results');
-        
-        this.displayResults(results, query);
+
+        this.removeSuggestions();
+        window.location.href = window.vcrocsSearchUtils.sitePath('search-results.html') + '?q=' + encodeURIComponent(query);
     }
-    
-    search(query) {
-        console.log('🔎 Searching for "' + query + '" in ' + this.posts.length + ' posts');
-        
-        const results = this.posts.filter(post => {
-            const titleMatch = post.title.toLowerCase().includes(query);
-            const contentMatch = post.content && post.content.toLowerCase().includes(query);
-            const excerptMatch = post.excerpt && post.excerpt.toLowerCase().includes(query);
-            const tagsMatch = post.tags && post.tags.some(tag => 
-                tag.toLowerCase().includes(query)
-            );
-            const categoriesMatch = post.categories && post.categories.some(cat => 
-                cat.toLowerCase().includes(query)
-            );
-            
-            const matched = titleMatch || contentMatch || excerptMatch || tagsMatch || categoriesMatch;
-            
-            // Debug logging for matches
-            if (matched) {
-                console.log('   ✅ Match in "' + post.title + '"');
-                console.log('      Title match:', titleMatch);
-                console.log('      Content match:', contentMatch);
-                console.log('      Excerpt match:', excerptMatch);
-                console.log('      Tags match:', tagsMatch);
-                console.log('      Categories match:', categoriesMatch);
-            }
-            
-            return matched;
-        }).slice(0, 10); // Limit to 10 results
-        
-        console.log('   Found ' + results.length + ' total results');
-        return results;
-    }
-    
-    showSuggestions() {
-        const query = this.searchInput.value.trim().toLowerCase();
-        if (!query) return;
-        
-        const results = this.search(query).slice(0, 5);
-        
-        // Remove existing suggestions
+
+    removeSuggestions() {
         const existingSuggestions = document.querySelector('.search-suggestions');
         if (existingSuggestions) {
             existingSuggestions.remove();
         }
-        
+    }
+
+    showSuggestions() {
+        const query = this.searchInput.value.trim();
+        if (!query) return;
+
+        const results = window.vcrocsSearchUtils.searchPosts(this.posts, query, 5);
+        this.removeSuggestions();
+
         if (results.length === 0) return;
-        
-        // Create suggestions dropdown
+
         const suggestions = document.createElement('div');
         suggestions.className = 'search-suggestions';
         suggestions.innerHTML = results.map(post => {
-            let titleHTML = this.highlightMatch(post.title, query);
-            
-            // Generate context snippet from content or excerpt
-            let snippetHTML = '';
-            if (post.content && post.content.toLowerCase().includes(query)) {
-                // Extract context around the match
-                const snippet = this.extractContextSnippet(post.content, query, 80);
-                snippetHTML = '<span class="excerpt">' + this.highlightMatch(snippet, query) + '</span>';
-            } else if (post.excerpt) {
-                snippetHTML = '<span class="excerpt">' + post.excerpt.substring(0, 60) + '...</span>';
-            }
-            
-            return '<a href="' + post.url + '" class="search-suggestion-item">' +
+            const titleHTML = window.vcrocsSearchUtils.highlightMatch(post.title, query);
+            const snippetSource = post.content || post.excerpt || '';
+            const snippet = window.vcrocsSearchUtils.extractContextSnippet(snippetSource, query, 90);
+            const snippetHTML = snippet
+                ? '<span class="excerpt">' + window.vcrocsSearchUtils.highlightMatch(snippet, query) + '</span>'
+                : '';
+
+            return '<a href="' + window.vcrocsSearchUtils.sitePath(post.url) + '" class="search-suggestion-item">' +
                    '<strong>' + titleHTML + '</strong>' +
                    snippetHTML +
                    '</a>';
         }).join('');
-        
+
         this.searchInput.parentElement.appendChild(suggestions);
-        
-        // Close suggestions when clicking outside
+
         const closeSuggestions = (e) => {
             if (!suggestions.contains(e.target) && e.target !== this.searchInput) {
                 suggestions.remove();
@@ -326,54 +548,6 @@ class BlogSearch {
             }
         };
         document.addEventListener('click', closeSuggestions);
-    }
-    
-    extractContextSnippet(text, query, contextLength = 80) {
-        const lowerText = text.toLowerCase();
-        const lowerQuery = query.toLowerCase();
-        const index = lowerText.indexOf(lowerQuery);
-        
-        if (index === -1) return text.substring(0, contextLength) + '...';
-        
-        // Calculate start and end positions for context
-        const start = Math.max(0, index - Math.floor(contextLength / 2));
-        const end = Math.min(text.length, index + query.length + Math.floor(contextLength / 2));
-        
-        let snippet = text.substring(start, end);
-        
-        // Add ellipsis if needed
-        if (start > 0) snippet = '...' + snippet;
-        if (end < text.length) snippet = snippet + '...';
-        
-        return snippet;
-    }
-    
-    highlightMatch(text, query) {
-        const regex = new RegExp('(' + this.escapeRegex(query) + ')', 'gi');
-        return text.replace(regex, '<mark>$1</mark>');
-    }
-    
-    escapeRegex(string) {
-        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    }
-    
-    displayResults(results, query) {
-        if (results.length === 0) {
-            alert('No results found for "' + query + '"');
-            return;
-        }
-        
-        // Create results page URL with query parameter
-        const searchURL = 'search-results.html?q=' + encodeURIComponent(query);
-        
-        // Store results in sessionStorage for the results page
-        sessionStorage.setItem('searchResults', JSON.stringify({
-            query: query,
-            results: results
-        }));
-        
-        // Navigate to results page
-        window.location.href = searchURL;
     }
 }
 
