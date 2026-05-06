@@ -183,7 +183,7 @@
 </ul>
 <h4>Use Case for Creating this Blog</h4>
 <br>
-<p>##### Goals:</p>
+<h4>Goals:</h4>
 <ul>
 <li>Leverage my existing Home Lab Hardware to start using and learning about VMware Cloud Foundation (VCF).</li>
 <li>Enable quick creation or re-creation of a VCF environment.</li>
@@ -197,13 +197,13 @@
 <li>Ensure performance is sufficient for learning purposes, without requiring production-level speed.</li>
 <br>
 </ul>
-<p>##### Initial Considerations:</p>
+<h4>Initial Considerations:</h4>
 <p>I explored VMware Holodeck as an option, but the resource requirements were too high for my setup.</p>
 <br>
-<p>##### Inspiration and Approach:</p>
+<h4>Inspiration and Approach:</h4>
 <p>I came across William Lam's Blog about running VCF on a single NUC and decided to adapt that idea for my lab. William also provides a PowerShell script that automates the entire VCF installation in a single run. William's script does require more than one ESXi Host.</p>
 <br>
-<p>##### Outcome:</p>
+<h4>Outcome:</h4>
 <p>After evaluating the available options, I decided to modify some of the example PowerShell scripts and processes to deploy and manage VCF in my Home Lab.</p>
 <br>
 <p>This blog serves as a guide to automate VMware Cloud Foundation (VCF) deployment in a home lab environment. It is also designed as a learning resource for VCF, which is why some steps are performed manually.</p>
@@ -216,7 +216,7 @@
 <br>
 <hr>
 <br>
-<p>##### Home Lab Hardware</p>
+<h4>Home Lab Hardware</h4>
 <br>
 <p><strong>Primary Systems:</strong></p>
 <ul>
@@ -257,7 +257,7 @@
 <hr>
 <br>
 </ul>
-<p>##### PowerShell Scripts:</p>
+<h4>PowerShell Scripts:</h4>
 <br>
 <p><strong>Script Overview - Step 1</strong></p>
 <br>
@@ -1185,7 +1185,7 @@ New-LogEvent &quot;Duration: $duration minutes to Deploy CloudBuilder&quot;</cod
 <hr>
 <br>
 </ul>
-<p>##### Screen Shots:</p>
+<h4>Screen Shots:</h4>
 <br>
 <p><small>Screen Shot of the Physical Host (MS-01), Capacity and Usage, before any installs:</p>
 <ul>
@@ -1320,7 +1320,7 @@ New-LogEvent &quot;Duration: $duration minutes to Deploy CloudBuilder&quot;</cod
 <br>
 <hr>
 <br>
-<p>##### Lessons Learned:</p>
+<h4>Lessons Learned:</h4>
 <br>
 <ul>
 <li>Update the security settings on the vSwitch of the physical ESXi hosts running the nested ESXi hosts to ensure proper configuration (Refer to the screenshot above.)</li>
@@ -1352,7 +1352,7 @@ New-LogEvent &quot;Duration: $duration minutes to Deploy CloudBuilder&quot;</cod
 <br>
 <p>➡️ <a href="https://community.broadcom.com/flings/home" target="_blank" rel="noopener noreferrer">Click here to access the downloads</a></p>
 <br>
-<p>##### Important Note for macOS Users</p>
+<h4>Important Note for macOS Users</h4>
 <br>
 <p>The Nested ESXi Virtual Appliance downloads are packaged as ZIP files. However, do not double-click to unpack them on macOS, as it may lead to issues with the extracted contents.</p>
 <br>
