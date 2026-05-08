@@ -163,35 +163,24 @@
                     
                     <div class="content">
                         <p>Part 8: Pouring the salt grains</p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <p>My previous posts about grain data were to show how to add minion grain data during the creation of a new server with vRA using PowerShell. This post I want to show how I'm going to maintain the grain data that is not default out of the box grain data.</p>
-<br>
 <hr>
-<br>
 <p>Windows Server grain data not available out of the of box that I want to add to every minion AND make sure the grain data stays up to date:</p>
 <ul>
 <li>Windows Server Features | Roles</li>
 <li>Windows Server Installed Software</li>
 <li>Windows Server Running Services</li>
-<br>
 <hr>
-<br>
 </ul>
 <p>These are the steps that I use to maintain custom grain data with a Windows Server:</p>
 <ul>
 <li>Create a PowerShell Script that can run locally on a minion. Add the script to the SaltStack Config File Manager. Use salt-call to run salt.functions locally on a minion. See screen shot and my code examples below.</li>
 <li>Create a SaltStack Config Job to execute the PowerShell Script remotely on the minion. See Screen Shot.</li>
 <li>Create a SaltStack Config Schedule to run the job that you create. The job can run every day, once a week, every 4 hours. Whatever makes sense for your use case. See Screen Shot.</li>
-<br>
 <hr>
-<br>
 </ul>
 <p>If you want to run a script locally on a minion and use salt functions that is where you use the salt-call command. After you learn the salt-functions and are logged into a Windows Server locally, you can still use salt commands by using salt-call.</p>
-<br>
 <pre><code># --- example code
 salt-call --version
 salt-call test.ping
@@ -204,29 +193,17 @@ salt-call win_servermanager.list_installed
 
 # --- Show Installed Sofwtare
 salt-call pkg.list_pkgs</code></pre>
-<br>
 <p><a href="https://docs.saltproject.io/en/latest/ref/cli/salt-call.html" target="_blank" rel="noopener noreferrer">Link to salt-call Documentation</a></p>
-<br>
 <hr>
-<br>
 <h2>Step 1 - Add script to SaltStack Config File Manager:</h2>
-<br>
 <p>See code examples below to add Windows Server Features|Roles, Installed Software, and Runnings Services as grain data.</p>
-<br>
 <img src="images/Salt-49.PNG" alt="">
 <img src="images/Salt-50.PNG" alt="">
-<br>
 <h2>Step 3 - Create SaltStack Config Schedule:</h2>
-<br>
 <img src="images/Salt-51.PNG" alt="">
-<br>
 <hr>
-<br>
 <h2>Code Examples:</h2>
-<br>
-<br>
 <h2>- Add Windows Features | Roles as grain data:</h2>
-<br>
 <pre><code>&lt;#
 .SYNOPSIS
   This Script is used to Get Windows Servers Features and add as Grain Data
@@ -315,11 +292,8 @@ $saltCommand = &#39;salt-call saltutil.sync_grains&#39;
 Invoke-Expression -Command $saltCommand
 
 # ----- [ End of Code ] ---------------------------------------------------------------------------</code></pre>
-<br>
 <hr>
-<br>
 <h2>- Add Windows Server Installed Packages|Software as grain data:</h2>
-<br>
 <pre><code>&lt;#
 .SYNOPSIS
   This Script is used to Get Windows Installed Packages and add as Grain Data
@@ -405,10 +379,8 @@ $saltCommand = &#39;salt-call saltutil.sync_grains&#39;
 Invoke-Expression -Command $saltCommand
 
 # ----- [ End of Code ] ---------------------------------------------------------------------------</code></pre>
-<br>
 <hr>
 <h2>- Add Windows Running Services as grain data:</h2>
-<br>
 <pre><code>&lt;#
 .SYNOPSIS
   This Script is used to Get Windows Servers Running Services and add as Grain Data
@@ -491,24 +463,17 @@ $saltCommand = &#39;salt-call saltutil.sync_grains&#39;
 Invoke-Expression -Command $saltCommand
 
 # ----- [ End of Code ] ---------------------------------------------------------------------------</code></pre>
-<br>
 <hr>
-<br>
 <h2>SaltStack Config Target using Windows Server Running Service (SQL Server):</h2>
-<br>
 <img src="images/Salt-52.PNG" alt="">
-<br>
 <hr>
-<br>
 <h2>Lessons Learned:</h2>
 <ul>
 <li>Windows Server Features|Roles make a great way to target minions.</li>
 <li>Windows Server installed software also makes a great way to target minions.</li>
 <li>Windows Server Running Services is a good way to target minions.</li>
 <li>If you add custom grain data when the server is created you also need a way to maintain the grain data so it stays up to date and is current.</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Salt Links I found to be very helpful:</h2>
 <ul>
@@ -518,22 +483,17 @@ Invoke-Expression -Command $saltCommand
 <li><a href="https://saltstackcommunity.slack.com"                                  target="_blank">SaltStack Community Slack Channel</a></li>
 <li><a href="https://learnvrealizeautomation.github.io"                             target="_blank">Learn vRealize Automation</a></li>
 <li><a href="https://learnsaltstackconfig.github.io/"                               target="_blank">Learn SaltStack Config</a></li>
-<br>
 </ul>
 <div style="background-color:#ccffcc; Padding:20px;" >
 <p>When I write about <b>vRealize Automation</b> ("vRA") I always say there are many ways to accomplish the same task.  <b>SaltStack Config</b> is the same way.  I am showing what I felt was important to see but every organization/environment will be different. There is no right or wrong way to use Salt. This is a <b>GREAT Tool</b> that is included with your vRealize Suite Advanced/Enterprise license. If you own the vRealize Suite, you own SaltStack Config.</p>
 </div>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

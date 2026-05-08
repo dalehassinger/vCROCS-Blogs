@@ -163,51 +163,31 @@
                     
                     <div class="content">
                         <p><strong>Part 4: How to use SaltStack Config with Windows Server and PowerShell</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <p>The latest item on my journey with <strong>VMware vRealize SaltStack Config</strong> as a <strong>Windows Server Admin</strong> will be salt grains. I have a specific use case that made me start looking at grains. In VMware vCenter I use vCenter TAGs to organize VMs. I also use vCenter TAGs to organize VMs in vRealize Operations.  I want to use the same logic of using vCenter TAGs in SaltStack Config. SaltStack Config does not use vCenter TAGs OOTB (Out of the Box) for VMs.</p>
-<br>
 <p>At the end of this Blog Post I also have an SaltStack Config Orchestration example.  Instead of running multiple Jobs one at a time I have (4) steps in a SLS file that I run using a salt-run job and the function state.orchestrate.</p>
-<br>
 <hr>
-<br>
 <h2>Grains File:</h2>
 <p>This is what I learned about salt grains when using with a Windows OS.</p>
 <ul>
 <li>The default location of the grains file is in directory "C:\salt\conf\".</li>
 <li>The grains file is named grains with no extension.</li>
-<br>
 </ul>
 <h2>Example grains file:</h2>
-<br>
 <pre><code>vCenterTags: TAG-VM-vCROCS|TAG-VM-WebServer|TAG-App-Hugo</code></pre>
-<br>
 <ul>
 <li>"Grain Name": "The value of the grain".</li>
 <li>In my example I wanted the grain to be named "vCenterTags" and the values will be the vCenter TAG names "TAG-VM-vCROCS|TAG-VM-WebServer|TAG-App-Hugo". I have (3) vCenter TAGs assigned to this VM.  I will be able to create a SaltStack Config Target based on any of the TAGs.</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>SaltStack Config Targets:</h2>
-<br>
 <p>When I add the vCenter TAG information to the grains file I am then able to create SaltStack Config Targets based on the grain "vCenterTags".</p>
-<br>
 <h2>SaltStack Config Targets:</h2>
-<br>
 <img src="images/Salt-42.PNG" alt="">
-<br>
 <h2>SaltStack Config Target Definition:</h2>
-<br>
 <img src="images/Salt-41.PNG" alt="">
-<br>
 <h2>How to add the vCenter TAGs to the grains file on all your VMs in SaltStack Config:</h2>
-<br>
 <h2>Step 1: Get the VM Names and All Assigned vCenter TAGs into a csv file</h2>
-<br>
 <p>Example PowerShell Code to get all vCenter VM Names and all vCenter TAGs assigned to the VMs</p>
 <pre><code># ----- [ Start Create CSV File with all VMs/TAGs Assigned ] ----------------------------
 
@@ -251,31 +231,18 @@ New-Item $allvmstaginfoFile -ItemType File
 $allVMsTagInfo | Select-Object -Skip 1 | Set-Content $allvmstaginfoFile
 
 # ----- [ End Create CSV File with all VMs/TAGs Assigned ] ----------------------------</code></pre>
-<br>
 <h2>Step 2: Copy the csv file to the salt master</h2>
-<br>
 <p>After I create the csv file I copy to the StackStack Config Server (Salt Master) in the folder /var/srv/salt.  This is where all files need to be saved when you use function cp.get_file.</p>
-<br>
 <hr>
-<br>
 <h2>Step 3: Copy the csv file to the salt minions</h2>
-<br>
 <p>You may be wondering why I copy the file to the minion and not copy to a central share. My environment has NSX-T with zero trust. Most of my automation I do not open ports to servers that are not needed permanently. So the concept of using salt to copy files to minions, use the files to make changes and then delete the files when processes are complete works well in a zero trust environment.</p>
-<br>
 <h2>Job to copy csv file to minions:</h2>
-<br>
 <img src="images/Salt-43.PNG" alt="">
-<br>
 <hr>
-<br>
 <h2>Step 4: Run Script on minion</h2>
-<br>
 <p>After I copy the csv file to the minion I run a script to create/update the grains files.</p>
-<br>
 <h2>Job to run a PowerShell Script to create/update the grains file:</h2>
-<br>
 <img src="images/Salt-44.PNG" alt="">
-<br>
 <p>Example PowerShell Code to create/update grains file on a minion:</p>
 <pre><code># ----- [ Start Create Grain File with TAGs Assigned ] ----------------------------
 
@@ -325,31 +292,21 @@ else{
 } # End else
 
 # ----- [ End Create Grain File with TAGs Assigned ] ----------------------------</code></pre>
-<br>
 <hr>
-<br>
 <h2>Step 5: Run job to do a sync_grains</h2>
-<br>
 <p>Anytime you make any changes to the grains file you should run the function saltutil.sync_grains to update the SaltStack Config Server immediately.</p>
-<br>
 <h2>Job to run sync of the minion grains information:</h2>
-<br>
 <img src="images/Salt-45.PNG" alt="">
-<br>
 <hr>
-<br>
 <h2>SaltStack Config Orchestration:</h2>
-<br>
 <h2>Job to Orchestrate all the steps:</h2>
 <ul>
 <li>Copy file to minion.</li>
 <li>Run script to create/update grains file</li>
 <li>Run a sync_grains.</li>
 <li>Delete the files from the minions when processes are complete.</li>
-<br>
 </ul>
 <img src="images/Salt-46.PNG" alt="">
-<br>
 <p>Example Orchestration SLS file:</p>
 <pre><code>copy_tags:
   salt.function:
@@ -382,21 +339,15 @@ Cleanup_Tag_File:
     - tgt_type: grain
     - arg:    
       - &#39;C:\vCROCS\allvmstaginfo.csv&#39;</code></pre>
-<br>
 <h2>Salt-Run Job to Orchestrate Copy File/Run Script/Run Sync/Delete File:</h2>
-<br>
 <img src="images/Salt-47.PNG" alt="">
-<br>
 <hr>
-<br>
 <h2>Lessons Learned:</h2>
 <ul>
 <li>Grains are a good way to create SaltStack Config Targets. Allows you to group VMs together the same way you can in vCenter.</li>
 <li>The Grains file is basically a Database that can be any information that you want to show about your VMs. In this Blog post I am adding vCenter TAGs to the minions but the information could be anything that helps you target VMs.</li>
 <li>If the default list of grains OOTB doesn't show the information you want to see, you can easily add your own gains with a little bit of code.</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Salt Links I found to be very helpful:</h2>
 <ul>
@@ -406,22 +357,17 @@ Cleanup_Tag_File:
 <li><a href="https://saltstackcommunity.slack.com"                                  target="_blank">SaltStack Community Slack Channel</a></li>
 <li><a href="https://learnvrealizeautomation.github.io"                             target="_blank">Learn vRealize Automation</a></li>
 <li><a href="https://learnsaltstackconfig.github.io/"                               target="_blank">Learn SaltStack Config</a></li>
-<br>
 </ul>
 <div style="background-color:#ccffcc; Padding:20px;" >
 <p>When I write about <b>vRealize Automation</b> ("vRA") I always say there are many ways to accomplish the same task.  <b>SaltStack Config</b> is the same way.  I am showing what I felt was important to see but every organization/environment will be different. There is no right or wrong way to use Salt. This is a <b>GREAT Tool</b> that is included with your vRealize Suite Advanced/Enterprise license. If you own the vRealize Suite, you own SaltStack Config.</p>
 </div>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

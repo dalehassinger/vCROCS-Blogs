@@ -163,225 +163,128 @@
                     
                     <div class="content">
                         <p><strong>Learn how to monitor SaaS solutions like Zoom by building a custom Management Pack.</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <blockquote>You start to see the true power of VCF Operations when you add Management Packs (MPs) tailored to the systems your organization needs to monitor.</blockquote>
-<br>
 <hr>
-<br>
 <h2>Why create and use a Zoom MP:</h2>
-<br>
 <p>I rely on Zoom for daily conference calls. Last week, regional issues prevented users from joining scheduled meetings. This highlighted the need for alerts when SaaS tools experience problems.</p>
-<br>
 <p>While I’ve created dashboards in the past to show the status of SaaS services using the Text Display widget, I wanted to take it a step further and receive email alerts from VCF Operations—just as I do for ESXi hosts, VMs, or storage issues.</p>
-<br>
 <p>To enable this, I built a Management Pack (MP) to bring the data into VCF Operations. Once the data is available, you can create dashboards, views, alerts, and reports—just like you would for any other monitored system.</p>
-<br>
 <p>Creating Management Packs (MPs) with the MP Builder requires making API calls. I did some research and found that Zoom status information is available through a REST API.</p>
-<br>
 <p>I’ve used the MP Builder before for other use cases, so I was already familiar with the process. Building the Zoom MP took about 30 minutes.</p>
-<br>
 <p>See the screenshots and steps below—it’s a straightforward process that anyone can follow.</p>
-<br>
 <hr>
-<br>
 <blockquote>In 2025, take some time to get hands-on with the MP Builder in VCF Operations. The platform already delivers solid monitoring out of the box, but when you start building your own Management Packs, that’s when it really starts to shine.</blockquote>
-<br>
 <hr>
-<br>
 <h2>Dashboard Examples:</h2>
-<br>
 <ul>
 <li>Colors are very poweful in VCF Operations. When you see <span style="color:green; font-weight:bold;">Green</span> it's good, while <span style="color:red; font-weight:bold;">Red</span>, <span style="color:orange; font-weight:bold;">Orange</span>, or <span style="color:yellow; font-weight:bold;">Yellow</span> suggests something may need attention.</li>
-<br>
 <hr>
-<br>
 </ul>
 <img src="images/zoom-mp-01.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Zoom MP Alerts:</h2>
-<br>
 <ul>
 <li>Screen Shots MP Alert</li>
-<br>
 <hr>
-<br>
 </ul>
 <img src="images/zoom-mp-21.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Alert Type: "Application: Availability"</li>
-<br>
 </ul>
 <img src="images/zoom-mp-21-2.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Condition: If "Zoom Meetings" "Status" not equal to "operational"</li>
-<br>
 </ul>
 <img src="images/zoom-mp-22.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-23.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Select the Policy you want to use</li>
-<br>
 </ul>
 <img src="images/zoom-mp-24.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Building the MP:</h2>
-<br>
 <ul>
 <li>Screen Shots creating the MP.</li>
-<br>
 <hr>
-<br>
 </ul>
 <img src="images/zoom-mp-02.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-03.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Define the source</li>
-<br>
 </ul>
 <img src="images/zoom-mp-04.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-05.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-06.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-07.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-08.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Define the Requests</li>
-<br>
 </ul>
 <img src="images/zoom-mp-09.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-10.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-11.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Define the Objects</li>
-<br>
 </ul>
 <img src="images/zoom-mp-12.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-13.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>I only pick the fields that I want to be included in VCF Operations. You do NOT have to pick all fiields.</li>
-<br>
-<br>
 </ul>
 <img src="images/zoom-mp-14.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-15.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-16.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Set default values for the MP</li>
-<br>
 </ul>
 <img src="images/zoom-mp-17.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-18.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Perform a Collection and then Build</li>
-<br>
 </ul>
 <img src="images/zoom-mp-19.png" alt="">
-<br>
 <hr>
-<br>
 <img src="images/zoom-mp-20.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Lessons Learned:</h2>
-<br>
 <ul>
 <li>Management Packs (MPs) provide a way to monitor components that aren’t included by default.</li>
 <li>MPs provide a good way for you to Alert your Team when SaaS type solutions also have issues.</li>
 <li>MPs are straightforward to build. Once you understand how the APIs work, you can create powerful integrations.</li>
-<br>
-<br>
 <hr>
-<br>
 </ul>
 <p>MP Download coming soon...</p>
-<br>
 <hr>
-<br>
 <p>In my blogs, I often emphasize that there are multiple methods to achieve the same objective. This article presents just one of the many ways you can tackle this task. I've shared what I believe to be an effective approach for this particular use case, but keep in mind that every organization and environment varies. There's no definitive right or wrong way to accomplish the tasks discussed in this article.</p>
-<br>
 <hr>
-<br>
 <p>Always test new setups and processes, like those discussed in this blog, in a lab environment before implementing them in a production environment.</p>
-<br>
 <hr>
-<br>
 <p>If you found this blog helpful, consider buying me a coffee to kickstart my day.</p>
-<br>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

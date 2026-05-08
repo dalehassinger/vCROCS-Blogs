@@ -163,61 +163,39 @@
                     
                     <div class="content">
                         <p><strong>Part 5: How to use SaltStack Config with Windows Server and PowerShell</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <p>The latest item on my journey with <b>VMware vRealize SaltStack Config</b> as a <b>Windows Server Admin</b> will be an update to some items that I have talked about in previous posts. I have been spending more time with <b>VMware vRealize SaltStack Config</b> and I have learned some better ways to do some of the processes that I have talked about already. My goal to to learn and use the built-in functions that are already in the product. I found that using the salt functions require less coding and better logging.</p>
-<br>
 <p>First example of changing how I am going to use <b>VMware vRealize SaltStack Config</b>. When I first started looking at grains I thought I would edit the grains file with PowerShell and add the grains content to the file.  What I did worked but I think I learned a better way. There is a function grains.append that will append grains data to the grains file on the minion. This works much better and when I run a job to add grains information it is listed in Activity Completed within <b>VMware vRealize SaltStack Config</b>. I like to be able to see when changes are made by the jobs that are run.</p>
-<br>
 <p>The code that I have listed below to get vCenter TAGs assigned to a VM and add the information to the minion is using PowerShell. To use this script you <b>MUST</b> install the PowerShell Module POSH-SSH. The process I am showing connects to a vCenter, creates a SSH Connection to the Salt Server, gets all assigned vCenter TAGs for a VM, , runs salt commands to add grain information to the grains file of a minion, and then runs a minion grains sync. This concept can be used for a lot of different systems. If you want to add NSX-T Security TAGs as grain information (Thanks Karl Hauck for this idea), AD (Active Directory) OU of the Windows Server, or anything you think would be useful to Target minions within <b>VMware vRealize SaltStack Config</b>.</p>
-<br>
 <p>I really like the idea of using POSH-SSH to make the SSH connection to the Salt Master Server and running commands. I do a lot of Automation within vRA (vRealize Automation) with PowerShell and I can use this same concept to use <b>VMware vRealize SaltStack Config</b> to complete the processes that need run. I can also create Catalog items within vRA that you can make available to APP Teams to use. The Catalog item could be running salt jobs in  <b>VMware vRealize SaltStack Config</b>. Cool Stuff!</p>
-<br>
 <hr>
-<br>
 <h2>Grains File:</h2>
 <p>This is what I learned about salt grains when using with a Windows OS.</p>
 <ul>
 <li>The default location of the grains file is in directory "C:\salt\conf\".</li>
 <li>The grains file is named grains with no extension.</li>
-<br>
 </ul>
 <h2>Example grains file:</h2>
-<br>
 <pre><code>NSXSecurityTAGs:
 - vCROCS.Apps.VMware.SaltStack.Minion
 vCenterTAGs:
 - TAG-VM-WebServer
 - TAG-VM-vCROCS
 - TAG-App-Hugo</code></pre>
-<br>
 <ul>
 <li>"Grain Name": "The value of the grain".</li>
 <li>In my example I wanted the grain to be named "vCenterTags" and the values will be the vCenter TAG names "TAG-VM-vCROCS, TAG-VM-WebServer, TAG-App-Hugo". I have (3) vCenter TAGs assigned to this VM.  I will be able to create a SaltStack Config Target based on any of the TAGs.</li>
 <li> I like the formatting that is used for the grains file by using the function grains.append.</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>SaltStack Config Targets:</h2>
-<br>
 <p>When I add the vCenter TAG information to the grains file I am then able to create SaltStack Config Targets based on the grain "vCenterTags".</p>
-<br>
 <h2>SaltStack Config Targets:</h2>
-<br>
 <img src="images/Salt-42.PNG" alt="">
-<br>
 <h2>SaltStack Config Target Definition:</h2>
-<br>
 <img src="images/Salt-41.PNG" alt="">
-<br>
 <p>How to add the vCenter TAGs to the grains file on all your VMs in SaltStack Config:</p>
-<br>
 <p>Get the VM Names and All Assigned vCenter TAGs</p>
-<br>
 <p>PowerShell Script:</p>
 <pre><code># ----- [ SSH SaltStack Config Server - Add vCenter TAGs to Minion Grains ] --------------------------
 
@@ -254,16 +232,13 @@ foreach($vmName in $VMNames){
 
 # ----- [ Terminate SSH Session ] -----------------------------
 Remove-SSHSession -SessionId 0</code></pre>
-<br>
 <h2>Lessons Learned:</h2>
 <ul>
 <li>Adding the POSH-SSH PowerShell module so you can create a SSH connection to the salt master opens up a lot of possibilities for your PowerShell Automation as a Windows Server Admin.</li>
 <li>Grains are a good way to create SaltStack Config Targets. Allows you to group VMs together the same way you can in vCenter.</li>
 <li>The Grains file is basically a Database that can be any information that you want to show about your VMs. In this Blog post I am adding vCenter TAGs to the minions but the information could be anything that helps you target VMs.</li>
 <li>If the default list of grains OOTB doesn't show the information you want to see, you can easily add your own gains with a little bit of code.</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Salt Links I found to be very helpful:</h2>
 <ul>
@@ -273,22 +248,17 @@ Remove-SSHSession -SessionId 0</code></pre>
 <li><a href="https://saltstackcommunity.slack.com"                                  target="_blank">SaltStack Community Slack Channel</a></li>
 <li><a href="https://learnvrealizeautomation.github.io"                             target="_blank">Learn vRealize Automation</a></li>
 <li><a href="https://learnsaltstackconfig.github.io/"                               target="_blank">Learn SaltStack Config</a></li>
-<br>
 </ul>
 <div style="background-color:#ccffcc; Padding:20px;" >
 <p>When I write about <b>vRealize Automation</b> ("vRA") I always say there are many ways to accomplish the same task.  <b>SaltStack Config</b> is the same way.  I am showing what I felt was important to see but every organization/environment will be different. There is no right or wrong way to use Salt. This is a <b>GREAT Tool</b> that is included with your vRealize Suite Advanced/Enterprise license. If you own the vRealize Suite, you own SaltStack Config.</p>
 </div>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

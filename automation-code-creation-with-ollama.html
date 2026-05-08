@@ -163,97 +163,55 @@
                     
                     <div class="content">
                         <p><strong>My review on using ollama to help create code for Automation</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <blockquote>"By harnessing the power of AI, I simplify my coding workflow, freeing up time to focus on creating blog posts that resonate with the vCommunity. With the help of AI, my writing becomes more precise, more creative, and more impactful.” - Dale Hassinger</blockquote>
-<br>
 <hr>
-<br>
 <h2>ollama</h2>
-<br>
 <img src="images/ollama-01.png" alt="">
-<br>
 <h2>ollama Web Site Link:</h2>
-<br>
 <p><a href="https://ollama.com/" target="_blank" rel="noopener noreferrer">Link to ollama web site.</a></p>
-<br>
 <p>Building on my experience with ChatGPT, I decided to explore Ollama Local on my trusty Apple MacBook Pro M1. As a user-friendly AI enthusiast, I was eager to see how seamless the installation process would be. To my delight, setting up Ollama Local on Mac is incredibly straightforward.</p>
-<br>
 <p>To get started, simply head to the <a href="https://ollama.com/" target="_blank" rel="noopener noreferrer">Ollama website</a> and download the application as a zip file. Expand the contents of the archive and copy the Ollama Application file into your Applications folder. Double-clicking the icon will launch the app in no time – it's that easy!</p>
-<br>
 <p>For this review, I'll be using the Llama3 Large Language Model (LLM) to demonstrate Ollama Local's capabilities. The first time you run the application, it will automatically download the necessary LLM files for you. Like I said, very easy to use.</p>
-<br>
 <p>With Ollama Local up and running, let's dive into its features and see what kind of AI-powered magic it can create.</p>
-<br>
 <p>Go to a terminal and type "ollama run llama3" to get started.</p>
-<br>
 <hr>
-<br>
 <p><span style="font-size: 13px; color: red; font-weight: bold;">Code:</span></p>
 <pre><code>ollama run llama3</code></pre>
-<br>
 <hr>
-<br>
 <img src="images/ollama-02.png" alt="">
-<br>
 <hr>
-<br>
 <h2>ollama Models:</h2>
-<br>
 <p><strong>There are many models to pick from to use with ollama...</strong></p>
-<br>
 <hr>
-<br>
 <img src="images/ollama-03.gif" alt="">
-<br>
 <hr>
-<br>
 <p>Once you've chosen the desired model, the web site will provide you with the necessary command prompts to get started. No need to dig through complex documentation or struggle with unfamiliar code - just follow the straightforward instructions and you're good to go!</p>
-<br>
 <hr>
-<br>
 <img src="images/ollama-04.gif" alt="">
-<br>
 <hr>
-<br>
 <h2>How to run ollama from cli:</h2>
-<br>
 <p><strong>Here is a quick video to show how to get started from the CLI</strong></p>
 <ul>
 <li>Run command to start ollama</li>
 <li>Ask a question and see the results</li>
 <li>type /bye to exit ollama</li>
-<br>
 </ul>
 <p>Hands-on experience with this tool? A breeze! Not only is it incredibly user-friendly, but the performance on my laptop has been impressive too. And what really stands out is the speed at which responses are delivered - no waiting around here! The unedited video itself</p>
 <p>is a testament to its fast processing capabilities.</p>
-<br>
 <hr>
-<br>
 <img src="images/ollama-05.gif" alt="">
-<br>
 <hr>
-<br>
 <p><span style="font-size: 13px; color: red; font-weight: bold;">Code:</span></p>
 <pre><code>ollama run llama3
 &gt;&gt;&gt; Who Created PowerShell
 &gt;&gt;&gt; /bye</code></pre>
-<br>
 <hr>
-<br>
 <h2>ollama "Real World" Examples:</h2>
-<br>
 <p>Now I will show some examples of how I use ollama everyday for coding and writing. They are my main uses cases for AI.</p>
-<br>
 <hr>
-<br>
 <h2>ollama PowerShell Function</h2>
-<br>
 <p>In my previous blogs, I've highlighted the versatility of PowerShell in automating various tasks. In this blog, I'll show how to harness the power of PowerShell to interact with AI assistants like Ollama. To start, I created a custom function that enables you to ask Ollama questions directly from the PowerShell command line. Here's the sample code to get you started:</p>
-<br>
 <p><span style="font-size: 13px; color: red; font-weight: bold;">Code:</span></p>
 <pre><code># Function to ask Ollama
 function ask-ollama {
@@ -295,17 +253,11 @@ ask-ollama -question &quot;Create a PowerShell script to connect to a vCenter, G
 ask-ollama -question &quot;Create a Salt State file to stop and disable a service with a name of Spooler&quot;
 
 ask-ollama -question &quot;Show me how to copy a powershell variable value to the clipboard&quot;</code></pre>
-<br>
 <hr>
-<br>
 <p>If you are a PowerShell enthusiast, you're probably accustomed to the flexibility of functions within your scripts. Feel free to adapt this example to your own workflow and coding style, regardless of whether you prefer to use it as is or modify it to fit your needs.</p>
-<br>
 <hr>
-<br>
 <h2>ollama Prompt Engineering Examples:</h2>
-<br>
 <h2>Set the 'Role' to start:</h2>
-<br>
 <p>One of my habits when working with ollama, or ChatGPT, is setting a specific 'role' for our conversations. By defining a clear context or persona, I've found that I'm able to receive more effective and insightful responses from the AI. This approach has been refined over time through experimentation and exploration of the product's capabilities, yielding better results and a more productive dialogue.</p>
 <ul>
 <li>Act as a PowerShell SME</li>
@@ -314,19 +266,14 @@ ask-ollama -question &quot;Show me how to copy a powershell variable value to th
 <li>Act as a vRealize SME</li>
 <li>Act as a Javascript SME to work with VMware Orchestrator</li>
 <li>Act as a Technology Blogger</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Questions to generate code:</h2>
-<br>
 <ul>
 <li>PowerCLI:</li>
 <li>Act as a PowerCLI SME</li>
 <li>Create a script to connect to a VMware vCenter. username is administrator@vsphere.local. password is Password123. vCenter name is vcenter8x.corp.local. List all VMs that have a snap. Export the list of VMs with a snap to c:\reports\vms-with-snaps.csv.</li>
-<br>
 <p><strong>Unedited Code Returned:</strong></p>
-<br>
 </ul>
 <p><span style="font-size: 13px; color: red; font-weight: bold;">Code:</span></p>
 <pre><code># Set the connection settings
@@ -351,7 +298,6 @@ $vmsWithSnaps | Export-Csv -Path &quot;C:\reports\vms-with-snaps.csv&quot; -NoTy
 # Disconnect from the vCenter
 Disconnect-VIServer -Confirm:$false</code></pre>
 <p>Let me explain what each part of the script does:</p>
-<br>
 <p>1. The first section sets the connection settings: <code>vcenter</code>, <code>username</code>, and <code>password</code>.</p>
 <p>2. The <code>Connect-VIServer</code> cmdlet connects to your VMware vCenter using the specified credentials.</p>
 <p>3. The <code>Get-VM</code> cmdlet retrieves a list of all virtual machines in the vCenter. We then use the <code>Where-Object</code> cmdlet to filter this list and</p>
@@ -359,7 +305,6 @@ Disconnect-VIServer -Confirm:$false</code></pre>
 <p>4. We loop through each VM that has a snapshot using a <code>ForEach-Object</code> cmdlet, and add its name to an array <code>$vmsWithSnaps</code>.</p>
 <p>5. The final section exports the array of VM names to a CSV file named <code>vms-with-snaps.csv</code> in the <code>C:\reports</code> directory.</p>
 <p>6. Finally, we disconnect from the vCenter using the <code>Disconnect-VIServer</code> cmdlet.</p>
-<br>
 <p>Save this script as a PowerShell file (e.g., <code>vms_with_snaps.ps1</code>) and run it to get the list of VMs with snapshots exported to the specified</p>
 <p>CSV file!</p>
 

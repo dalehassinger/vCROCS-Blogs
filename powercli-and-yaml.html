@@ -163,31 +163,18 @@
                     
                     <div class="content">
                         <p><strong>Streamlining PowerCLI Scripts: Using YAML for Variable Management</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <blockquote>The true power of automation lies in simplicity—storing all your home lab variables in a single YAML file transforms complexity into clarity, making every deployment seamless and every configuration effortless.</blockquote>
-<br>
 <hr>
 <h2>Why am I using a YAML file:</h2>
-<br>
 <p>Many automation tools and platforms rely on YAML files for configuration due to their readability and flexibility. In VMware VCF Automation—something I frequently work with—YAML is used extensively for Design Templates. To maintain consistency across my automation scripts, I centralized all my Home Lab variables in a single YAML file.</p>
-<br>
 <p>To work with YAML in PowerShell, I’m using the "PowerShell-YAML" module, which provides a simple and efficient way to read and write YAML data. In this blog post, I’ll share several sample scripts demonstrating how easy it is to integrate YAML into PowerShell-based automation.</p>
-<br>
 <p>All required variables for the PowerShell scripts are centralized in a single YAML configuration file for streamlined management.</p>
-<br>
 <hr>
-<br>
 <blockquote>For 2025, I’ve been invited to be a <strong>VMware Community {code} Coach</strong>! This year, my blogs will feature even more code examples to help others get started with automation, VMware solutions, and much more...</blockquote>
-<br>
 <hr>
-<br>
 <hr>
 <h2>Code Examples:</h2>
-<br>
 <p><strong>The sample YAML file contains all the variables for my home lab:</strong></p>
 <ul>
 <li>You can see that I have defined variables for several products within my home lab</li>
@@ -199,9 +186,6 @@
 <li>vCenter stores vCenter connection details</li>
 <li>Host101 provides credentials for a single ESXi host</li>
 <li>OPS defines login details for VCF Operations</li>
-<br>
-<br>
-<br>
 <pre><code>
 # NH is Nested Host
 NH:
@@ -257,17 +241,12 @@ OPS:
   opsPassword: VMware1!
   authSource:  local
 </code></pre>
-<br>
 <hr>
-<br>
 <p><strong>Sample Script to create Nested ESXi VMs:</strong></p>
 <li>The initial lines of code ensure that the necessary PowerShell modules are installed before executing the script</li>
 <li>The PowerShell code then reads the Home-Lab-Config.yaml file, loads its content as a raw string, and converts it from YAML format into a structured PowerShell object stored in $cfg</li>
 <li>The PowerShell code accesses the properties within the NH section of the $cfg object, which was previously loaded from a YAML configuration file</li>
 <li>The code references the NH section of the YAML configuration, accessing its VIServer value, where NH represents a structured key within the YAML file, organizing configuration settings into hierarchical sections.</li>
-<br>
-<br>
-<br>
 <pre><code>
 # Ensure required modules are installed before proceeding
 $requiredModules = @(&quot;powershell-yaml&quot;, &quot;VMware.PowerCLI&quot;)
@@ -396,17 +375,11 @@ New-LogEvent &quot;StartTime: $StartTime&quot;
 New-LogEvent &quot;EndTime: $EndTime&quot;
 New-LogEvent &quot;Duration: $duration minutes to deploy Nested ESXi Hosts&quot;
 </code></pre>
-<br>
 <hr>
-<br>
 </ul>
 <img src="images/powercli-yaml-01.gif" alt="">
-<br>
 <hr>
-<br>
 <p><strong>Sample Script to connect to vCenter using variables from a YAML file:</strong></p>
-<br>
-<br>
 <pre><code>
 # Ensure required modules are installed before proceeding
 $requiredModules = @(&quot;powershell-yaml&quot;, &quot;VMware.PowerCLI&quot;)
@@ -429,12 +402,8 @@ Get-VM | Select-Object Name | Sort-Object Name
 
 Disconnect-VIServer -Server * -Confirm:$false
 </code></pre>
-<br>
 <hr>
-<br>
 <p><strong>Sample Script to Connect to an ESXi Host Using Variables from a YAML File:</strong></p>
-<br>
-<br>
 <pre><code>
 # Ensure required modules are installed before proceeding
 $requiredModules = @(&quot;powershell-yaml&quot;, &quot;VMware.PowerCLI&quot;)
@@ -457,12 +426,8 @@ Get-VM | Select-Object Name | Sort-Object Name
 
 Disconnect-VIServer -Server * -Confirm:$false
 </code></pre>
-<br>
 <hr>
-<br>
 <p><strong>Sample Script to Connect to a VCF Operations Appliance Using Variables from a YAML File:</strong></p>
-<br>
-<br>
 <pre><code>
 # Ensure required modules are installed before proceeding
 $requiredModules = @(&quot;powershell-yaml&quot;, &quot;VMware.PowerCLI&quot;)
@@ -525,40 +490,26 @@ $data = $identifierList | ConvertFrom-Json
 # Display the names of all retrieved ESXi hosts
 $data.resourceKey.name
 </code></pre>
-<br>
 <hr>
-<br>
 <h2>Lessons Learned:</h2>
-<br>
 <ul>
 <li>I enjoy bringing consistency to my scripts by leveraging a YAML file, similar to the approach used in automation platforms I work with.</li>
 <li>All the scripts in this blog were created and tested on a Mac using PowerShell.</li>
 <li>Don’t dismiss PowerShell just because it was created by Microsoft. Embrace it to enhance your automation journey!</li>
 <li>Integrating PowerShell with YAML has been something I’ve wanted to explore for a while. I’m glad I took the time to develop the necessary code and share it with the vCommunity.</li>
-<br>
 <hr>
-<br>
 </ul>
 <p>I created a Google NotebookLM Podcast based on the content of this blog. While it may not be entirely accurate, is any podcast ever 100% perfect, even when real people are speaking? Take a moment to listen and share your thoughts with me!</p>
-<br>
 <p><a href="https://youtu.be/0qF9ONBxcwA" target="_blank" rel="noopener noreferrer">vCROCS Deep Dive Podcast | PowerCLI and YAML</a></p>
-<br>
 <hr>
-<br>
 <p>In my blogs, I often emphasize that there are multiple methods to achieve the same objective. This article presents just one of the many ways you can tackle this task. I've shared what I believe to be an effective approach for this particular use case, but keep in mind that every organization and environment varies. There's no definitive right or wrong way to accomplish the tasks discussed in this article.</p>
-<br>
 <hr>
-<br>
 <p>Always test new setups and processes, like those discussed in this blog, in a lab environment before implementing them in a production environment.</p>
-<br>
 <hr>
-<br>
 <p>If you found this blog helpful, consider buying me a coffee to kickstart my day.</p>
-<br>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

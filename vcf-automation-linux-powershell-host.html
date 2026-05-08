@@ -163,53 +163,30 @@
                     
                     <div class="content">
                         <p><strong>How to use a Rocky Linux PowerShell Host with VCF Automation Orchestrator. Linux ❤️ PowerShell!</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <blockquote>Streamline VMware Automation with VCF Automation, a Rocky Linux PowerShell host, custom workflows, and the simplicity of PowerCLI.</blockquote>
-<br>
 <hr>
 <h2>I like using PowerShell on Linux in my Lab:</h2>
-<br>
 <p>In most cases, a PowerShell Host for VCF Automation Orchestrator is set up on a Windows Server, which works seamlessly. Having spent much of my career working with Microsoft Windows Server, I’m well-versed in its capabilities. However, in my lab, where resource efficiency is a priority, I prefer to run Linux VMs whenever possible. I keep these Linux VMs lean and mean for maximum performance.</p>
-<br>
 <p>I set out to explore how a Rocky Linux VM could function as a PowerShell Host. By default, VCF Automation Orchestrator includes a workflow called “Run SSH Command”, designed to execute SSH commands on a server. I began testing with this built-in workflow and customized it to better align with my requirements.</p>
-<br>
 <p>To keep the setup simple, I wanted to create a single workflow where I could specify the PS script path and name. The Linux VM details—such as hostname, username, password, and port—would remain static.</p>
-<br>
 <blockquote>For 2025, I’ve been invited to be a <strong>VMware Community {code} Coach</strong>! This year, my blogs will feature even more code examples to help others get started with automation, VMware solutions, and much more...</blockquote>
-<br>
 <hr>
-<br>
 <h2>Running PowerShell from the CLI and Executing a Script:</h2>
-<br>
-<br>
 <pre><code>pwsh -file /home/administrator/Home-Lab-PS.ps1
 
 # If you want to use Script Parameters
 pwsh -file /home/administrator/Home-Lab-PS.ps1 -vmName &quot;VM-01&quot; -PowerState &quot;On&quot;
 </code></pre>
-<br>
 <hr>
-<br>
 <h2>Workflow Design:</h2>
-<br>
 <img src="images/linux0ps-host-01.gif" alt="">
-<br>
 <hr>
-<br>
-<br>
 <ul>
 <li><a href="https://github.com/dalehassinger/unlocking-the-potential/blob/main/VMware-Aria-Automation/Workflows/SSH-Run-PowerShell-Script.package" target="_blank" rel="noopener noreferrer">Click to download the workflow</a></li>
 <li>Import the Package into Orchestrator</li>
-<br>
 <hr>
-<br>
 <p><strong>Java Script used in the Workflow to SSH to the Rocky Linux PowerShell Host and run a PS Script:</strong></p>
-<br>
-<br>
 <pre><code>var session = null;
 try {
 	if (port) {
@@ -249,29 +226,20 @@ try {
 	}
 }
 </code></pre>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Code Examples:</h2>
-<br>
 <ul>
 <li>YAML file to store values to be used with scripts</li>
-<br>
-<br>
 <pre><code># vCenter Connection Values
 vCenter:
   server: vcsa8x.vcrocs.local
   username: administrator@vcrocs.local
   password: VMware1!
   ignoreCertErrors: true</code></pre>
-<br>
 <hr>
-<br>
 <p><strong>Sample PowerShell Script:</strong></p>
 <li>Sample script that I used to show that Rocky Linux can be used as a PowerShell Host</li>
-<br>
-<br>
 <pre><code># Ensure required modules are installed before proceeding
 $requiredModules = @(&quot;powershell-yaml&quot;, &quot;VMware.PowerCLI&quot;)
 foreach ($module in $requiredModules) {
@@ -311,30 +279,20 @@ catch {
     return &quot;Error: $_&quot;
 }
 </code></pre>
-<br>
 <hr>
-<br>
 <li>VCF Automation Catalog with an Option to run the Orchestrator Workflow that was created to run the script on Rocky Linux</li>
-<br>
 </ul>
 <img src="images/linux0ps-host-02.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>Orchestrator Workflow as a Catalog Item</li>
 <li>This is a simple example to give you ideas. The script that will run could bascially Automate anything</li>
 <li>Script Parameters become fields on a custom form</li>
 <li>If you can write a script for the process, you can Automate it with Orchestrator</li>
-<br>
 </ul>
 <img src="images/linux0ps-host-03.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Install PowerShell on Rocky Linux:</h2>
-<br>
-<br>
 <pre><code>
 # Install PowerShell on Rocky Linux
 sudo dnf install -y powershell
@@ -349,35 +307,24 @@ echo &quot;Subsystem powershell /usr/bin/pwsh -sshs -NoProfile&quot; | sudo tee 
 # Restart the SSH service
 sudo systemctl restart sshd
 </code></pre>
-<br>
 <hr>
-<br>
 <h2>Lessons Learned:</h2>
-<br>
 <ul>
 <li>If you like to use Linux for Servers, this is a good use case for running PowerShell scripts</li>
 <li>If you have existing PowerShell scripts that run on a Windows Server, most scripts should run on Linux with little to no modifications</li>
 <li>I enjoy bringing consistency to my scripts by leveraging a YAML file, similar to the approach used in automation platforms I work with</li>
 <li>All the scripts in this blog were created and tested on a Mac using PowerShell</li>
 <li>Don’t dismiss PowerShell just because it was created by Microsoft. Embrace it to enhance your automation journey!</li>
-<br>
 <hr>
-<br>
 </ul>
 <p>In my blogs, I often emphasize that there are multiple methods to achieve the same objective. This article presents just one of the many ways you can tackle this task. I've shared what I believe to be an effective approach for this particular use case, but keep in mind that every organization and environment varies. There's no definitive right or wrong way to accomplish the tasks discussed in this article.</p>
-<br>
 <hr>
-<br>
 <p>Always test new setups and processes, like those discussed in this blog, in a lab environment before implementing them in a production environment.</p>
-<br>
 <hr>
-<br>
 <p>If you found this blog helpful, consider buying me a coffee to kickstart my day.</p>
-<br>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

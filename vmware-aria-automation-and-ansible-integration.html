@@ -163,32 +163,18 @@
                     
                     <div class="content">
                         <p>How to setup and configure your VMware Aria Automation environment to work with Ansible.</p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <h2>Use Case</h2>
 <p>I was recently asked how the VMware Aria Automation | Ansible Integration worked. I never used Ansible before so I thought this would be great time to learn Ansible and demo the integration with VMware Aria Automation. If you look at some of my previous blog posts I wrote about SaltStack Config a lot. I thought this would be a good time for myself to learn Ansible and compare the two products.</p>
-<br>
 <p>When I started reading about the VMware Aria Automation and Ansible Integration, I didn't find a single blog post or article that covered everything from installing Ansible to creating a new Server Build in Aria Automation. I am going to document all the steps that it took for me to do a complete Aria Automation | Ansible integration. I hope that someone will find this blog post useful on their Automation journey.</p>
-<br>
 <p>A lot of people that write about Ansible use it with Red Hat Linux.  For my demo environment, I chose to use Rocky Linux so that I don't need to worry about any Red Hat licenses. Some people online recommend using Rocky Linux to replace CentOS. Sometimes it seems that the version of Linux you choose and what product to you use for Automation and Config management can be almost a religious debate. This blog post is to cover a specific use case. How to use VMware Aria Automation | Ansible Integration. Use whatever version of Linux you want. The details that I write about may need to be modified slightly if you use a different version of Linux. This blog post will at least give you the framework to get started.</p>
-<br>
 <p>When I wrote this Blog Post I was using VMware Aria Automation version 8.10.2, Ansible 2.13.3 and Rocky Linux 9.</p>
-<br>
 <p>To use the details in this blog post you will need a working install of VMware Aria Automation.</p>
-<br>
 <hr>
-<br>
 <h2>Create a Ansible Control Server and install Ansible:</h2>
-<br>
 <ul>
 <li>[x] Create a new Server. I created a clean Rocky Linux VM.</li>
 <li>[x] This server will be used as the Ansible Control Node.</li>
-<br>
-<br>
-<br>
 <p><strong>Steps to install Ansible:</strong></p>
 <pre><code># Step 1 | Install Rocky Linux EPEL repository
 dnf install epel-release -y
@@ -198,9 +184,7 @@ dnf install ansible -y
 
 # Check Ansible Version after Install
 ansible --version</code></pre>
-<br>
 <hr>
-<br>
 </ul>
 <p>Results from ansible --version:</p>
 <pre><code>ansible [core 2.13.3]
@@ -212,98 +196,64 @@ ansible --version</code></pre>
   python version = 3.9.14 (main, Nov  7 2022, 00:00:00) [GCC 11.3.1 20220421 (Red Hat 11.3.1-2)]
   jinja version = 3.1.2
   libyaml = True</code></pre>
-<br>
 <hr>
-<br>
 <img src="images/ansible-install-step-01.gif" alt="">
-<br>
 <hr>
-<br>
 <h2>Edit the hosts file:</h2>
-<br>
 <ul>
 <li>[x] Edit the /etc/ansible/hosts file:</li>
 <li>[x] I like to use nano to edit files. To save file changes in Nano use cntrl-o. To exit Nano use cntrl-x.</li>
-<br>
 <pre><code># the cmd at the cli to edit the hosts file
 nano /etc/ansible/hosts</code></pre>
-<br>
 <li>This is the contents of the /etc/ansible/hosts file:</li>
-<br>
 <pre><code>[rocky]
 192.168.110.201
 
 [rocky:vars]
 ansible_user=root
 ansible_password=&#39;VMware1!&#39;</code></pre>
-<br>
 </ul>
 <img src="images/ansible-install-step-02.gif" alt="">
-<br>
 <hr>
-<br>
 <h2>Edit the ansible.cfg file:</h2>
-<br>
 <ul>
 <li>[x] Edit the /etc/ansible/ansible.cfg file:</li>
-<br>
 <pre><code># the cmd at the cli to edit the ansible.cfg file
 nano /etc/ansible/ansible.cfg</code></pre>
-<br>
 </ul>
 <p>This is the minium contents of the /etc/ansible/ansible.cfg file:</p>
-<br>
 <ul>
 <li><strong>BOTH</strong> of these lines <strong>MUST</strong> be in the ansible.cfg file to add Ansible to VMware Aria Automation. If they are not present, adding the Integration will fail!</li>
 <li>The vault password file can be named something different, <strong>BUT IT MUST BE SPECIFIED!</strong></li>
-<br>
 <pre><code>[defaults]
 host_key_checking = False
 vault_password_file = /etc/ansible/vault-pass.txt</code></pre>
 </ul>
 <img src="images/ansible-install-step-03.gif" alt="">
-<br>
 <hr>
-<br>
 <h2>Test Ansible Install</h2>
-<br>
 <p><strong>To test the Ansible install you can do a ping:</strong></p>
-<br>
 <pre><code># the cmd at the cli to run a ping
 ansible rocky -m ping</code></pre>
-<br>
 <img src="images/ansible-install-step-04.gif" alt="">
-<br>
 <hr>
-<br>
 <h2>VMware Aria Automation Configuration</h2>
-<br>
 <p><strong>Add Ansible Integration to VMware Aria Automation:</strong></p>
-<br>
 <img src="images/ansible-vra-integration.png" alt="">
-<br>
 <ul>
 <li>You need to specify the Inventory File path. Default is /etc/ansible/hosts</li>
 <li>You need to make sure the /etc/ansible/ansible.cfg file has the following two lines of code to add as an VMware Aria Automation Integration.</li>
-<br>
 <p><strong>ansible.cfg file:</strong></p>
 <pre><code>[defaults]
 host_key_checking = False
 vault_password_file = /etc/ansible/vault-pass.txt</code></pre>
-<br>
 <p><strong>Ansible Integration screen:</strong></p>
-<br>
 </ul>
 <img src="images/ansible-vra-integration-details.png" alt="">
-<br>
 <h2>VMware Aria Automation Cloud Template</h2>
-<br>
 <p><strong>Add Ansible to Cloud Template</strong></p>
-<br>
 <img src="images/ansible-cloud-template.png" alt="">
-<br>
 <p><strong>Cloud Template YAML code</strong></p>
-<br>
 <pre><code># Cloud Template using Ansible Integration
 formatVersion: 1
 inputs:
@@ -373,11 +323,9 @@ resources:
         - network: ${resource.Cloud_Network_1.id}
           assignment: static
           address: ${input.IP}</code></pre>
-<br>
 <ul>
 <li>Example Ansible Playbook</li>
 <li>Creates a txt file, adds text to txt file, installs web server, starts web server service, enables cockpit, installs git, and does a git pull request from GitHub to copy web site files to new server.</li>
-<br>
 <pre><code># web-server-rocky.yml
 - hosts: rocky
   name: Ansible Playbook to Install Web Server
@@ -415,55 +363,38 @@ resources:
         dest: /var/www/html
         single_branch: yes
         version: master</code></pre>
-<br>
 <hr>
-<br>
 <p><strong>VMware Aria Automation Service Broker Catalog:</strong></p>
-<br>
 </ul>
 <img src="images/ansible-catalog.png" alt="">
-<br>
 <hr>
-<br>
 <ul>
 <li>VMware Aria Automation Service Broker Request</li>
 <li>You can make the Ansible Server Group and Playbooks a dropdown with the custom form. The code to do this is within the YAML code of the Cloud Template.</li>
-<br>
 </ul>
 <img src="images/ansible-new-request.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Lessons Learned</h2>
-<br>
 <ul>
 <li>The VMware Aria Automation | Ansible Integration works well if you follow all the configuration steps.</li>
 <li>Ansible installation is very easy when you follow the directions.</li>
-<br>
 <hr>
 </ul>
 <h2>Helpful Links</h2>
-<br>
 <ul>
 <li><a href="https://www.ansible.com" target="_blank" rel="noopener noreferrer">Red Hat Ansible Web Site</a></li>
 <li><a href="https://blogs.vmware.com/management/2020/07/deeper-look-at-the-vrealize-automation-and-ansible-open-source-integration.html" target="_blank" rel="noopener noreferrer">Deeper look at the vRealize Automation and Ansible Open Source Integration</a></li>
 <li><a href="https://docs.vmware.com/en/vRealize-Automation/8.10/Using-and-Managing-Cloud-Assembly/GUID-9244FFDE-2039-48F6-9CB1-93508FCAFA75.html" target="_blank" rel="noopener noreferrer">Configure Ansible Open Source integration in Cloud Assembly</a></li>
-<br>
 <hr>
-<br>
 </ul>
 <p>When I write about <b>VMware Aria Automation</b> I always say there are many ways to accomplish the same task.  <b>Ansible</b> is the same way.  I am showing what I felt was important to see but every organization/environment will be different. There is no right or wrong way to use Ansible.</p>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

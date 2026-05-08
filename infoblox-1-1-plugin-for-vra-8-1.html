@@ -163,45 +163,26 @@
                     
                     <div class="content">
                         <p><strong>Infoblox 1.1 plugin for vRA 8.1</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <p>I recently setup the Infoblox 1.1 plugin for vRA 8.1 and ran into an interesting challenge that I thought I would share. The setup of the plugin is straight forward; follow the documentation and you’ll likely be set. However, if you use custom DNS views in Infoblox (internal, external, etc.) then some additional configuration is required that’s not easily identified. Out of the box, the Infoblox IPAM integration comes with only a few default properties. I left these values in place when creating my first VM build blueprint but the <strong>Infoblox_AllocateIP</strong> action would always fail. Action Run logs under the Extensibility tab are a great way to troubleshoot. They were displaying the following error:</p>
-<br>
 <img src="images/infoblox-01.png" alt="">
-<br>
 <p>The fix for this issue is to add a custom property called <strong>Infoblox.IPAM.Network.dnsView</strong> and set the appropriate value. This property needs to be added in both the integration settings as well as in the blueprint.</p>
-<br>
 <h2>Integration Settings:</h2>
-<br>
 <img src="images/infoblox-02.png" alt="">
-<br>
 <h2>Blueprint:</h2>
-<br>
 <img src="images/infoblox-03.png" alt="">
-<br>
 <p>Once you complete these steps, you’ll find that the <strong>Infoblox_AllocateIP</strong> action will successfully complete.</p>
-<br>
 <img src="images/infoblox-04.png" alt="">
-<br>
 <p>For the record, the ability to test deployments without actually kicking off a build is fantastic. I confirmed that the test was accurate by running a deployment and verifying that an IP was assigned and a DNS record was registered.</p>
-<br>
 <p>Hope this helps.</p>
-<br>
 <p><strong>Dan Grove</strong></p>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

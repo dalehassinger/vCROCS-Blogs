@@ -163,19 +163,11 @@
                     
                     <div class="content">
                         <p><strong>How to check if ports are open to a remote server</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <h2>PowerShell Code</h2>
-<br>
 <p>Use PowerShell to see if ports are open to a remote server.</p>
-<br>
 <p>Living in a zero trust environment can be challenging. Here is some code that I have been using to test for open ports from a Windows server to any type of destination. Just change PortNumber and Destination for your use case.</p>
-<br>
 <hr>
-<br>
 <pre><code>$PortNumber = &#39;443&#39;
 $Destination = &#39;Server.vCrocs.info&#39;
 
@@ -191,30 +183,20 @@ else{
 } # end else
 
 Write-Output  $PortOpened</code></pre>
-<br>
 <hr>
-<br>
 <h2>Linux Commands</h2>
-<br>
 <p>If you work with VMware vRealize Suite of appliances here are some commands (curl and Netcat) that can be used with Linux OS to test if ports are open to destination servers.</p>
-<br>
 <pre><code>curl -v telnet://server01.vCROCS.info:443
 nc -ztv server01.vCROCS.info 443 -w 3</code></pre>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
-<br>
 <p>Article Updated: 2021-04-24</p>
-<br>
 <hr>
 
                     </div>

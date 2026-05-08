@@ -163,36 +163,20 @@
                     
                     <div class="content">
                         <p><strong>Options to use PowerShell Modules</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <p>I wanted to review VMware vRA (vRealize Automation) 8.x as a Microsoft Windows Server Admin.  Most of the reviews you see are creating Linux VMs and customizing the OS using tools for Linux. I am going to create Windows Server VMs and customize the OS using a new feature added to vRA 8.1, Action Based Extensibility (ABX) with PowerShell. No vRO (Orchestrator) Workflows will be used. This is completely different compared to how I create Windows Servers with vRA 7.6.</p>
-<br>
 <p>The enterprise organizations that I have worked for are 90%+ Microsoft Windows Servers.  It is important for me to have vRA be able to create Windows Servers and make all configuration changes using PowerShell.</p>
-<br>
 <p>You could also use this technique to make changes to a Linux VM using the PowerCLI commands Invoke-VMscript and Copy-VMGuestFile. I did create a <a href="../automation-zero-trust/" target="_blank" rel="noopener noreferrer">Blog Post</a> on this topic.</p>
-<br>
 <h2>BluePrint Requirements:</h2>
-<br>
 <p>I want to manually enter the VM Name.  I don’t want an auto generated name. After the Windows Server VM is created I want to to able to add vCenter TAGS to VM, make some OS changes, and install software based on values entered on the BluePrint.</p>
-<br>
 <h2>What I created to accomplish the requirements:</h2>
-<br>
 <p>Created a BluePrint. See included code and screen shot.</p>
-<br>
 <p>Created a PowerShell Action. See included code and screen shot.</p>
-<br>
 <p>Created a Subscription. See Screenshot.</p>
-<br>
 <h2>Sample Code and Screen Shots:---</h2>
 <h2>BluePrint:</h2>
-<br>
 <img src="images/vra81-01.jpg" alt="">
-<br>
 <p>The properties under resources in the yaml code can be used like parameters in a PowerShell script. Since I have a background in PowerShell that is how I am using the properties. When you deploy the BluePrint the values entered that I defined will not be used until the Action runs. The Action will run after the “Compute post provision” event is triggered with the subscription. Those values will be passed from the BluePrint to the Action.  Just like passing parameters to a PS script.</p>
-<br>
 <pre><code># This is the yaml code for the BluePrint
 # Created by vCrocs.info
 formatVersion: 1
@@ -237,17 +221,11 @@ resources:
       constraints:
         - tag: &#39;quick_start_run:1&#39;
 </code></pre>
-<br>
 <p>---Using the Inputs Screen helps you build the BluePrint yaml code.  I found this very useful since I am still learning the proper yaml formatting.</p>
-<br>
 <img src="images/vra81-04.png" alt="">
-<br>
 <h2>Action:</h2>
-<br>
 <img src="images/vra81-02.jpg" alt="">
-<br>
 <p>In my PowerShell code I am using Write-Host to help me understand how the BluePrint passes values to the Action. I use to troubleshoot and understand how it is working. I am able to take values from the payload customProperties and assign to variables. The customProperties are defined in the BluePrint yaml code as resources/properties. I can then make decisions in the code based on these values.</p>
-<br>
 <pre><code># This is the PowerShell code for the Action
 function handler($context, $payload) {
     Write-Host &quot;VM Name Created: &quot; $payload.resourceNames[0]
@@ -274,36 +252,25 @@ function handler($context, $payload) {
   return $payload
 }
 </code></pre>
-<br>
 <h2>Subscription:</h2>
-<br>
 <img src="images/vra81-03.png" alt="">
-<br>
 <h2>Lets compare vRA 7.6 vs 8.1</h2>
 <p>vRA 7.6:</p>
-<br>
 <p>I would create a BluePrint with a custom form in vRA 7.6. I would pass the field values from the custom form as parameters to a PowerShell script on a PowerShell Host.</p>
-<br>
 <p>vRA 8.1:</p>
-<br>
 <p>Using ABX and a subscription in vRA 8.1 eliminates the need to have a Windows PowerShell host and the PowerShell script has no parameters. The vRA 8.x appliance is the PowerShell Host. Less moving parts to complete a Windows Server Build in vRA 8.1.</p>
-<br>
 <h2>Lessons Learned:</h2>
 <ul>
 <li>I will need to learn yaml.</li>
 <li>The process to Create BluePrints will be much different in vRA 8.x.</li>
 <li>A lot of the PowerShell code and logic I use in vRA 7.6 will be able to be reused.</li>
 <li>I will not need as many VMs for the installation and administration of vRA 8.x.</li>
-<br>
 <hr>
-<br>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

@@ -163,35 +163,19 @@
                     
                     <div class="content">
                         <p><strong>How to send messages/updates to a Microsoft Teams Channel or Google Spaces.</strong></p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <blockquote>"If everyone is moving forward together, then success takes care of itself.” - Henry Ford</blockquote>
-<br>
 <hr>
-<br>
 <h2>VMware Aria Automation</h2>
-<br>
 <p>Whenever new VMs are deployed or Day 2 operations are executed via the VMware Aria Automation Catalog, I find it crucial to update our team through a common messaging platform about the ongoing creations or modifications. In this blog, I'll demonstrate how to dispatch notifications to both Microsoft Teams and Google Spaces via a Webhook. This technique can be adapted for any messaging service such as Slack, Zoom, Discord, etc., by simply altering the JSON body formatting code and creating a Webhook for message delivery.</p>
-<br>
 <p>I will guide you through the process of sending alerts from VMware Aria Automation utilizing ABX Actions and Orchestrator Workflows. Though the procedure remains largely the same, there are minor variations in acquiring Property Values. Presenting both methods offers you, the Automation Specialists, the freedom to choose the approach that seamlessly integrates into your workflows. My philosophy in automation is that there are countless ways to achieve the same outcome.</p>
-<br>
 <hr>
-<br>
 <p>In this blog, I'll walk you through the creation of a new virtual machine (VM). At the onset of the build process, I have configured an Extensibility Subscription that triggers the sending of notifications to both Microsoft Teams and Google Spaces. This is accomplished through the use of an ABX Action and an Orchestrator Workflow.</p>
-<br>
 <hr>
-<br>
 <p>Besides notifying your team when a new VM is created, I'll demonstrate how to dispatch a message through an Orchestrator Workflow for a Day 2 Automation process.</p>
-<br>
 <hr>
-<br>
 <h2>Create a New VM and Send Message</h2>
-<br>
 <p><strong>Steps:</strong></p>
-<br>
 <p>1. Within the Design section of Aria Automation, create a template. For the purpose of this tutorial, we will construct a straightforward Rocky Linux VM. | Refer to <a href="#screen-shot-01">Screen Shot 1</a>.</p>
 <p>2. Ensure that all properties you wish to include in your notification are incorporated into the template's YAML code. These property values will be transmitted to both ABX Actions and Orchestrator Workflows. | Refer to <a href="#screen-shot-02">Screen Shot 2</a>.</p>
 <ul>
@@ -214,13 +198,9 @@
 </ul>
 <p>9. If all steps were executed successfully, it's time for a celebration!</p>
 <p>10. <a href="#screen-shot-14">Screen Shot 14</a> illustrates the process of creating a Google Spaces Webhook.</p>
-<br>
 <hr>
-<br>
 <h2>Orchestrator Workflow Day 2 Automation and Send Message</h2>
-<br>
 <p><strong>Steps:</strong></p>
-<br>
 <p>1. Initiate the creation of an Orchestrator Workflow. Creating a new Workflow is the same for Day 2 Automation Processes as when a Workflow was created for building a New VM. | Refer to <a href="#screen-shot-07">Screen Shot 7</a>.</p>
 <ul>
 <li>Incorporate an input property into the Orchestrator Workflow for every question needed to complete the Day 2 Automation. | See <a href="#screen-shot-15">Screen Shot 15</a>.</li>
@@ -234,25 +214,14 @@
 </ul>
 <p>4. If all steps were executed successfully, it's time for a high five!</p>
 <p>5. Example of a Day 2 Automation Microsoft Teams Message | See <a href="#screen-shot-17">Screen Shot 17</a>.</p>
-<br>
 <hr>
-<br>
 <h2>Screen Shots of the Steps:</h2>
-<br>
 <h2>Screen Shot 01:</h2>
-<br>
 <p>Design Template with YAML Code that has all the required Properties.</p>
-<br>
 <img src="images/aria-automation-messages-01.png" alt="">
-<br>
 <hr>
-<br>
 <p><strong>Design Template Example YAML Code:</strong></p>
-<br>
 <p>This YAML code shows all the Properties that I want to send to a ABX Action or Orchestrator Workflow.</p>
-<br>
-<br>
-<br>
 <pre><code>  
 formatVersion: 1
 name: Ubuntu-20-with-minion
@@ -308,45 +277,26 @@ resources:
       networkType: existing
       constraints:
         - tag: Network:vCenter-VMs</code></pre>
-<br>
 <hr>
-<br>
 <h2>Screen Shot 02:</h2>
-<br>
 <p>Highlight of YAML Code showing Properties.</p>
-<br>
 <img src="images/aria-automation-messages-02.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 03:</h2>
-<br>
 <p>Where to create Extensibility ABX Actions.</p>
-<br>
 <img src="images/aria-automation-messages-03-1.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 04:</h2>
-<br>
 <p>Example Extensibility ABX Action.</p>
-<br>
 <img src="images/aria-automation-messages-03-2.png" alt="">
-<br>
 <hr>
-<br>
 <p><strong>Extensibility ABX Action Code:</strong></p>
-<br>
 <p>Code Snippets.</p>
 <ul>
 <li>Each ABX Action starts with identical code to retrieve Property Values.</li>
 <li>The variation arises in the methodology of dispatching this information to the respective messaging systems.</li>
-<br>
 </ul>
 <p>Here's an example script for sending notifications to Microsoft Teams.</p>
-<br>
-<br>
-<br>
 <pre><code>  
 
 function handler($context, $inputs) {
@@ -440,13 +390,8 @@ $messageCard = @{
     $outPut = &quot;Done&quot;
     return $outPut
 }</code></pre>
-<br>
 <hr>
-<br>
 <p>This code is to send a message to Google Spaces.</p>
-<br>
-<br>
-<br>
 <pre><code>  
 
 function handler($context, $inputs) {
@@ -569,69 +514,38 @@ $messageBody = @{
 
   return $outPut
 }</code></pre>
-<br>
 <hr>
-<br>
 <h2>Screen Shot 05:</h2>
-<br>
 <p>Subscriptions used to start ABX Actions or Orchestrator Workflows.</p>
-<br>
 <img src="images/aria-automation-messages-03.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 06:</h2>
-<br>
 <p>Subscription definition example.</p>
-<br>
 <img src="images/aria-automation-messages-04.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 07:</h2>
-<br>
 <p>Create a new Orchestrator Workflow.</p>
-<br>
 <img src="images/aria-automation-messages-07.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 08:</h2>
-<br>
 <p>Add Input named "inputProperties" to the Orchestrator Workflow.</p>
-<br>
 <img src="images/aria-automation-messages-08.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 09:</h2>
-<br>
 <p>Create the Orchestrator Workflow Schema.</p>
-<br>
 <img src="images/aria-automation-messages-09.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 10:</h2>
-<br>
 <p>Add the code to the Orchestrator Workflow.</p>
-<br>
 <img src="images/aria-automation-messages-10.png" alt="">
-<br>
 <hr>
-<br>
 <p><strong>Orchestrator Workflow Code:</strong></p>
-<br>
 <p>Code Examples. At the start of each Orchestrator Workflow, the code for retrieving Property Values is consistent. The variation comes in how the information is sent to each messaging system.</p>
-<br>
 <ul>
 <li>For sending messages to Microsoft Teams, use the following code.</li>
 <li>To send a message to Google Spaces in a Workflow, apply the same Google Spaces code used in ABX Actions.</li>
 <li>The Google Spaces code does not change between ABX Actions and Workflows.</li>
 <li>The difference in ABX Actions and Workflows is in the method of obtaining Property Values.</li>
-<br>
-<br>
-<br>
 <pre><code>  
 function Handler($context, $inputs) {
 
@@ -724,75 +638,42 @@ $messageCard = @{
 
     return $output
 }</code></pre>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Screen Shot 11:</h2>
-<br>
 <p>Code difference between a Orchestrator Workflow and a ABX Action.</p>
-<br>
 <img src="images/aria-automation-messages-11.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Message Examples:</h2>
-<br>
 <h2>Screen Shot 12:</h2>
-<br>
 <p>When all is configured and functioning properly, the Google Space message containing the New VM Build Details will appear as follows. Quite impressive!</p>
-<br>
 <img src="images/aria-automation-messages-google-space.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 13:</h2>
-<br>
 <p>Microsoft Teams Message with New VM Build Details. Very Cool!</p>
-<br>
 <img src="images/aria-automation-messages-teams-message.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 14:</h2>
-<br>
 <p>How to create a Google Spaces Webhook. Link included below on how to create a Microsoft Teams Webhook.</p>
-<br>
 <img src="images/aria-automation-messages-12.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Start of Day 2 Automation Screen Shots:</h2>
-<br>
 <h2>Screen Shot 15:</h2>
-<br>
 <p>Add all the required inputs to the Workflow for the Day 2 Automation process.</p>
-<br>
 <img src="images/aria-automation-messages-15.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Screen Shot 16:</h2>
-<br>
 <p>Add the code to the Orchestrator Workflow.</p>
-<br>
 <img src="images/aria-automation-messages-16.png" alt="">
-<br>
 <hr>
-<br>
 <p><strong>Orchestrator Workflow Code for Day 2 Automation:</strong></p>
-<br>
 <p>Code Example.</p>
-<br>
 <ul>
 <li>The difference between this Workflow for day 2 Automation Code and when I used a Workflow to create a new VM is how you get the input values.</li>
 <li>For sending messages to Microsoft Teams, use the following code.</li>
 <li>To send a message to Google Spaces in a Workflow, apply the same Google Spaces code used in ABX Actions.</li>
 <li>The Google Spaces code does not change between ABX Actions and Workflows.</li>
 <li>The difference in ABX Actions and Workflows is in the method of obtaining Property Values.</li>
-<br>
-<br>
-<br>
 <pre><code>  
 
 function Handler($context, $inputs) {
@@ -861,43 +742,29 @@ $messageCard = @{
 
     return $output
 }</code></pre>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Screen Shot 17:</h2>
-<br>
 <p>Microsoft Teams Message with Day 2 Automation Details. Awesome!</p>
-<br>
 <img src="images/aria-automation-messages-17.png" alt="">
-<br>
 <hr>
-<br>
 <h2>Links to resources discussed is this Blog Post:</h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=newteams%2Cdotnet" target="_blank" rel="noopener noreferrer">Link to learn how to create a Microsoft Teams Webhook.</a></li>
 <li><a href="https://github.com/dalehassinger/unlocking-the-potential/" target="_blank" rel="noopener noreferrer">Link to my GitHub Repository for sample code like what is included in this Blog Post.</a></li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Aria Automation Version used for Blog Post:</h2>
 <p>VMware Aria Automation 8.16.0 was used for this Blog Post. When new versions of VMware Aria Automation are released, the code or process may need to be changed.</p>
-<br>
 <hr>
-<br>
 <p>In my blogs, I often emphasize that there are multiple methods to achieve the same objective. This article presents just one of the many ways you can tackle this task. I've shared what I believe to be an effective approach for this particular use case, but keep in mind that every organization and environment varies. There's no definitive right or wrong way to accomplish the tasks discussed in this article.</p>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this blog article helpful and it assisted you, consider buying me a coffee to kickstart my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>

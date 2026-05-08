@@ -163,30 +163,18 @@
                     
                     <div class="content">
                         <p>Part 9: Using salt-api with PowerShell for Windows Server Automation</p>
-<br>
-<br>
-<br>
 <hr>
-<br>
 <p><strong>Update: It was brought to my attention that adding cherypy will break the salt master. After a quick test in my lab I had the same issue with the newest version of SaltStack Config. DO NOT use this blog post until I get a working version in my lab.</strong></p>
-<br>
 <p><strong>If you want to work with the VMware Aria Automation Config API please use this newer Blog Post that I created:</strong></p>
 <ul>
 <li><a href="https://www.vcrocs.info/unlocking-the-potential-vmware-aria-automation-config-api/" target="_blank" rel="noopener noreferrer">Unlocking the Potential | VMware Aria Automation Config API</a></li>
-<br>
 <hr>
-<br>
 </ul>
 <p>This post is to show how to use PowerShell to make RESTful API calls to SaltStack Config. This is something that I have wanted to do for awhile. I could never find any examples in my Google searches, so I took the time to learn how the examples that use curl work and translated that into PowerShell Code. I hope some Windows Server Admins will find this post helpful. I like using salt to do Windows Server Configuration Management more than remote PowerShell. You can run changes against many servers at the exact same time instead of looping thru a list of servers names.</p>
-<br>
 <p>I am also going to look at use salt-api with vRealize Automation ABX action scripts.</p>
-<br>
 <p>In some previous posts I used the POSH-SSH module but when you use the salt-api, the PowerShell Module POSH-SSH is no longer needed.</p>
-<br>
 <hr>
-<br>
 <h2>Configuration Changes to the  SaltStack Config Server:</h2>
-<br>
 <div>
 <p><b>My SaltStack Config Server (SSC) is what VMware provides when using Life Cycle Manager (LCM) running Photon OS.</b></p>
 </div>
@@ -202,32 +190,19 @@
 <div>
 <p><br></p>
 </div>
-<br>
 <ul>
 <li>Install CherryPy:</li>
-<br>
 <pre><code>pip3 install cherrypy</code></pre>
-<br>
 <li>Install the PyOpenSSL package:</li>
-<br>
 <pre><code>pip3 install pyopenssl</code></pre>
-<br>
 <li>Generate a self-signed certificate:</li>
-<br>
 <pre><code>salt-call --local tls.create_self_signed_cert</code></pre>
-<br>
 <li>open firewall port 8000:</li>
-<br>
 <pre><code>iptables -A INPUT -i eth0 -p tcp --dport 8000 -j ACCEPT</code></pre>
-<br>
-<br>
 <li>Edit /etc/salt/master file:</li>
-<br>
 <pre><code>vi /etc/salt/master</code></pre>
-<br>
 </ul>
 <p>Add these lines to the /etc/salt/master file:</p>
-<br>
 <pre><code>external_auth:
   pam:
     root:
@@ -237,27 +212,19 @@ rest_cherrypy:
   port: 8000
   ssl_crt: /etc/pki/tls/certs/localhost.crt
   ssl_key: /etc/pki/tls/certs/localhost.key</code></pre>
-<br>
 <ul>
 <li>Restart salt-master and check service status for any errors:</li>
-<br>
 <pre><code>systemctl restart salt-master
 systemctl status salt-master</code></pre>
-<br>
 <li>Enable | Start salt-api and check service status for any errors:</li>
-<br>
 <pre><code>systemctl enable salt-api
 systemctl start salt-api
 systemctl status salt-api</code></pre>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Tests to make sure SaltStack Config Changes are working:</h2>
-<br>
 <ul>
 <li>I did all this PowerShell code from my mac.  To use self-signed certs I use -SkipCertificateCheck. On a Windows OS the code is different.</li>
-<br>
 <pre><code># --- PowerShell Code ---
 Invoke-WebRequest -Uri &#39;https://192.168.86.141:8000&#39; -SkipCertificateCheck
 
@@ -280,11 +247,8 @@ InputFields       : {}
 Links             : {}
 RawContentLength  : 146
 RelationLink      : {}</code></pre>
-<br>
 <li>Make sure you see StatusCode: 200</li>
-<br>
 <li>Next step is to make sure you get a token:</li>
-<br>
 <pre><code># --- PowerShell Code ---
 # --- In my code I show the PassWord. In Production DO NOT DO THIS.
 # --- There are so many different ways to include encrypted PWs in the code. 
@@ -315,17 +279,12 @@ return
 ------
 {@{token=6696846c802f78d5326a69b79d36e95015d37f5a; expire=1655025071.22838; start=1654981871.22838; user=root; eauth=pam; perms=System.Object[]}}
 6696846c802f78d5326a69b79d36e95015d37f5a</code></pre>
-<br>
 <li>You will see "token=" in the return data</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>PowerShell API Code Examples:</h2>
-<br>
 <ul>
 <li>Run a test.ping</li>
-<br>
 <pre><code># --- PowerShell Code ---
 $minionName        = &#39;2019DC&#39;
 $saltServerAddress = &#39;https://192.168.86.110:8000&#39;
@@ -352,9 +311,7 @@ $fetch = Invoke-RestMethod @Params -SkipCertificateCheck
 #$fetch
 $fetch.return
 $fetch.return.$minionName</code></pre>
-<br>
 <li>Check disk.usage</li>
-<br>
 <pre><code># --- PowerShell Code ---
 $minionName        = &#39;2019DC&#39;
 $saltServerAddress = &#39;https://192.168.86.110:8000&#39;
@@ -382,9 +339,7 @@ $fetch.return
 $fetch.return.$minionName
 $fetch.return.$minionName.&#39;C:\&#39;
 $fetch.return.$minionName.&#39;C:\&#39;.capacity</code></pre>
-<br>
 <li>Check Service Status</li>
-<br>
 <pre><code># --- PowerShell Code ---
 $minionName        = &#39;2019DC&#39;
 $saltServerAddress = &#39;https://192.168.86.110:8000&#39;
@@ -410,9 +365,7 @@ $fetch = Invoke-RestMethod @Params -SkipCertificateCheck
 
 # --- Service Status | True = Running | False = Stopped
 $fetch.return.$minionName</code></pre>
-<br>
 <li>Stop Service</li>
-<br>
 <pre><code># --- PowerShell Code ---
 $minionName        = &#39;2019DC&#39;
 $saltServerAddress = &#39;https://192.168.86.110:8000&#39;
@@ -438,9 +391,7 @@ $fetch = Invoke-RestMethod @Params -SkipCertificateCheck
 
 # --- Service Stopped | True = Stopped | False = Not Stopped
 $fetch.return.$minionName</code></pre>
-<br>
 <li>Disable Service</li>
-<br>
 <pre><code># --- PowerShell Code ---
 $minionName        = &#39;2019DC&#39;
 $saltServerAddress = &#39;https://192.168.86.110:8000&#39;
@@ -466,11 +417,8 @@ $fetch = Invoke-RestMethod @Params -SkipCertificateCheck
 
 # --- Service Disabled | True = Disabled | False = Not Disabled
 $fetch.return.$minionName</code></pre>
-<br>
 <li>I hope the code was helpful to get started.</li>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Lessons Learned:</h2>
 <ul>
@@ -480,10 +428,7 @@ $fetch.return.$minionName</code></pre>
 <li>To get the proper args for a salt function I always test from the CLI.</li>
 <li><a href="https://docs.saltproject.io/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html" target="_blank">SaltStack REST_CHERRYPY Documentation</a></li>
 <li><a href="https://docs.saltproject.io/en/latest/topics/eauth/index.html"                       target="_blank">SaltStack EXTERNAL AUTHENTICATION SYSTEM Documentation</a></li>
-<br>
-<br>
 <hr>
-<br>
 </ul>
 <h2>Salt Links I found to be very helpful:</h2>
 <ul>
@@ -493,22 +438,17 @@ $fetch.return.$minionName</code></pre>
 <li><a href="https://saltstackcommunity.slack.com"                                  target="_blank">SaltStack Community Slack Channel</a></li>
 <li><a href="https://learnvrealizeautomation.github.io"                             target="_blank">Learn vRealize Automation</a></li>
 <li><a href="https://learnsaltstackconfig.github.io/"                               target="_blank">Learn SaltStack Config</a></li>
-<br>
 </ul>
 <div style="background-color:#ccffcc; Padding:20px;" >
 <p>When I write about <b>vRealize Automation</b> ("vRA") I always say there are many ways to accomplish the same task.  <b>SaltStack Config</b> is the same way.  I am showing what I felt was important to see but every organization/environment will be different. There is no right or wrong way to use Salt. This is a <b>GREAT Tool</b> that is included with your vRealize Suite Advanced/Enterprise license. If you own the vRealize Suite, you own SaltStack Config.</p>
 </div>
-<br>
 <hr>
-<br>
 <ul>
 <li>If you found this Blog article useful and it helped you, Buy me a coffee to start my day.</li>
-<br>
 </ul>
 <p><center></p>
 <p><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dalehassinger" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script></p>
 <p></center></p>
-<br>
 <hr>
 
                     </div>
